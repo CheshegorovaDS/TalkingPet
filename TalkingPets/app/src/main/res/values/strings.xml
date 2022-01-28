@@ -1,3 +1,38 @@
 <resources>
     <string name="app_name">TalkingPets</string>
+
+    //Permissions
+    <string name="permission_camera_and_gallery">Allow the access to choose your pictures or take photos</string>
+    <string name="permission_record_voice">Allow the access to the microphone to record voice</string>
+
+    //Choose a picture
+    <string name="create_first_animation">Let’s create your first animation!</string>
+    <string name="create_unique_animation">Create your unique animations!</string>
+    <string name="got_it">Got it</string>
+    
+    //Edit photo
+    <string name="change_photo_hilt">Crop and rotate the picture</string>
+    
+    //Analyze photo
+    <string name="choose_points">You can set the points manually</string>
+    <string name="pointy_ears">Pointy ears</string>
+
+    //Record voice
+    <string name="hilt_recording">hold to record</string>
+    
+    //Creating video
+    <string name="speed">Speed</string>
+    <string name="pitch">Pitch</string>
+    <string name="cancel_recording">Cancel this recording and create a new one?</string>
+    <string name="record_again">Record again</string>
+    <string name="back">Back</string>
+
+    //Share video
+    <string name="download">Download</string>
+    <string name="share">Share</string>
+    <string name="create_new_animation_button">Create new animation</string>
+    <string name="video_saved">The video has been saved to your gallery</string>
+    <string name="create_new_animation_hilt">Create a new animation?\nThe current one will be removed</string>
+    <string name="create_new">Create new</string>
+
 </resources>
