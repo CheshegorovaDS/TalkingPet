@@ -1,49 +1,36 @@
 package com.issart.talkingpets.ui.mainNavigation
 
-import android.widget.Toast
 import androidx.compose.animation.animateContentSize
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.Button
-import androidx.compose.material.ButtonDefaults
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.*
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
-import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.LiveData
 import com.issart.talkingpets.MainViewModel
+import com.issart.talkingpets.R
 import com.issart.talkingpets.navigation.TalkingPetsScreen
+import com.issart.talkingpets.ui.theme.Blue
 import com.issart.talkingpets.ui.theme.Green
+import com.issart.talkingpets.ui.utils.ClickNavigation
 
 @Composable
-fun MainNavigation(viewModel: MainViewModel, modifier: Modifier = Modifier) {
-    val context = LocalContext.current
-    Column(
-        modifier = modifier
-            .fillMaxWidth()
-            .fillMaxHeight(),
-        verticalArrangement = Arrangement.Bottom
+fun MainNavigation(clickNavigation: ClickNavigation, viewModel: MainViewModel, modifier: Modifier = Modifier) {
+    Box(
+        modifier = modifier.fillMaxSize(),
+        contentAlignment = Alignment.BottomStart
     ) {
-        Row {
-            GalleryButton(viewModel = viewModel)
-
-            Button(
-                modifier = Modifier.wrapContentSize(),
-                onClick = {
-                    Toast.makeText(context, "click editor", Toast.LENGTH_SHORT).show()
-                    viewModel.changeScreen(TalkingPetsScreen.EDITOR)
-                }
-            ) {
-                Text(text = TalkingPetsScreen.EDITOR.name)
-            }
-        }
+        EditorButton(viewModel = viewModel, clickNavigation = clickNavigation)
+        GalleryButton(viewModel = viewModel, clickNavigation = clickNavigation)
     }
 }
 
 @Composable
-fun GalleryButton(viewModel: MainViewModel) {
+fun GalleryButton(clickNavigation: ClickNavigation, viewModel: MainViewModel) {
     val configuration = LocalConfiguration.current
     val width = (configuration.screenWidthDp / 5).dp
 
@@ -58,11 +45,47 @@ fun GalleryButton(viewModel: MainViewModel) {
             .width(width)
             .height(height)
             .animateContentSize(),
-        onClick = {
-            viewModel.changeScreen(TalkingPetsScreen.GALLERY)
-        },
-        colors = ButtonDefaults.buttonColors(backgroundColor = Green)
+        onClick = { clickNavigation(TalkingPetsScreen.GALLERY) },
+        colors = ButtonDefaults.buttonColors(backgroundColor = Green),
+        shape = RoundedCornerShape(0,40,0,0),
     ) {
+        Image(
+            painter = painterResource(id = R.drawable.ic_gallery),
+            contentDescription = "gallery"
+        )
 
+    }
+}
+
+@Composable
+fun EditorButton(clickNavigation: ClickNavigation, viewModel: MainViewModel) {
+    val configuration = LocalConfiguration.current
+    val width = (2 * configuration.screenWidthDp / 5).dp
+
+    val height = if (viewModel.screen.value == TalkingPetsScreen.EDITOR) {
+        80.dp
+    } else {
+        72.dp
+    }
+
+    Button(
+        modifier = Modifier
+            .width(width)
+            .height(height)
+            .animateContentSize(),
+        onClick = { clickNavigation(TalkingPetsScreen.EDITOR) },
+        colors = ButtonDefaults.buttonColors(backgroundColor = Blue),
+        shape = RoundedCornerShape(0,40,0,0)
+    ) {
+        Row(
+            modifier = Modifier.fillMaxSize(),
+            horizontalArrangement = Arrangement.End,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Image(
+                painter = painterResource(id = R.drawable.ic_editor),
+                contentDescription = "editor"
+            )
+        }
     }
 }
