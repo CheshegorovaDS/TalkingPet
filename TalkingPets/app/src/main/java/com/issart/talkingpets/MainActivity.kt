@@ -11,9 +11,12 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import com.issart.talkingpets.navigation.TalkingPetsScreen
 import com.issart.talkingpets.navigation.TalkingPetsScreen.*
+import com.issart.talkingpets.ui.detector.Detector
 import com.issart.talkingpets.ui.editor.Editor
 import com.issart.talkingpets.ui.gallery.Gallery
 import com.issart.talkingpets.ui.mainNavigation.MainNavigation
+import com.issart.talkingpets.ui.recorder.Recorder
+import com.issart.talkingpets.ui.share.Share
 import com.issart.talkingpets.ui.theme.TalkingPetsTheme
 
 class MainActivity : ComponentActivity() {
@@ -37,16 +40,12 @@ fun TalkingPetsApp(viewModel: MainViewModel) {
             when (currentScreen) {
                 GALLERY -> Gallery()
                 EDITOR -> Editor()
+                DETECTOR -> Detector()
+                RECORDER -> Recorder()
+                PREVIEW -> Share()
             }
             MainNavigation(viewModel::changeScreen, viewModel)
         }
-    }
-}
-
-@Composable
-fun TitleScreen(title: String) {
-    Surface(color = Color.Transparent) {
-        Text(text = title, color = Color.Black)
     }
 }
 
