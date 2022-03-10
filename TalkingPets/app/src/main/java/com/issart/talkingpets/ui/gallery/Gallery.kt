@@ -1,5 +1,7 @@
 package com.issart.talkingpets.ui.gallery
 
+import android.content.Context
+import android.widget.Toast
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
@@ -7,17 +9,16 @@ import androidx.compose.foundation.lazy.GridCells
 import androidx.compose.foundation.lazy.LazyVerticalGrid
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Button
-import androidx.compose.material.ButtonDefaults
-import androidx.compose.material.Card
-import androidx.compose.material.Text
+import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.imageResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -32,7 +33,7 @@ import com.issart.talkingpets.ui.theme.TextTitleColor
 
 @Composable
 fun Gallery() {
-    Column {
+    Column(modifier = Modifier.padding(bottom = 70.dp)) {
         GalleryTitleText()
         GalleryButtonsRow()
         AnimalGridLayout()
@@ -44,7 +45,7 @@ fun GalleryTitleText() {
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(top = 48.dp, start = 36.dp, end = 36.dp),
+            .padding(top = 32.dp, start = 36.dp, end = 36.dp),
         contentAlignment = Alignment.TopCenter
     ) {
         TitleScreen(
@@ -74,24 +75,27 @@ fun GalleryButtonsRow() {
     }
 }
 
-@OptIn(ExperimentalFoundationApi::class)
+@OptIn(ExperimentalMaterialApi::class, ExperimentalFoundationApi::class)
 @Composable
 fun AnimalGridLayout() {
-    val data: List<String> = listOf("1", " 2", "3", "4", "5", "6")
+    val data = getAnimalIdList()
+    val context = LocalContext.current
 
     LazyVerticalGrid(
         modifier = Modifier,
         cells = GridCells.Fixed(3),
-        contentPadding = PaddingValues(vertical = 48.dp, horizontal = 8.dp)
+        contentPadding = PaddingValues(vertical = 32.dp, horizontal = 8.dp)
     ) {
-        items(data) { item ->
+        items(data) { animalPhotoId ->
             Card(
                 modifier = Modifier.padding(4.dp),
-                backgroundColor = Color.LightGray
+                backgroundColor = Color.LightGray,
+                onClick = { showToast(context, "animal photo") }
             ) {
                 Image(
-                    painter = painterResource(id = R.mipmap.ic_cat),
-                    contentDescription = "animal photo"
+                    bitmap = ImageBitmap.imageResource(id = animalPhotoId),
+                    contentDescription = "animal photo",
+                    contentScale = ContentScale.Fit
                 )
             }
         }
@@ -99,10 +103,17 @@ fun AnimalGridLayout() {
 }
 
 @Composable
-fun GalleryButton(color: Color, imageId: Int, description: String) {
+fun GalleryButton(
+    color: Color,
+    imageId: Int,
+    description: String
+) {
     val configuration = LocalConfiguration.current
     val widthBox = configuration.screenWidthDp / 2
     val width = configuration.screenWidthDp * 0.45
+//    val height = configuration.screenHeightDp * 0.11
+
+    val context = LocalContext.current
 
     Box(
         modifier = Modifier.width(width = widthBox.dp),
@@ -110,13 +121,13 @@ fun GalleryButton(color: Color, imageId: Int, description: String) {
     ) {
         Button(
             modifier = Modifier.width(width = width.dp),
-            onClick = { },
+            onClick = { showToast(context, description) },
             colors = ButtonDefaults.buttonColors(backgroundColor = color),
             shape = RoundedCornerShape(25),
             elevation = ButtonDefaults.elevation(defaultElevation = 4.dp)
         ) {
             Image(
-                modifier = Modifier.padding(top = 24.dp, bottom = 24.dp),
+                modifier = Modifier.padding(top = 16.dp, bottom = 16.dp),
                 painter = painterResource(id = imageId),
                 contentDescription = description
             )
@@ -134,6 +145,10 @@ fun TitleScreen(title: String) {
         fontWeight = FontWeight(600)
     )
 }
+
+private fun showToast(context: Context, text: String) =
+    Toast.makeText(context, text, Toast.LENGTH_SHORT).show()
+
 
 @Preview(showBackground = true, widthDp = 400, heightDp = 848)
 @Composable

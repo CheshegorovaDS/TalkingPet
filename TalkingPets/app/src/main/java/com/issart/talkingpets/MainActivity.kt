@@ -7,7 +7,6 @@ import androidx.activity.viewModels
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import com.issart.talkingpets.navigation.TalkingPetsScreen
 import com.issart.talkingpets.navigation.TalkingPetsScreen.*
