@@ -1,7 +1,17 @@
 package com.issart.talkingpets.ui.gallery
 
+import android.annotation.SuppressLint
 import android.content.Context
+import android.graphics.Bitmap
+import android.graphics.ImageDecoder
+import android.net.Uri
+import android.os.Build
+import android.provider.MediaStore
 import android.widget.Toast
+import androidx.activity.compose.ManagedActivityResultLauncher
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.activity.result.launch
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
@@ -10,11 +20,12 @@ import androidx.compose.foundation.lazy.LazyVerticalGrid
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ImageBitmap
+import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
@@ -26,6 +37,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.google.accompanist.permissions.ExperimentalPermissionsApi
+import com.google.accompanist.permissions.rememberPermissionState
 import com.issart.talkingpets.R
 import com.issart.talkingpets.ui.theme.Blue
 import com.issart.talkingpets.ui.theme.Purple
@@ -33,10 +46,58 @@ import com.issart.talkingpets.ui.theme.TextTitleColor
 
 @Composable
 fun Gallery() {
+    val imageUri = remember { mutableStateOf<Uri?>(null) }
+    var bitmap by remember { mutableStateOf<Bitmap?>(null) }
+
+    val context = LocalContext.current
+
+    val galleryLauncher = rememberLauncherForActivityResult(contract =
+    ActivityResultContracts.GetContent()) { uri: Uri? ->
+        imageUri.value = uri
+    }
+
+    val cameraLauncher = rememberLauncherForActivityResult(
+        ActivityResultContracts.TakePicturePreview()) {
+            bitmap = it
+        }
+
+    imageUri.let {
+        val uri = it.value
+
+        if (uri != null) {
+            bitmap = if (Build.VERSION.SDK_INT < 28) {
+                MediaStore.Images.Media.getBitmap(context.contentResolver, uri)
+            } else {
+                val source = ImageDecoder.createSource(context.contentResolver, uri)
+                ImageDecoder.decodeBitmap(source)
+            }
+        }
+    }
+
+    when (bitmap) {
+        null -> Column(modifier = Modifier.padding(bottom = 70.dp)) {
+            GalleryTitleText()
+            GalleryButtonsRow(galleryLauncher, cameraLauncher)
+            AnimalGridLayout()
+        }
+        else -> PhotoFromGallery(bitmap!!)
+    }
+
+}
+
+@Composable
+fun PhotoFromGallery(bitmap: Bitmap) {
     Column(modifier = Modifier.padding(bottom = 70.dp)) {
-        GalleryTitleText()
-        GalleryButtonsRow()
-        AnimalGridLayout()
+        Card(
+            modifier = Modifier.fillMaxSize(),
+            backgroundColor = Color.LightGray
+        ) {
+            Image(
+                bitmap = bitmap.asImageBitmap(),
+                contentDescription = "animal photo",
+                contentScale = ContentScale.Fit
+            )
+        }
     }
 }
 
@@ -54,8 +115,26 @@ fun GalleryTitleText() {
     }
 }
 
+@SuppressLint("PermissionLaunchedDuringComposition")
+@OptIn(ExperimentalPermissionsApi::class)
 @Composable
-fun GalleryButtonsRow() {
+fun GalleryButtonsRow(
+    launcher: ManagedActivityResultLauncher<String, Uri?>,
+    cameraLauncher: ManagedActivityResultLauncher<Void?, Bitmap?>
+) {
+
+    val cameraPermissionState = rememberPermissionState(
+        android.Manifest.permission.CAMERA
+    )
+
+//    val isButtonEnabled = when (cameraPermissionState.hasPermission) {
+//        true -> true
+//        false -> {
+//            cameraPermissionState.launchPermissionRequest()
+//            false
+//        }
+//    }
+
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -64,13 +143,17 @@ fun GalleryButtonsRow() {
         GalleryButton(
             color = Blue,
             imageId = R.drawable.ic_gallery,
-            description = "open gallery"
+            description = "open gallery",
+            true,//isButtonEnabled,
+            launcher = launcher
         )
 
         GalleryButton(
             color = Purple,
             imageId = R.drawable.ic_camera,
-            description = "open camera"
+            description = "open camera",
+            true,//isButtonEnabled,
+            cameraLauncher = cameraLauncher
         )
     }
 }
@@ -90,7 +173,9 @@ fun AnimalGridLayout() {
             Card(
                 modifier = Modifier.padding(4.dp),
                 backgroundColor = Color.LightGray,
-                onClick = { showToast(context, "animal photo") }
+                onClick = {
+                    showToast(context, "animal photo")
+                }
             ) {
                 Image(
                     bitmap = ImageBitmap.imageResource(id = animalPhotoId),
@@ -106,14 +191,14 @@ fun AnimalGridLayout() {
 fun GalleryButton(
     color: Color,
     imageId: Int,
-    description: String
+    description: String,
+    enabled: Boolean,
+    launcher: ManagedActivityResultLauncher<String, Uri?>? = null,
+    cameraLauncher: ManagedActivityResultLauncher<Void?, Bitmap?>? = null
 ) {
     val configuration = LocalConfiguration.current
     val widthBox = configuration.screenWidthDp / 2
     val width = configuration.screenWidthDp * 0.45
-//    val height = configuration.screenHeightDp * 0.11
-
-    val context = LocalContext.current
 
     Box(
         modifier = Modifier.width(width = widthBox.dp),
@@ -121,10 +206,14 @@ fun GalleryButton(
     ) {
         Button(
             modifier = Modifier.width(width = width.dp),
-            onClick = { showToast(context, description) },
+            onClick = {
+                launcher?.launch("image/*")
+                cameraLauncher?.launch()
+                      },
             colors = ButtonDefaults.buttonColors(backgroundColor = color),
             shape = RoundedCornerShape(25),
-            elevation = ButtonDefaults.elevation(defaultElevation = 4.dp)
+            elevation = ButtonDefaults.elevation(defaultElevation = 4.dp),
+            enabled = enabled
         ) {
             Image(
                 modifier = Modifier.padding(top = 16.dp, bottom = 16.dp),

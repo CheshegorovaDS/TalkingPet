@@ -8,6 +8,7 @@ import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.issart.talkingpets.navigation.TalkingPetsScreen
 import com.issart.talkingpets.navigation.TalkingPetsScreen.*
 import com.issart.talkingpets.ui.detector.Detector
@@ -20,20 +21,19 @@ import com.issart.talkingpets.ui.theme.TalkingPetsTheme
 
 class MainActivity : ComponentActivity() {
 
-    private val viewModel by viewModels<MainViewModel>()
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            TalkingPetsApp(viewModel)
+            TalkingPetsApp()
         }
     }
 
 }
 
 @Composable
-fun TalkingPetsApp(viewModel: MainViewModel) {
+fun TalkingPetsApp() {
     TalkingPetsTheme {
+        val viewModel: MainViewModel = hiltViewModel()
         val currentScreen: TalkingPetsScreen by viewModel.screen.observeAsState(GALLERY)
         Surface(color = MaterialTheme.colors.background) {
             when (currentScreen) {
@@ -51,5 +51,5 @@ fun TalkingPetsApp(viewModel: MainViewModel) {
 @Preview(showBackground = true, widthDp = 320, heightDp = 640)
 @Composable
 fun DefaultPreview() {
-    TalkingPetsApp(MainViewModel())
+    TalkingPetsApp()
 }
