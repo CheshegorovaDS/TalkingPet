@@ -7,9 +7,10 @@ import com.issart.talkingpets.navigation.TalkingPetsScreen
 import com.issart.talkingpets.navigation.TalkingPetsScreen.*
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
+import javax.inject.Singleton
 
 @HiltViewModel
-class MainViewModel @Inject constructor() : ViewModel() {
+class NavigationViewModel @Inject constructor() : ViewModel() {
 
     private var currentScreen = MutableLiveData(GALLERY)
     val screen: LiveData<TalkingPetsScreen> = currentScreen

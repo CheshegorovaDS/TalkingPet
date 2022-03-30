@@ -3,7 +3,6 @@ package com.issart.talkingpets
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.activity.viewModels
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
@@ -33,7 +32,7 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun TalkingPetsApp() {
     TalkingPetsTheme {
-        val viewModel: MainViewModel = hiltViewModel()
+        val viewModel: NavigationViewModel = hiltViewModel()
         val currentScreen: TalkingPetsScreen by viewModel.screen.observeAsState(GALLERY)
         Surface(color = MaterialTheme.colors.background) {
             when (currentScreen) {
@@ -43,7 +42,7 @@ fun TalkingPetsApp() {
                 RECORDER -> Recorder()
                 PREVIEW -> Share()
             }
-            MainNavigation(viewModel::changeScreen, viewModel)
+            MainNavigation(currentScreen = viewModel.screen.value, clickNavigation = viewModel::changeScreen)
         }
     }
 }
