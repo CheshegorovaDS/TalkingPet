@@ -1,6 +1,5 @@
 package com.issart.talkingpets.ui.gallery
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.ImageDecoder
@@ -11,7 +10,6 @@ import android.widget.Toast
 import androidx.activity.compose.ManagedActivityResultLauncher
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.activity.result.launch
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
@@ -44,6 +42,7 @@ import com.issart.talkingpets.ui.theme.Blue
 import com.issart.talkingpets.ui.theme.Purple
 import com.issart.talkingpets.ui.theme.TextTitleColor
 
+
 @Composable
 fun Gallery() {
     val imageUri = remember { mutableStateOf<Uri?>(null) }
@@ -56,10 +55,12 @@ fun Gallery() {
         imageUri.value = uri
     }
 
-    val cameraLauncher = rememberLauncherForActivityResult(
-        ActivityResultContracts.TakePicturePreview()) {
-            bitmap = it
+    val cameraLauncher = rememberLauncherForActivityResult(contract =
+    ActivityResultContracts.TakePicture()) {
+        if (it) {
+
         }
+    }
 
     imageUri.let {
         val uri = it.value
@@ -80,7 +81,10 @@ fun Gallery() {
             GalleryButtonsRow(galleryLauncher, cameraLauncher)
             AnimalGridLayout()
         }
-        else -> PhotoFromGallery(bitmap!!)
+        else -> {
+//            savePhoto, openNewScreen
+            PhotoFromGallery(bitmap!!)
+        }
     }
 
 }
@@ -115,26 +119,11 @@ fun GalleryTitleText() {
     }
 }
 
-@SuppressLint("PermissionLaunchedDuringComposition")
-@OptIn(ExperimentalPermissionsApi::class)
 @Composable
 fun GalleryButtonsRow(
     launcher: ManagedActivityResultLauncher<String, Uri?>,
-    cameraLauncher: ManagedActivityResultLauncher<Void?, Bitmap?>
+    cameraLauncher: ManagedActivityResultLauncher<Uri, Boolean>
 ) {
-
-    val cameraPermissionState = rememberPermissionState(
-        android.Manifest.permission.CAMERA
-    )
-
-//    val isButtonEnabled = when (cameraPermissionState.hasPermission) {
-//        true -> true
-//        false -> {
-//            cameraPermissionState.launchPermissionRequest()
-//            false
-//        }
-//    }
-
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -144,15 +133,13 @@ fun GalleryButtonsRow(
             color = Blue,
             imageId = R.drawable.ic_gallery,
             description = "open gallery",
-            true,//isButtonEnabled,
             launcher = launcher
         )
 
-        GalleryButton(
+        CameraButton(
             color = Purple,
             imageId = R.drawable.ic_camera,
             description = "open camera",
-            true,//isButtonEnabled,
             cameraLauncher = cameraLauncher
         )
     }
@@ -192,13 +179,55 @@ fun GalleryButton(
     color: Color,
     imageId: Int,
     description: String,
-    enabled: Boolean,
-    launcher: ManagedActivityResultLauncher<String, Uri?>? = null,
-    cameraLauncher: ManagedActivityResultLauncher<Void?, Bitmap?>? = null
+    launcher: ManagedActivityResultLauncher<String, Uri?>? = null
 ) {
     val configuration = LocalConfiguration.current
     val widthBox = configuration.screenWidthDp / 2
     val width = configuration.screenWidthDp * 0.45
+    Box(
+        modifier = Modifier.width(width = widthBox.dp),
+        contentAlignment = Alignment.Center
+    ) {
+        Button(
+            modifier = Modifier.width(width = width.dp),
+            onClick = { launcher?.launch("image/*") },
+            colors = ButtonDefaults.buttonColors(backgroundColor = color),
+            shape = RoundedCornerShape(25),
+            elevation = ButtonDefaults.elevation(defaultElevation = 4.dp),
+        ) {
+            Image(
+                modifier = Modifier.padding(top = 16.dp, bottom = 16.dp),
+                painter = painterResource(id = imageId),
+                contentDescription = description
+            )
+        }
+    }
+}
+
+@OptIn(ExperimentalPermissionsApi::class)
+@Composable
+fun CameraButton(
+    color: Color,
+    imageId: Int,
+    description: String,
+    cameraLauncher: ManagedActivityResultLauncher<Uri, Boolean>? = null
+) {
+    val configuration = LocalConfiguration.current
+    val widthBox = configuration.screenWidthDp / 2
+    val width = configuration.screenWidthDp * 0.45
+
+    val context = LocalContext.current
+
+//    val file = File(getFilesDir(), "talkingPet")
+//    val uri = FileProvider.getUriForFile(
+//        context,
+//        context.packageName + ".provider",
+//        file
+//    )
+
+    val cameraPermissionState = rememberPermissionState(
+        android.Manifest.permission.CAMERA
+    )
 
     Box(
         modifier = Modifier.width(width = widthBox.dp),
@@ -207,13 +236,14 @@ fun GalleryButton(
         Button(
             modifier = Modifier.width(width = width.dp),
             onClick = {
-                launcher?.launch("image/*")
-                cameraLauncher?.launch()
-                      },
+//                when (cameraPermissionState.hasPermission) {
+//                    true -> cameraLauncher?.launch(Ur)
+//                    false -> cameraPermissionState.launchPermissionRequest()
+//                }
+            },
             colors = ButtonDefaults.buttonColors(backgroundColor = color),
             shape = RoundedCornerShape(25),
-            elevation = ButtonDefaults.elevation(defaultElevation = 4.dp),
-            enabled = enabled
+            elevation = ButtonDefaults.elevation(defaultElevation = 4.dp)
         ) {
             Image(
                 modifier = Modifier.padding(top = 16.dp, bottom = 16.dp),

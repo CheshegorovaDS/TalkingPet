@@ -14,6 +14,7 @@ import com.issart.talkingpets.ui.detector.Detector
 import com.issart.talkingpets.ui.editor.Editor
 import com.issart.talkingpets.ui.gallery.Gallery
 import com.issart.talkingpets.ui.mainNavigation.MainNavigation
+import com.issart.talkingpets.ui.mainNavigation.NavigationViewModel
 import com.issart.talkingpets.ui.recorder.Recorder
 import com.issart.talkingpets.ui.share.Share
 import com.issart.talkingpets.ui.theme.TalkingPetsTheme
@@ -50,5 +51,7 @@ fun TalkingPetsApp() {
 @Preview(showBackground = true, widthDp = 320, heightDp = 640)
 @Composable
 fun DefaultPreview() {
-    TalkingPetsApp()
+    TalkingPetsTheme {
+        Editor()
+    }
 }
