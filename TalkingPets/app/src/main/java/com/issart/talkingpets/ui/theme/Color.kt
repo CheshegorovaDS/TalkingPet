@@ -11,8 +11,10 @@ val Green = Color(0xFF58CCB0)
 val Purple = Color(0xFFBA94E0)
 val Red = Color(0xFFED6D72)
 val Orange = Color(0xFFFFB05B)
+val White = Color(0xFFFFFFFF)
 
 val BackgroundColor = Color(0xFFFFF8E7)
 val TextTitleColor = Color(0xFF545047)
 val TextDialogColor = Color(0xFF333333)
+val SwitchUncheckedTrackColor = Color(0xFFE2E2E2)
 
