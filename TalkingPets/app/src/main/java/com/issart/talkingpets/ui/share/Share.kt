@@ -71,8 +71,12 @@ fun ShareButtons() {
         )
     }
 
-    Box {
+    Box(
+        modifier = Modifier.fillMaxWidth(),
+        contentAlignment = Alignment.Center
+    ) {
        ShareButtonWithoutIcon(
+           modifier = Modifier.padding(top = 32.dp),
            text = stringResource(id = R.string.create_new_animation_button),
            background = Purple
        )
@@ -118,10 +122,13 @@ fun ShareButton(icon: Painter, text: String, background: Color, modifier: Modifi
 }
 
 @Composable
-fun ShareButtonWithoutIcon(text: String, background: Color) {
+fun ShareButtonWithoutIcon(text: String, background: Color, modifier: Modifier = Modifier) {
     val context = LocalContext.current
+    val configuration = LocalConfiguration.current
+    val heightButton = configuration.screenHeightDp * 0.085
 
     Button(
+        modifier = modifier.height(heightButton.dp),
         onClick = { showToast(context, text) },
         colors = ButtonDefaults.buttonColors(backgroundColor = background),
         shape = RoundedCornerShape(25),
@@ -130,7 +137,7 @@ fun ShareButtonWithoutIcon(text: String, background: Color) {
         Text(
             modifier = Modifier.padding(start = 8.dp),
             text = text,
-            fontSize = 24.sp,
+//            fontSize = 24.sp,
             fontWeight = FontWeight(600),
             color = White
         )

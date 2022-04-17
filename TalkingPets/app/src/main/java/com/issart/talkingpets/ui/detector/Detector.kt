@@ -1,5 +1,6 @@
 package com.issart.talkingpets.ui.detector
 
+import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Switch
@@ -9,6 +10,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
@@ -34,14 +37,39 @@ fun Detector() {
 fun DetectorImage() {
     val configuration = LocalConfiguration.current
     val heightImage = configuration.screenHeightDp * 0.56
-    Image(
+
+    Box(
         modifier = Modifier
             .fillMaxWidth()
-            .height(heightImage.dp),
+            .height(heightImage.dp)
+    ) {
+        DetectorPhoto()
+        DetectorCanvas()
+    }
+}
+
+@Composable
+fun DetectorPhoto() {
+    Image(
+        modifier = Modifier.fillMaxSize(),
         bitmap = ImageBitmap.imageResource(id = R.drawable.cat_1),
         contentDescription = "animal photo",
         contentScale = ContentScale.Crop
     )
+}
+
+@Composable
+fun DetectorCanvas() {
+    Canvas(modifier = Modifier.fillMaxSize() ) {
+        val canvasWidth = size.width
+        val canvasHeight = size.height
+
+        drawOval(
+            color = Blue,
+            size = Size(canvasWidth * 0.5f, canvasWidth * 0.4f),
+            topLeft = Offset(canvasWidth * 0.25f, canvasHeight / 2)
+        )
+    }
 }
 
 @Composable
