@@ -13,6 +13,7 @@ import com.issart.talkingpets.navigation.TalkingPetsScreen.*
 import com.issart.talkingpets.ui.detector.Detector
 import com.issart.talkingpets.ui.editor.Editor
 import com.issart.talkingpets.ui.gallery.Gallery
+import com.issart.talkingpets.ui.gallery.GalleryViewModel
 import com.issart.talkingpets.ui.mainNavigation.MainNavigation
 import com.issart.talkingpets.ui.recorder.Recorder
 import com.issart.talkingpets.ui.share.Share
@@ -33,10 +34,13 @@ class MainActivity : ComponentActivity() {
 fun TalkingPetsApp() {
     TalkingPetsTheme {
         val viewModel: NavigationViewModel = hiltViewModel()
+        val galleryViewModel: GalleryViewModel = hiltViewModel()
         val currentScreen: TalkingPetsScreen by viewModel.screen.observeAsState(GALLERY)
         Surface(color = MaterialTheme.colors.background) {
             when (currentScreen) {
-                GALLERY -> Gallery()
+                GALLERY -> Gallery(galleryViewModel.uri) {
+                    galleryViewModel.setPhotoUri(it)
+                }
                 EDITOR -> Editor()
                 DETECTOR -> Detector()
                 RECORDER -> Recorder()

@@ -21,6 +21,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.*
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -43,32 +44,47 @@ import com.issart.talkingpets.R
 import com.issart.talkingpets.ui.theme.Blue
 import com.issart.talkingpets.ui.theme.Purple
 import com.issart.talkingpets.ui.theme.TextTitleColor
+import androidx.core.content.FileProvider
+import androidx.lifecycle.MutableLiveData
+import com.issart.talkingpets.ui.utils.StringCallback
+
+import java.io.File
+import java.io.IOException
+import java.text.SimpleDateFormat
+import java.util.*
 
 @Composable
-fun Gallery() {
-    val imageUri = remember { mutableStateOf<Uri?>(null) }
-    var bitmap by remember { mutableStateOf<Bitmap?>(null) }
+fun Gallery(uri: MutableLiveData<String?>, updatePhoto: StringCallback) {
+    var bitmap by remember { mutableStateOf<Bitmap?>(null) }//delete
+    val photoUri = uri.observeAsState()
 
     val context = LocalContext.current
+    val contentResolver = context.contentResolver
 
-    val galleryLauncher = rememberLauncherForActivityResult(contract =
-    ActivityResultContracts.GetContent()) { uri: Uri? ->
-        imageUri.value = uri
+    val galleryLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.GetContent()
+    ) { uri: Uri? ->
+        updatePhoto(uri.toString())
     }
 
     val cameraLauncher = rememberLauncherForActivityResult(
-        ActivityResultContracts.TakePicturePreview()) {
-            bitmap = it
+        contract = ActivityResultContracts.TakePicture()
+    ) {
+        if (it) {
+            //success
+        } else {
+            updatePhoto(null)
+            Toast.makeText(context, "Camera image didn't save.", Toast.LENGTH_SHORT).show()
         }
 
-    imageUri.let {
-        val uri = it.value
+    photoUri.value?.let {
+        val uri = Uri.parse(it)
 
         if (uri != null) {
             bitmap = if (Build.VERSION.SDK_INT < 28) {
-                MediaStore.Images.Media.getBitmap(context.contentResolver, uri)
+                MediaStore.Images.Media.getBitmap(contentResolver, uri)
             } else {
-                val source = ImageDecoder.createSource(context.contentResolver, uri)
+                val source = ImageDecoder.createSource(contentResolver, uri)
                 ImageDecoder.decodeBitmap(source)
             }
         }
@@ -77,7 +93,7 @@ fun Gallery() {
     when (bitmap) {
         null -> Column(modifier = Modifier.padding(bottom = 70.dp)) {
             GalleryTitleText()
-            GalleryButtonsRow(galleryLauncher, cameraLauncher)
+            GalleryButtonsRow(galleryLauncher, cameraLauncher, updatePhoto)
             AnimalGridLayout()
         }
         else -> PhotoFromGallery(bitmap!!)
@@ -120,7 +136,8 @@ fun GalleryTitleText() {
 @Composable
 fun GalleryButtonsRow(
     launcher: ManagedActivityResultLauncher<String, Uri?>,
-    cameraLauncher: ManagedActivityResultLauncher<Void?, Bitmap?>
+    cameraLauncher: ManagedActivityResultLauncher<Uri, Boolean>,
+    updatePhoto: StringCallback
 ) {
 
     val cameraPermissionState = rememberPermissionState(
@@ -152,8 +169,8 @@ fun GalleryButtonsRow(
             color = Purple,
             imageId = R.drawable.ic_camera,
             description = "open camera",
-            true,//isButtonEnabled,
-            cameraLauncher = cameraLauncher
+            cameraLauncher = cameraLauncher,
+            updatePhoto
         )
     }
 }
@@ -192,13 +209,69 @@ fun GalleryButton(
     color: Color,
     imageId: Int,
     description: String,
-    enabled: Boolean,
-    launcher: ManagedActivityResultLauncher<String, Uri?>? = null,
-    cameraLauncher: ManagedActivityResultLauncher<Void?, Bitmap?>? = null
+    launcher: ManagedActivityResultLauncher<String, Uri?>? = null
 ) {
     val configuration = LocalConfiguration.current
     val widthBox = configuration.screenWidthDp / 2
     val width = configuration.screenWidthDp * 0.45
+    Box(
+        modifier = Modifier.width(width = widthBox.dp),
+        contentAlignment = Alignment.Center
+    ) {
+        Button(
+            modifier = Modifier.width(width = width.dp),
+            onClick = { launcher?.launch("image/*") },
+            colors = ButtonDefaults.buttonColors(backgroundColor = color),
+            shape = RoundedCornerShape(25),
+            elevation = ButtonDefaults.elevation(defaultElevation = 4.dp),
+        ) {
+            Image(
+                modifier = Modifier.padding(top = 16.dp, bottom = 16.dp),
+                painter = painterResource(id = imageId),
+                contentDescription = description
+            )
+        }
+    }
+}
+
+@OptIn(ExperimentalPermissionsApi::class)
+@Composable
+fun CameraButton(
+    color: Color,
+    imageId: Int,
+    description: String,
+    cameraLauncher: ManagedActivityResultLauncher<Uri, Boolean>? = null,
+    updatePhoto: StringCallback
+) {
+    val configuration = LocalConfiguration.current
+    val widthBox = configuration.screenWidthDp / 2
+    val width = configuration.screenWidthDp * 0.45
+
+    val context = LocalContext.current
+
+    val photoFile: File? = try {
+        createImageFile(context)
+    } catch (ex: IOException) {
+        Toast.makeText(
+            context,
+            "SAVE_IMAGE_EXCEPTION_MESSAGE",
+            Toast.LENGTH_SHORT
+        ).show()
+        null
+    }
+
+    val uri = photoFile?.let {
+        FileProvider.getUriForFile(
+        context,
+        context.packageName + ".provider",
+            it
+        )
+    }
+    updatePhoto(uri.toString())
+
+    val cameraPermissionState = rememberPermissionState(
+        android.Manifest.permission.CAMERA
+    )
 
     Box(
         modifier = Modifier.width(width = widthBox.dp),
@@ -207,9 +280,11 @@ fun GalleryButton(
         Button(
             modifier = Modifier.width(width = width.dp),
             onClick = {
-                launcher?.launch("image/*")
-                cameraLauncher?.launch()
-                      },
+                when (cameraPermissionState.hasPermission) {
+                    true -> cameraLauncher?.launch(uri)
+                    false -> cameraPermissionState.launchPermissionRequest()
+                }
+            },
             colors = ButtonDefaults.buttonColors(backgroundColor = color),
             shape = RoundedCornerShape(25),
             elevation = ButtonDefaults.elevation(defaultElevation = 4.dp),
@@ -222,6 +297,18 @@ fun GalleryButton(
             )
         }
     }
+}
+
+@SuppressLint("SimpleDateFormat")
+@Throws(IOException::class)
+private fun createImageFile(context: Context): File {
+    val timeStamp: String = SimpleDateFormat("yyyyMMdd_HHmmss").format(Date())
+    val storageDir: File = context.cacheDir
+    return File.createTempFile(
+        "JPEG_${timeStamp}",
+        ".jpg",
+        storageDir
+    )
 }
 
 @Composable
@@ -238,9 +325,8 @@ fun TitleScreen(title: String) {
 private fun showToast(context: Context, text: String) =
     Toast.makeText(context, text, Toast.LENGTH_SHORT).show()
 
-
 @Preview(showBackground = true, widthDp = 400, heightDp = 848)
 @Composable
 fun DefaultPreview() {
-    Gallery()
+//    Gallery(galleryViewModel.uri)
 }

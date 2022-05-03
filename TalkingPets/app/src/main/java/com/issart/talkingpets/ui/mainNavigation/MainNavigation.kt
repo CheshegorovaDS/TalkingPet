@@ -55,12 +55,7 @@ fun MainNavigation(
 fun GalleryButton(clickNavigation: ClickNavigation, curScreen: TalkingPetsScreen?) {
     val configuration = LocalConfiguration.current
     val width = (configuration.screenWidthDp / 5).dp
-
-    val height = if (curScreen == TalkingPetsScreen.GALLERY) {
-        80.dp
-    } else {
-        72.dp
-    }
+    val height = getHeight(TalkingPetsScreen.GALLERY, curScreen)
 
     Button(
         modifier = Modifier
@@ -83,12 +78,7 @@ fun GalleryButton(clickNavigation: ClickNavigation, curScreen: TalkingPetsScreen
 fun EditorButton(clickNavigation: ClickNavigation, curScreen: TalkingPetsScreen?) {
     val configuration = LocalConfiguration.current
     val width = (2 * configuration.screenWidthDp / 5).dp
-
-    val height = if (curScreen == TalkingPetsScreen.EDITOR) {
-        80.dp
-    } else {
-        72.dp
-    }
+    val height = getHeight(TalkingPetsScreen.EDITOR, curScreen)
 
     Button(
         modifier = Modifier
@@ -117,12 +107,7 @@ fun EditorButton(clickNavigation: ClickNavigation, curScreen: TalkingPetsScreen?
 fun DetectorButton(clickNavigation: ClickNavigation, curScreen: TalkingPetsScreen?) {
     val configuration = LocalConfiguration.current
     val width = (3 * configuration.screenWidthDp / 5).dp
-
-    val height = if (curScreen == TalkingPetsScreen.DETECTOR) {
-        80.dp
-    } else {
-        72.dp
-    }
+    val height = getHeight(TalkingPetsScreen.DETECTOR, curScreen)
 
     Button(
         modifier = Modifier
