@@ -2,6 +2,7 @@ package com.issart.talkingpets.ui.gallery
 
 import android.content.Context
 import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.graphics.ImageDecoder
 import android.net.Uri
 import android.os.Build
@@ -45,12 +46,10 @@ import com.issart.talkingpets.ui.theme.TextTitleColor
 import androidx.core.content.FileProvider
 import androidx.lifecycle.MutableLiveData
 import com.issart.talkingpets.ui.utils.StringCallback
-
 import java.io.File
 import java.io.IOException
 import java.text.SimpleDateFormat
 import java.util.*
-
 
 @Composable
 fun Gallery(uri: MutableLiveData<String?>, updatePhoto: StringCallback) {
@@ -64,21 +63,6 @@ fun Gallery(uri: MutableLiveData<String?>, updatePhoto: StringCallback) {
         contract = ActivityResultContracts.GetContent()
     ) { uri: Uri? ->
         updatePhoto(uri.toString())
-    }
-
-    val cameraLauncher = rememberLauncherForActivityResult(
-        contract = ActivityResultContracts.TakePicture()
-    ) {
-        if (it) {
-            //success
-        } else {
-            updatePhoto(null)
-            Toast.makeText(context, "Camera image didn't save.", Toast.LENGTH_SHORT).show()
-        }
-    }
-
-    photoUri.value?.let {
-        val uri = Uri.parse(it)
 
         if (uri != null) {
             bitmap = if (Build.VERSION.SDK_INT < 28) {
@@ -87,6 +71,18 @@ fun Gallery(uri: MutableLiveData<String?>, updatePhoto: StringCallback) {
                 val source = ImageDecoder.createSource(contentResolver, uri)
                 ImageDecoder.decodeBitmap(source)
             }
+        }
+    }
+
+    val cameraLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.TakePicture()
+    ) {
+        if (it) {
+            bitmap = BitmapFactory.decodeFile(photoUri.value)
+            updatePhoto(photoUri.value)
+        } else {
+            updatePhoto(null)
+            Toast.makeText(context, "Camera image didn't save.", Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -254,7 +250,11 @@ fun CameraButton(
             it
         )
     }
-    updatePhoto(uri.toString())
+
+    val storageDir: File = context.cacheDir
+    val fileName = uri?.path
+//    val file = File()
+    updatePhoto("$storageDir/${fileName?.substringAfterLast("/")}")
 
     val cameraPermissionState = rememberPermissionState(
         android.Manifest.permission.CAMERA
