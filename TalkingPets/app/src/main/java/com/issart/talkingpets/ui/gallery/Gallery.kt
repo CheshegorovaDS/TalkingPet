@@ -1,6 +1,5 @@
 package com.issart.talkingpets.ui.gallery
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.ImageDecoder
@@ -11,7 +10,6 @@ import android.widget.Toast
 import androidx.activity.compose.ManagedActivityResultLauncher
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.activity.result.launch
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
@@ -53,6 +51,7 @@ import java.io.IOException
 import java.text.SimpleDateFormat
 import java.util.*
 
+
 @Composable
 fun Gallery(uri: MutableLiveData<String?>, updatePhoto: StringCallback) {
     var bitmap by remember { mutableStateOf<Bitmap?>(null) }//delete
@@ -76,6 +75,7 @@ fun Gallery(uri: MutableLiveData<String?>, updatePhoto: StringCallback) {
             updatePhoto(null)
             Toast.makeText(context, "Camera image didn't save.", Toast.LENGTH_SHORT).show()
         }
+    }
 
     photoUri.value?.let {
         val uri = Uri.parse(it)
@@ -96,7 +96,10 @@ fun Gallery(uri: MutableLiveData<String?>, updatePhoto: StringCallback) {
             GalleryButtonsRow(galleryLauncher, cameraLauncher, updatePhoto)
             AnimalGridLayout()
         }
-        else -> PhotoFromGallery(bitmap!!)
+        else -> {
+//            savePhoto, openNewScreen
+            PhotoFromGallery(bitmap!!)
+        }
     }
 
 }
@@ -131,27 +134,12 @@ fun GalleryTitleText() {
     }
 }
 
-@SuppressLint("PermissionLaunchedDuringComposition")
-@OptIn(ExperimentalPermissionsApi::class)
 @Composable
 fun GalleryButtonsRow(
     launcher: ManagedActivityResultLauncher<String, Uri?>,
     cameraLauncher: ManagedActivityResultLauncher<Uri, Boolean>,
     updatePhoto: StringCallback
 ) {
-
-    val cameraPermissionState = rememberPermissionState(
-        android.Manifest.permission.CAMERA
-    )
-
-//    val isButtonEnabled = when (cameraPermissionState.hasPermission) {
-//        true -> true
-//        false -> {
-//            cameraPermissionState.launchPermissionRequest()
-//            false
-//        }
-//    }
-
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -161,11 +149,10 @@ fun GalleryButtonsRow(
             color = Blue,
             imageId = R.drawable.ic_gallery,
             description = "open gallery",
-            true,//isButtonEnabled,
             launcher = launcher
         )
 
-        GalleryButton(
+        CameraButton(
             color = Purple,
             imageId = R.drawable.ic_camera,
             description = "open camera",
@@ -287,8 +274,7 @@ fun CameraButton(
             },
             colors = ButtonDefaults.buttonColors(backgroundColor = color),
             shape = RoundedCornerShape(25),
-            elevation = ButtonDefaults.elevation(defaultElevation = 4.dp),
-            enabled = enabled
+            elevation = ButtonDefaults.elevation(defaultElevation = 4.dp)
         ) {
             Image(
                 modifier = Modifier.padding(top = 16.dp, bottom = 16.dp),
@@ -299,7 +285,6 @@ fun CameraButton(
     }
 }
 
-@SuppressLint("SimpleDateFormat")
 @Throws(IOException::class)
 private fun createImageFile(context: Context): File {
     val timeStamp: String = SimpleDateFormat("yyyyMMdd_HHmmss").format(Date())

@@ -1,4 +1,4 @@
-package com.issart.talkingpets
+package com.issart.talkingpets.ui.mainNavigation
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
