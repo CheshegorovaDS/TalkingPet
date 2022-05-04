@@ -1,5 +1,6 @@
 package com.issart.talkingpets.ui.gallery
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
@@ -44,17 +45,27 @@ import com.issart.talkingpets.ui.theme.Blue
 import com.issart.talkingpets.ui.theme.Purple
 import com.issart.talkingpets.ui.theme.TextTitleColor
 import androidx.core.content.FileProvider
-import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.LiveData
 import com.issart.talkingpets.ui.utils.StringCallback
 import java.io.File
+import java.io.FileOutputStream
 import java.io.IOException
 import java.text.SimpleDateFormat
 import java.util.*
 
 @Composable
-fun Gallery(uri: MutableLiveData<String?>, updatePhoto: StringCallback) {
+fun Gallery(uri: LiveData<String?>, updatePhoto: StringCallback) {
     var bitmap by remember { mutableStateOf<Bitmap?>(null) }//delete
     val photoUri = uri.observeAsState()
+
+    if (bitmap == null) {
+        photoUri.value?.let {
+            val bitmapFromFile = BitmapFactory.decodeFile(photoUri.value)
+            if (bitmapFromFile != null) {
+                bitmap = bitmapFromFile
+            }
+        }
+    }
 
     val context = LocalContext.current
     val contentResolver = context.contentResolver
@@ -90,7 +101,7 @@ fun Gallery(uri: MutableLiveData<String?>, updatePhoto: StringCallback) {
         null -> Column(modifier = Modifier.padding(bottom = 70.dp)) {
             GalleryTitleText()
             GalleryButtonsRow(galleryLauncher, cameraLauncher, updatePhoto)
-            AnimalGridLayout()
+            AnimalGridLayout(updatePhoto)
         }
         else -> {
 //            savePhoto, openNewScreen
@@ -160,7 +171,7 @@ fun GalleryButtonsRow(
 
 @OptIn(ExperimentalMaterialApi::class, ExperimentalFoundationApi::class)
 @Composable
-fun AnimalGridLayout() {
+fun AnimalGridLayout(updatePhoto: StringCallback) {
     val data = getAnimalIdList()
     val context = LocalContext.current
 
@@ -174,7 +185,11 @@ fun AnimalGridLayout() {
                 modifier = Modifier.padding(4.dp),
                 backgroundColor = Color.LightGray,
                 onClick = {
-                    showToast(context, "animal photo")
+                    val uri = getPhotoUri(context)
+                    val storageDir: File = context.cacheDir
+                    val fileName = uri?.path
+                    val filePath = "$storageDir/${fileName?.substringAfterLast("/")}"
+                    updateGalleryPhoto(filePath, context, animalPhotoId, updatePhoto)
                 }
             ) {
                 Image(
@@ -232,30 +247,6 @@ fun CameraButton(
 
     val context = LocalContext.current
 
-    val photoFile: File? = try {
-        createImageFile(context)
-    } catch (ex: IOException) {
-        Toast.makeText(
-            context,
-            "SAVE_IMAGE_EXCEPTION_MESSAGE",
-            Toast.LENGTH_SHORT
-        ).show()
-        null
-    }
-
-    val uri = photoFile?.let {
-        FileProvider.getUriForFile(
-        context,
-        context.packageName + ".provider",
-            it
-        )
-    }
-
-    val storageDir: File = context.cacheDir
-    val fileName = uri?.path
-//    val file = File()
-    updatePhoto("$storageDir/${fileName?.substringAfterLast("/")}")
-
     val cameraPermissionState = rememberPermissionState(
         android.Manifest.permission.CAMERA
     )
@@ -268,7 +259,14 @@ fun CameraButton(
             modifier = Modifier.width(width = width.dp),
             onClick = {
                 when (cameraPermissionState.hasPermission) {
-                    true -> cameraLauncher?.launch(uri)
+                    true -> {
+                        val uri = getPhotoUri(context)
+                        val storageDir: File = context.cacheDir
+                        val fileName = uri?.path
+                        updatePhoto("$storageDir/${fileName?.substringAfterLast("/")}")
+
+                        cameraLauncher?.launch(uri)
+                    }
                     false -> cameraPermissionState.launchPermissionRequest()
                 }
             },
@@ -285,6 +283,50 @@ fun CameraButton(
     }
 }
 
+private fun updateGalleryPhoto(
+    filePath: String,
+    context: Context,
+    animalPhotoId: Int,
+    updatePhoto: StringCallback
+) {
+    val bitmap = BitmapFactory.decodeResource(context.resources, animalPhotoId)
+    val file = File(filePath)
+
+    try {
+        val stream = FileOutputStream(file)
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream)
+        stream.flush()
+        stream.close()
+        updatePhoto(filePath)
+    } catch (e:IOException) {
+        showToast(context, e.message.toString())//?: "..."
+    }
+}
+
+private fun getPhotoUri(context: Context): Uri? {
+    val photoFile: File? = try {
+        createImageFile(context)
+    } catch (ex: IOException) {
+        Toast.makeText(
+            context,
+            "SAVE_IMAGE_EXCEPTION_MESSAGE",
+            Toast.LENGTH_SHORT
+        ).show()
+        null
+    }
+
+    val uri = photoFile?.let {
+        FileProvider.getUriForFile(
+            context,
+            context.packageName + ".provider",
+            it
+        )
+    }
+
+    return uri
+}
+
+@SuppressLint("SimpleDateFormat")
 @Throws(IOException::class)
 private fun createImageFile(context: Context): File {
     val timeStamp: String = SimpleDateFormat("yyyyMMdd_HHmmss").format(Date())
