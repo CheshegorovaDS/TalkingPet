@@ -39,7 +39,11 @@ fun TalkingPetsApp() {
         val currentScreen: TalkingPetsScreen by viewModel.screen.observeAsState(GALLERY)
         Surface(color = MaterialTheme.colors.background) {
             when (currentScreen) {
-                GALLERY -> Gallery(galleryViewModel.uri, galleryViewModel::setPhotoUri)
+                GALLERY -> Gallery(
+                    galleryViewModel.uri,
+                    galleryViewModel::setPhotoUri,
+                    viewModel::changeScreen
+                )
                 EDITOR -> Editor()
                 DETECTOR -> Detector()
                 RECORDER -> Recorder()

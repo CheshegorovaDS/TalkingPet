@@ -46,6 +46,7 @@ import com.issart.talkingpets.ui.theme.Purple
 import com.issart.talkingpets.ui.theme.TextTitleColor
 import androidx.core.content.FileProvider
 import androidx.lifecycle.LiveData
+import com.issart.talkingpets.navigation.TalkingPetsScreen
 import com.issart.talkingpets.ui.utils.StringCallback
 import java.io.File
 import java.io.FileOutputStream
@@ -54,9 +55,13 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 @Composable
-fun Gallery(uri: LiveData<String?>, updatePhoto: StringCallback) {
+fun Gallery(
+    uri: LiveData<String?>,
+    updatePhoto: StringCallback,
+    onChoosePhoto: (TalkingPetsScreen) -> Unit
+) {
     var bitmap by remember { mutableStateOf<Bitmap?>(null) }//delete
-    val photoUri = uri.observeAsState()
+    val photoUri = uri.observeAsState(initial = null)
 
     if (bitmap == null) {
         photoUri.value?.let {
@@ -104,8 +109,9 @@ fun Gallery(uri: LiveData<String?>, updatePhoto: StringCallback) {
             AnimalGridLayout(updatePhoto)
         }
         else -> {
-//            savePhoto, openNewScreen
-            PhotoFromGallery(bitmap!!)
+//            savePhototoEditorViewModel
+            updatePhoto(null)
+            onChoosePhoto(TalkingPetsScreen.EDITOR)
         }
     }
 
