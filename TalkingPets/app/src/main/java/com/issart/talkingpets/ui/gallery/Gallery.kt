@@ -46,7 +46,6 @@ import com.issart.talkingpets.ui.theme.Purple
 import com.issart.talkingpets.ui.theme.TextTitleColor
 import androidx.core.content.FileProvider
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.LiveData
 import com.issart.talkingpets.navigation.TalkingPetsScreen
 import com.issart.talkingpets.ui.utils.StringCallback
 import java.io.File
@@ -58,9 +57,10 @@ import java.util.*
 @Composable
 fun Gallery(
     onChoosePhoto: (TalkingPetsScreen) -> Unit,
+    setEditorPhoto: (Bitmap) -> Unit,
     galleryViewModel: GalleryViewModel = hiltViewModel()
 ) {
-    var bitmap by remember { mutableStateOf<Bitmap?>(null) }//delete
+    var bitmap by remember { mutableStateOf<Bitmap?>(null) }
     val photoUri = galleryViewModel.uri.observeAsState(initial = null)
     val updatePhoto = galleryViewModel::setPhotoUri
 
@@ -110,28 +110,12 @@ fun Gallery(
             AnimalGridLayout(updatePhoto)
         }
         else -> {
-//            savePhototoEditorViewModel
+            bitmap?.let { setEditorPhoto(it) }
             updatePhoto(null)
             onChoosePhoto(TalkingPetsScreen.EDITOR)
         }
     }
 
-}
-
-@Composable
-fun PhotoFromGallery(bitmap: Bitmap) {
-    Column(modifier = Modifier.padding(bottom = 70.dp)) {
-        Card(
-            modifier = Modifier.fillMaxSize(),
-            backgroundColor = Color.LightGray
-        ) {
-            Image(
-                bitmap = bitmap.asImageBitmap(),
-                contentDescription = "animal photo",
-                contentScale = ContentScale.Fit
-            )
-        }
-    }
 }
 
 @Composable

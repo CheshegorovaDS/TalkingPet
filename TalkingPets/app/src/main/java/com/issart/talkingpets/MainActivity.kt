@@ -8,12 +8,13 @@ import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.issart.talkingpets.navigation.TalkingPetsScreen
 import com.issart.talkingpets.navigation.TalkingPetsScreen.*
 import com.issart.talkingpets.ui.detector.Detector
 import com.issart.talkingpets.ui.editor.Editor
+import com.issart.talkingpets.ui.editor.EditorViewModel
 import com.issart.talkingpets.ui.gallery.Gallery
-import com.issart.talkingpets.ui.gallery.GalleryViewModel
 import com.issart.talkingpets.ui.mainNavigation.MainNavigation
 import com.issart.talkingpets.ui.mainNavigation.NavigationViewModel
 import com.issart.talkingpets.ui.recorder.Recorder
@@ -36,11 +37,15 @@ fun TalkingPetsApp() {
     TalkingPetsTheme {
         val viewModel: NavigationViewModel = hiltViewModel()
         val currentScreen: TalkingPetsScreen by viewModel.screen.observeAsState(GALLERY)
+        val editorViewModel:EditorViewModel = hiltViewModel()
 
         Surface(color = MaterialTheme.colors.background) {
             when (currentScreen) {
-                GALLERY -> Gallery(viewModel::changeScreen)
-                EDITOR -> Editor()
+                GALLERY -> Gallery(
+                    onChoosePhoto = viewModel::changeScreen,
+                    setEditorPhoto = editorViewModel::setEditorBitmap
+                )
+                EDITOR -> Editor(editorViewModel)
                 DETECTOR -> Detector()
                 RECORDER -> Recorder()
                 PREVIEW -> Share()
@@ -57,6 +62,6 @@ fun TalkingPetsApp() {
 @Composable
 fun DefaultPreview() {
     TalkingPetsTheme {
-        Editor()
+        Editor(viewModel())
     }
 }

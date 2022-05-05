@@ -1,6 +1,7 @@
 package com.issart.talkingpets.ui.editor
 
 import android.content.Context
+import android.graphics.Bitmap
 import android.widget.Toast
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -9,47 +10,36 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.Button
-import androidx.compose.material.ButtonDefaults
-import androidx.compose.material.ButtonElevation
-import androidx.compose.material.Text
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.draw.rotate
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.ImageBitmap
-import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.imageResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.issart.talkingpets.R
 import com.issart.talkingpets.ui.common.Title
 import com.issart.talkingpets.ui.theme.TalkingPetsTheme
-import com.issart.talkingpets.ui.theme.TextTitleColor
 
 @Composable
-fun Editor() {
+fun Editor(viewModel: EditorViewModel) {
     Column(modifier = Modifier.padding(bottom = 70.dp)) {
-        EditorImage()
+        viewModel.bitmap.value?.let { EditorImage(it) }
         EditorTitle()
         RotateButtons()
     }
 }
 
 @Composable
-fun EditorImage() {
+fun EditorImage(bitmap: Bitmap) {
     val configuration = LocalConfiguration.current
     val heightImage = configuration.screenHeightDp * 0.56
     Image(
         modifier = Modifier
             .fillMaxWidth()
             .height(heightImage.dp),
-        bitmap = ImageBitmap.imageResource(id = R.drawable.cat_1),
+        bitmap = bitmap.asImageBitmap(),
         contentDescription = "animal photo",
         contentScale = ContentScale.Crop
     )
@@ -89,7 +79,7 @@ fun RotateButtons() {
                 .clickable(
                     enabled = true,
                     onClickLabel = "Clickable image",
-                    onClick = { showToast(context, "rotate left")}
+                    onClick = { showToast(context, "rotate left") }
                 ),
             painter = painterResource(id = R.drawable.ic_rotate_left) ,
             contentDescription = "rotate left"
@@ -102,7 +92,7 @@ fun RotateButtons() {
                 .clickable(
                     enabled = true,
                     onClickLabel = "Clickable image",
-                    onClick = { showToast(context, "rotate zero")}
+                    onClick = { showToast(context, "rotate zero") }
                 ),
             painter = painterResource(id = R.drawable.ic_rotate_zero_degrees) ,
             contentDescription = "rotate zero",
@@ -115,7 +105,7 @@ fun RotateButtons() {
                 .clickable(
                     enabled = true,
                     onClickLabel = "Clickable image",
-                    onClick = { showToast(context, "rotate right")}
+                    onClick = { showToast(context, "rotate right") }
                 ),
             painter = painterResource(id = R.drawable.ic_rotate_right) ,
             contentDescription = "rotate right"
@@ -130,7 +120,7 @@ private fun showToast(context: Context, text: String) =
 @Composable
 fun EditorPreview() {
     TalkingPetsTheme {
-        Editor()
+        Editor(hiltViewModel())
     }
 }
 
