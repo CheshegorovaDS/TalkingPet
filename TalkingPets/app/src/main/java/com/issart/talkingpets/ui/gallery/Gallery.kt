@@ -45,6 +45,7 @@ import com.issart.talkingpets.ui.theme.Blue
 import com.issart.talkingpets.ui.theme.Purple
 import com.issart.talkingpets.ui.theme.TextTitleColor
 import androidx.core.content.FileProvider
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.LiveData
 import com.issart.talkingpets.navigation.TalkingPetsScreen
 import com.issart.talkingpets.ui.utils.StringCallback
@@ -56,12 +57,12 @@ import java.util.*
 
 @Composable
 fun Gallery(
-    uri: LiveData<String?>,
-    updatePhoto: StringCallback,
-    onChoosePhoto: (TalkingPetsScreen) -> Unit
+    onChoosePhoto: (TalkingPetsScreen) -> Unit,
+    galleryViewModel: GalleryViewModel = hiltViewModel()
 ) {
     var bitmap by remember { mutableStateOf<Bitmap?>(null) }//delete
-    val photoUri = uri.observeAsState(initial = null)
+    val photoUri = galleryViewModel.uri.observeAsState(initial = null)
+    val updatePhoto = galleryViewModel::setPhotoUri
 
     if (bitmap == null) {
         photoUri.value?.let {

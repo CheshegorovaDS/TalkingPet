@@ -35,15 +35,10 @@ class MainActivity : ComponentActivity() {
 fun TalkingPetsApp() {
     TalkingPetsTheme {
         val viewModel: NavigationViewModel = hiltViewModel()
-        val galleryViewModel: GalleryViewModel = hiltViewModel()
         val currentScreen: TalkingPetsScreen by viewModel.screen.observeAsState(GALLERY)
         Surface(color = MaterialTheme.colors.background) {
             when (currentScreen) {
-                GALLERY -> Gallery(
-                    galleryViewModel.uri,
-                    galleryViewModel::setPhotoUri,
-                    viewModel::changeScreen
-                )
+                GALLERY -> Gallery(viewModel::changeScreen)
                 EDITOR -> Editor()
                 DETECTOR -> Detector()
                 RECORDER -> Recorder()
