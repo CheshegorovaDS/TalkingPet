@@ -23,8 +23,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.fontResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.Font
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -175,14 +178,6 @@ fun AnimalGridLayout(updatePhoto: StringCallback) {
     )
 }
 
-private fun setPhotoFromList(context: Context, animalImageId: Int, updatePhoto: StringCallback) {
-    val uri = getPhotoUri(context)
-    val storageDir: File = context.cacheDir
-    val fileName = uri?.path
-    val filePath = "$storageDir/${fileName?.substringAfterLast("/")}"
-    updateGalleryPhoto(filePath, context, animalImageId, updatePhoto)
-}
-
 @Composable
 fun GalleryButton(
     color: Color,
@@ -326,12 +321,21 @@ fun TitleScreen(title: String) {
         color = TextTitleColor,
         fontSize = 36.sp,
         textAlign = TextAlign.Center,
-        fontWeight = FontWeight(600)
+        fontFamily = FontFamily(Font(R.font.baloo_bhaijaan_2_semi_bold)),
+        lineHeight = 43.sp
     )
 }
 
 private fun showToast(context: Context, text: String) =
     Toast.makeText(context, text, Toast.LENGTH_SHORT).show()
+
+private fun setPhotoFromList(context: Context, animalImageId: Int, updatePhoto: StringCallback) {
+    val uri = getPhotoUri(context)
+    val storageDir: File = context.cacheDir
+    val fileName = uri?.path
+    val filePath = "$storageDir/${fileName?.substringAfterLast("/")}"
+    updateGalleryPhoto(filePath, context, animalImageId, updatePhoto)
+}
 
 @Preview(showBackground = true, widthDp = 400, heightDp = 848)
 @Composable
