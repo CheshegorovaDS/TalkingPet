@@ -37,15 +37,11 @@ fun TalkingPetsApp() {
     TalkingPetsTheme {
         val viewModel: NavigationViewModel = hiltViewModel()
         val currentScreen: TalkingPetsScreen by viewModel.screen.observeAsState(GALLERY)
-        val editorViewModel:EditorViewModel = hiltViewModel()
 
         Surface(color = MaterialTheme.colors.background) {
             when (currentScreen) {
-                GALLERY -> Gallery(
-                    onChoosePhoto = viewModel::changeScreen,
-                    setEditorPhoto = editorViewModel::setEditorBitmap
-                )
-                EDITOR -> Editor(editorViewModel)
+                GALLERY -> Gallery(onChoosePhoto = viewModel::changeScreen)
+                EDITOR -> Editor()
                 DETECTOR -> Detector()
                 RECORDER -> Recorder()
                 PREVIEW -> Share()

@@ -1,4 +1,4 @@
-package com.issart.talkingpets.ui.common
+package com.issart.talkingpets.ui.common.texts
 
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable

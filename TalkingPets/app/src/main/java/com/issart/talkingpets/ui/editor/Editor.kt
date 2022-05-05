@@ -19,11 +19,11 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.issart.talkingpets.R
-import com.issart.talkingpets.ui.common.Title
+import com.issart.talkingpets.ui.common.texts.Title
 import com.issart.talkingpets.ui.theme.TalkingPetsTheme
 
 @Composable
-fun Editor(viewModel: EditorViewModel) {
+fun Editor(viewModel: EditorViewModel = hiltViewModel()) {
     Column(modifier = Modifier.padding(bottom = 70.dp)) {
         viewModel.bitmap.value?.let { EditorImage(it) }
         EditorTitle()

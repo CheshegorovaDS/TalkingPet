@@ -22,7 +22,7 @@ import androidx.compose.ui.res.imageResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.issart.talkingpets.R
-import com.issart.talkingpets.ui.common.Title
+import com.issart.talkingpets.ui.common.texts.Title
 import com.issart.talkingpets.ui.theme.Blue
 import com.issart.talkingpets.ui.theme.SwitchUncheckedTrackColor
 import com.issart.talkingpets.ui.theme.White

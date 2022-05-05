@@ -12,12 +12,8 @@ import android.widget.Toast
 import androidx.activity.compose.ManagedActivityResultLauncher
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.GridCells
-import androidx.compose.foundation.lazy.LazyVerticalGrid
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.*
@@ -25,12 +21,8 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.ImageBitmap
-import androidx.compose.ui.graphics.asImageBitmap
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.imageResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -47,6 +39,10 @@ import com.issart.talkingpets.ui.theme.TextTitleColor
 import androidx.core.content.FileProvider
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.issart.talkingpets.navigation.TalkingPetsScreen
+import com.issart.talkingpets.ui.common.gridLayout.HORIZONTAL_PADDING_GRID_LAYOUT
+import com.issart.talkingpets.ui.common.gridLayout.ImageGridLayout
+import com.issart.talkingpets.ui.common.gridLayout.VERTICAL_PADDING_GRID_LAYOUT
+import com.issart.talkingpets.ui.editor.EditorViewModel
 import com.issart.talkingpets.ui.utils.StringCallback
 import java.io.File
 import java.io.FileOutputStream
@@ -57,8 +53,8 @@ import java.util.*
 @Composable
 fun Gallery(
     onChoosePhoto: (TalkingPetsScreen) -> Unit,
-    setEditorPhoto: (Bitmap) -> Unit,
-    galleryViewModel: GalleryViewModel = hiltViewModel()
+    galleryViewModel: GalleryViewModel = hiltViewModel(),
+    editorViewModel: EditorViewModel = hiltViewModel()
 ) {
     var bitmap by remember { mutableStateOf<Bitmap?>(null) }
     val photoUri = galleryViewModel.uri.observeAsState(initial = null)
@@ -110,7 +106,7 @@ fun Gallery(
             AnimalGridLayout(updatePhoto)
         }
         else -> {
-            bitmap?.let { setEditorPhoto(it) }
+            bitmap?.let { editorViewModel.setEditorBitmap(it) }
             updatePhoto(null)
             onChoosePhoto(TalkingPetsScreen.EDITOR)
         }
@@ -160,37 +156,31 @@ fun GalleryButtonsRow(
     }
 }
 
-@OptIn(ExperimentalMaterialApi::class, ExperimentalFoundationApi::class)
 @Composable
 fun AnimalGridLayout(updatePhoto: StringCallback) {
-    val data = getAnimalIdList()
     val context = LocalContext.current
+    ImageGridLayout(
+        data = getAnimalIdList(),
+        onClickCallback = { animalImageId ->
+            setPhotoFromList(
+                context = context,
+                animalImageId = animalImageId,
+                updatePhoto = updatePhoto
+            )
+        },
+        contentPadding = PaddingValues(
+            vertical = VERTICAL_PADDING_GRID_LAYOUT.dp,
+            horizontal = HORIZONTAL_PADDING_GRID_LAYOUT.dp
+        )
+    )
+}
 
-    LazyVerticalGrid(
-        modifier = Modifier,
-        cells = GridCells.Fixed(3),
-        contentPadding = PaddingValues(vertical = 32.dp, horizontal = 8.dp)
-    ) {
-        items(data) { animalPhotoId ->
-            Card(
-                modifier = Modifier.padding(4.dp),
-                backgroundColor = Color.LightGray,
-                onClick = {
-                    val uri = getPhotoUri(context)
-                    val storageDir: File = context.cacheDir
-                    val fileName = uri?.path
-                    val filePath = "$storageDir/${fileName?.substringAfterLast("/")}"
-                    updateGalleryPhoto(filePath, context, animalPhotoId, updatePhoto)
-                }
-            ) {
-                Image(
-                    bitmap = ImageBitmap.imageResource(id = animalPhotoId),
-                    contentDescription = "animal photo",
-                    contentScale = ContentScale.Fit
-                )
-            }
-        }
-    }
+private fun setPhotoFromList(context: Context, animalImageId: Int, updatePhoto: StringCallback) {
+    val uri = getPhotoUri(context)
+    val storageDir: File = context.cacheDir
+    val fileName = uri?.path
+    val filePath = "$storageDir/${fileName?.substringAfterLast("/")}"
+    updateGalleryPhoto(filePath, context, animalImageId, updatePhoto)
 }
 
 @Composable

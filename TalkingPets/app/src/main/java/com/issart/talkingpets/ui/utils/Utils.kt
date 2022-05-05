@@ -6,3 +6,4 @@ typealias ClickNavigation = (TalkingPetsScreen) -> Unit
 typealias StringCallback = (String?) -> Unit
 typealias ClickButtonDebug = (String) -> Unit
 typealias onClickCallback = () -> Unit
+typealias onClickImageCallback = (Int) -> Unit

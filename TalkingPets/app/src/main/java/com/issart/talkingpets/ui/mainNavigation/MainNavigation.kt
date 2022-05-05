@@ -6,7 +6,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import com.issart.talkingpets.R
 import com.issart.talkingpets.navigation.TalkingPetsScreen
-import com.issart.talkingpets.ui.common.NavigationButton
+import com.issart.talkingpets.ui.common.buttons.NavigationButton
 import com.issart.talkingpets.ui.theme.*
 import com.issart.talkingpets.ui.utils.ClickNavigation
 

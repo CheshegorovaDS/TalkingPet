@@ -1,4 +1,4 @@
-package com.issart.talkingpets.ui.common
+package com.issart.talkingpets.ui.common.buttons
 
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.Image
