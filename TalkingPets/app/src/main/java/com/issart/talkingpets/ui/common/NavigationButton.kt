@@ -14,7 +14,6 @@ import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.zIndex
 import com.issart.talkingpets.ui.theme.TextTitleColor
 import com.issart.talkingpets.ui.theme.White
 import com.issart.talkingpets.ui.utils.onClickCallback

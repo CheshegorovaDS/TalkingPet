@@ -36,6 +36,7 @@ fun TalkingPetsApp() {
     TalkingPetsTheme {
         val viewModel: NavigationViewModel = hiltViewModel()
         val currentScreen: TalkingPetsScreen by viewModel.screen.observeAsState(GALLERY)
+
         Surface(color = MaterialTheme.colors.background) {
             when (currentScreen) {
                 GALLERY -> Gallery(viewModel::changeScreen)
@@ -44,7 +45,10 @@ fun TalkingPetsApp() {
                 RECORDER -> Recorder()
                 PREVIEW -> Share()
             }
-            MainNavigation(currentScreen = viewModel.screen.value, clickNavigation = viewModel::changeScreen)
+            MainNavigation(
+                currentScreen = viewModel.screen.value,
+                clickNavigation = viewModel::changeScreen
+            )
         }
     }
 }
