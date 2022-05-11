@@ -19,6 +19,6 @@ fun Title(title: String) {
         textAlign = TextAlign.Center,
         fontWeight = FontWeight(500),
         fontFamily = FontFamily(Font(R.font.baloo_bhaijaan2_semi_bold)),
-        lineHeight = 33.sp
+        lineHeight = 23.sp
     )
 }

@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
@@ -18,14 +19,14 @@ fun MainImage(
     contentDescription: String = DEFAULT_IMAGE_CONTENT_DESCRIPTION
 ) {
     val configuration = LocalConfiguration.current
-    val heightImage = configuration.screenHeightDp * 0.56
+    val heightImage = configuration.screenWidthDp
     Image(
+        bitmap = bitmap.asImageBitmap(),
         modifier = modifier
             .fillMaxWidth()
             .height(heightImage.dp),
-        bitmap = bitmap.asImageBitmap(),
+        contentScale = ContentScale.Crop,
         contentDescription = contentDescription,
-        contentScale = ContentScale.Crop
     )
 }
 

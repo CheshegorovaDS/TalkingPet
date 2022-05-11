@@ -42,7 +42,6 @@ fun DetectorImage(bitmap: Bitmap?) = Box {
     DetectorCanvas()
 }
 
-
 @Composable
 fun DetectorCanvas() {
     val configuration = LocalConfiguration.current
@@ -87,12 +86,14 @@ fun DetectorTitle() {
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(16.dp),
+            .padding(
+                top = 32.dp,
+                start = 16.dp,
+                end = 16.dp
+            ),
         contentAlignment = Alignment.TopCenter
     ) {
-        Title(
-            title = stringResource(id = R.string.choose_points)
-        )
+        Title(title = stringResource(id = R.string.choose_points))
     }
 }
 
@@ -100,16 +101,19 @@ fun DetectorTitle() {
 fun DetectorEarsSwitch() {
     val checkedState = remember { mutableStateOf(true) }
 
-    Row(modifier = Modifier
-        .padding(start = 32.dp, end = 32.dp, top = 24.dp),
+    Row(
+        modifier = Modifier
+            .padding(
+                top = 16.dp,
+                start = 32.dp,
+                end = 32.dp
+            ),
         verticalAlignment = Alignment.CenterVertically
     )  {
-        Box(modifier = Modifier
-            .padding(end = 32.dp)
+        Box(
+            modifier = Modifier.padding(end = 32.dp)
         ) {
-            Title(
-                title = stringResource(id = R.string.pointy_ears)
-            )
+            Title(title = stringResource(id = R.string.pointy_ears))
         }
 
         Switch(
