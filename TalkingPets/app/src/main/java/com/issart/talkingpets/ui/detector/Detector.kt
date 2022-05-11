@@ -1,7 +1,7 @@
 package com.issart.talkingpets.ui.detector
 
+import android.graphics.Bitmap
 import androidx.compose.foundation.Canvas
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.gestures.detectDragGestures
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Switch
@@ -15,60 +15,46 @@ import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
 import androidx.compose.ui.input.pointer.consumeAllChanges
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.ImageBitmap
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
-import androidx.compose.ui.res.imageResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.issart.talkingpets.R
+import com.issart.talkingpets.ui.common.images.MainImage
 import com.issart.talkingpets.ui.common.texts.Title
+import com.issart.talkingpets.ui.editor.EditorViewModel
 import com.issart.talkingpets.ui.theme.Blue
 import com.issart.talkingpets.ui.theme.SwitchUncheckedTrackColor
 import com.issart.talkingpets.ui.theme.White
 
 @Composable
-fun Detector() {
+fun Detector(viewModel: EditorViewModel = hiltViewModel()) {
     Column(modifier = Modifier.padding(bottom = 70.dp)) {
-        DetectorImage()
+        DetectorImage(viewModel.bitmap.value)
         DetectorTitle()
         DetectorEarsSwitch()
     }
 }
 
-@Composable//EditorImage
-fun DetectorImage() {
-    val configuration = LocalConfiguration.current
-    val heightImage = configuration.screenHeightDp * 0.56
-
-    Box(
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(heightImage.dp)
-    ) {
-        DetectorPhoto()
-        DetectorCanvas()
-    }
-}
-
 @Composable
-fun DetectorPhoto() {
-    Image(
-        modifier = Modifier.fillMaxSize(),
-        bitmap = ImageBitmap.imageResource(id = R.drawable.cat_1),
-        contentDescription = "animal photo",
-        contentScale = ContentScale.Crop
-    )
+fun DetectorImage(bitmap: Bitmap?) = Box {
+    bitmap?.let { MainImage(bitmap = it) }
+    DetectorCanvas()
 }
+
 
 @Composable
 fun DetectorCanvas() {
+    val configuration = LocalConfiguration.current
+    val heightImage = configuration.screenHeightDp * 0.56
+
     var offsetX by remember { mutableStateOf(0f) }
     var offsetY by remember { mutableStateOf(0f) }
     val paint = Paint().asFrameworkPaint()
 
     Canvas(modifier = Modifier
-        .fillMaxSize()
+        .fillMaxWidth()
+        .height(heightImage.dp)
         .pointerInput(Unit) {
             detectDragGestures { change, dragAmount ->
                 change.consumeAllChanges()
@@ -82,7 +68,7 @@ fun DetectorCanvas() {
         drawCircle(
             center = Offset(offsetX + (canvasQuadrantSize.width / 2f), offsetY),
             color = Color.Black,
-            radius = 2f
+            radius = 20f
         )
 
         drawIntoCanvas {
@@ -101,7 +87,7 @@ fun DetectorTitle() {
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(top = 16.dp, start = 36.dp, end = 16.dp),
+            .padding(16.dp),
         contentAlignment = Alignment.TopCenter
     ) {
         Title(
@@ -115,7 +101,7 @@ fun DetectorEarsSwitch() {
     val checkedState = remember { mutableStateOf(true) }
 
     Row(modifier = Modifier
-        .padding(start = 32.dp, end = 32.dp, top = 32.dp),
+        .padding(start = 32.dp, end = 32.dp, top = 24.dp),
         verticalAlignment = Alignment.CenterVertically
     )  {
         Box(modifier = Modifier
