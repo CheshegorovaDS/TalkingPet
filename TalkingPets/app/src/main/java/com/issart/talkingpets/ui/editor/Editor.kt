@@ -83,7 +83,7 @@ fun RotateButtons(currentAngle: Float, onClickRotateButton: (Float) -> Unit) = R
         onClick = { onClickRotateButton(currentAngle + 90f) },
         imageId = R.drawable.ic_rotate_right
     )
-    
+
 }
 
 const val PERCENT_SIZE_ROTATION_BUTTON = 0.22

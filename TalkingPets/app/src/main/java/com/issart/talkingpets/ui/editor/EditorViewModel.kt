@@ -18,6 +18,7 @@ class EditorViewModel @Inject constructor(): ViewModel() {
 
     fun setEditorBitmap(newBitmap: Bitmap) {
         mutableBitmap.value = newBitmap
+        mutableAngle.value = 0f
     }
 
     fun setEditorAngle(newAngle: Float) {
