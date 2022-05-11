@@ -43,6 +43,8 @@ import com.issart.talkingpets.navigation.TalkingPetsScreen
 import com.issart.talkingpets.ui.common.gridLayout.HORIZONTAL_PADDING_GRID_LAYOUT
 import com.issart.talkingpets.ui.common.gridLayout.ImageGridLayout
 import com.issart.talkingpets.ui.common.gridLayout.VERTICAL_PADDING_GRID_LAYOUT
+import com.issart.talkingpets.ui.common.texts.TitleBoldText
+import com.issart.talkingpets.ui.common.texts.TitleText
 import com.issart.talkingpets.ui.editor.EditorViewModel
 import com.issart.talkingpets.ui.utils.StringCallback
 import java.io.File
@@ -116,45 +118,36 @@ fun Gallery(
 }
 
 @Composable
-fun GalleryTitleText() {
-    Box(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(top = 32.dp, start = 36.dp, end = 36.dp),
-        contentAlignment = Alignment.TopCenter
-    ) {
-        TitleScreen(
-            title = stringResource(id = R.string.create_first_animation),
-        )
-    }
-}
+fun GalleryTitleText() = TitleText(
+    title = stringResource(id = R.string.create_first_animation)
+)
 
 @Composable
 fun GalleryButtonsRow(
     launcher: ManagedActivityResultLauncher<String, Uri?>,
     cameraLauncher: ManagedActivityResultLauncher<Uri, Boolean>,
     updatePhoto: StringCallback
+) = Row(
+    modifier = Modifier
+        .fillMaxWidth()
+        .padding(top = 32.dp)
 ) {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(top = 32.dp)
-    ) {
-        GalleryButton(
-            color = Blue,
-            imageId = R.drawable.ic_gallery,
-            description = "open gallery",
-            launcher = launcher
-        )
 
-        CameraButton(
-            color = Purple,
-            imageId = R.drawable.ic_camera,
-            description = "open camera",
-            cameraLauncher = cameraLauncher,
-            updatePhoto
-        )
-    }
+    GalleryButton(
+        color = Blue,
+        imageId = R.drawable.ic_gallery,
+        description = "open gallery",
+        launcher = launcher
+    )
+
+    CameraButton(
+        color = Purple,
+        imageId = R.drawable.ic_camera,
+        description = "open camera",
+        cameraLauncher = cameraLauncher,
+        updatePhoto
+    )
+
 }
 
 @Composable
@@ -309,18 +302,6 @@ private fun createImageFile(context: Context): File {
         "JPEG_${timeStamp}",
         ".jpg",
         storageDir
-    )
-}
-
-@Composable
-fun TitleScreen(title: String) {
-    Text(
-        text = title,
-        color = TextTitleColor,
-        fontSize = 36.sp,
-        textAlign = TextAlign.Center,
-        fontFamily = FontFamily(Font(R.font.baloo_bhaijaan2_semi_bold)),
-        lineHeight = 43.sp
     )
 }
 

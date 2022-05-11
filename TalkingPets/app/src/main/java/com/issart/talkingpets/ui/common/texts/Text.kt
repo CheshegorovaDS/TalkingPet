@@ -11,14 +11,23 @@ import com.issart.talkingpets.R
 import com.issart.talkingpets.ui.theme.TextTitleColor
 
 @Composable
-fun Title(title: String) {
-    Text(
-        text = title,
-        color = TextTitleColor,
-        fontSize = 24.sp,
-        textAlign = TextAlign.Center,
-        fontWeight = FontWeight(500),
-        fontFamily = FontFamily(Font(R.font.baloo_bhaijaan2_semi_bold)),
-        lineHeight = 23.sp
-    )
-}
+fun BodyMediumText(title: String) = Text(
+    text = title,
+    color = TextTitleColor,
+    fontSize = 24.sp,
+    textAlign = TextAlign.Center,
+    fontWeight = FontWeight(500),
+    fontFamily = FontFamily(Font(R.font.baloo_bhaijaan2_medium)),
+    lineHeight = 23.sp
+)
+
+@Composable
+fun TitleBoldText(title: String) = Text(
+    text = title,
+    color = TextTitleColor,
+    fontSize = 36.sp,
+    textAlign = TextAlign.Center,
+    fontWeight = FontWeight(600),
+    fontFamily = FontFamily(Font(R.font.baloo_bhaijaan2_semi_bold)),
+    lineHeight = 43.sp
+)

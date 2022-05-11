@@ -15,7 +15,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.issart.talkingpets.R
 import com.issart.talkingpets.ui.common.buttons.ImageButton
 import com.issart.talkingpets.ui.common.images.MainImage
-import com.issart.talkingpets.ui.common.texts.Title
+import com.issart.talkingpets.ui.common.texts.BodyText
 import com.issart.talkingpets.ui.theme.TalkingPetsTheme
 
 @Composable
@@ -36,19 +36,9 @@ fun EditorImage(bitmap: Bitmap?, degrees: Float = 0f) {
 }
 
 @Composable
-fun EditorTitle() = Box(
-    modifier = Modifier
-        .fillMaxWidth()
-        .padding(
-            top = 32.dp,
-            start = 16.dp,
-            end = 16.dp
-        ),
-    contentAlignment = Alignment.TopCenter
-) {
-    Title(title = stringResource(id = R.string.change_photo_hilt))
-}
-
+fun EditorTitle() = BodyText(
+    title = stringResource(id = R.string.change_photo_hilt)
+)
 
 @Composable
 fun RotateButtons(currentAngle: Float, onClickRotateButton: (Float) -> Unit) = Row(

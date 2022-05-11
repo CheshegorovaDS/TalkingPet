@@ -13,8 +13,6 @@ import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.imageResource
 import androidx.compose.ui.unit.dp
 import com.issart.talkingpets.R
-import com.issart.talkingpets.navigation.TalkingPetsScreen
-import com.issart.talkingpets.ui.gallery.TitleScreen
 
 @Composable
 fun Recorder() {
