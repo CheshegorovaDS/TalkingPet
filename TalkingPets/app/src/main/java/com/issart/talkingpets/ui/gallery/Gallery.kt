@@ -23,12 +23,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.fontResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -321,7 +319,7 @@ fun TitleScreen(title: String) {
         color = TextTitleColor,
         fontSize = 36.sp,
         textAlign = TextAlign.Center,
-        fontFamily = FontFamily(Font(R.font.baloo_bhaijaan_2_semi_bold)),
+        fontFamily = FontFamily(Font(R.font.baloo_bhaijaan2_semi_bold)),
         lineHeight = 43.sp
     )
 }

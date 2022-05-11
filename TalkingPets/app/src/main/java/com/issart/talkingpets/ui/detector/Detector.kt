@@ -78,17 +78,6 @@ fun DetectorCanvas() {
         }
     ){
         val canvasQuadrantSize = size / 2F
-        drawRect(
-            topLeft = Offset(offsetX, offsetY),
-            color = Color.Green,
-            size = canvasQuadrantSize
-        )
-
-        drawRect(
-            topLeft = Offset(offsetX + (canvasQuadrantSize.width / 2f), offsetY),
-            color = Color.Black,
-            size = canvasQuadrantSize
-        )
 
         drawCircle(
             center = Offset(offsetX + (canvasQuadrantSize.width / 2f), offsetY),
