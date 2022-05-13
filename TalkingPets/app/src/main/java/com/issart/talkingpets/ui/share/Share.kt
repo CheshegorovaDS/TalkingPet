@@ -24,6 +24,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.issart.talkingpets.R
+import com.issart.talkingpets.ui.common.buttons.TextButtonsWithImage
 import com.issart.talkingpets.ui.theme.Blue
 import com.issart.talkingpets.ui.theme.Green
 import com.issart.talkingpets.ui.theme.Purple
@@ -55,7 +56,11 @@ fun TalkingPetVideo() {
 fun ShareButtons() {
     Row(
         modifier = Modifier
-            .padding(top = 32.dp, start = 24.dp, end = 24.dp)
+            .padding(
+                top = 32.dp,
+                start = 24.dp,
+                end = 24.dp
+            )
     ) {
         ShareButton(
             icon = painterResource(id = R.drawable.ic_download),
@@ -91,34 +96,18 @@ fun ShareButton(icon: Painter, text: String, background: Color, modifier: Modifi
     val heightButton = configuration.screenHeightDp * 0.085
     val sizeIcon = widthButton * 0.15
 
-    Button(
+    TextButtonsWithImage(
         modifier = modifier.size(
             width = widthButton.dp,
             height = heightButton.dp
         ),
-        onClick = { showToast(context, text) },
-        colors = ButtonDefaults.buttonColors(backgroundColor = background),
-        shape = RoundedCornerShape(25),
-        elevation = ButtonDefaults.elevation(defaultElevation = 4.dp)
+        icon = icon,
+        text = text,
+        backgroundColor = background,
+        sizeIcon = sizeIcon.dp
     ) {
-        Row(
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Image(
-                modifier = Modifier.size(sizeIcon.dp),
-                painter = icon,
-                contentDescription = text
-            )
-            Text(
-                modifier = Modifier.padding(start = 8.dp),
-                text = text,
-//                fontSize = 24.sp,
-                fontWeight = FontWeight(600),
-                color = White
-            )
-        }
+        showToast(context, text)
     }
-
 }
 
 @Composable
@@ -135,9 +124,8 @@ fun ShareButtonWithoutIcon(text: String, background: Color, modifier: Modifier =
         elevation = ButtonDefaults.elevation(defaultElevation = 4.dp)
     ) {
         Text(
-            modifier = Modifier.padding(start = 8.dp),
+//            modifier = Modifier.padding(start = 8.dp),
             text = text,
-//            fontSize = 24.sp,
             fontWeight = FontWeight(600),
             color = White
         )
