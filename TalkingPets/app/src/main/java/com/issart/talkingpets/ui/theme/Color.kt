@@ -15,6 +15,7 @@ val White = Color(0xFFFFFFFF)
 
 val BackgroundColor = Color(0xFFFFF8E7)
 val TextTitleColor = Color(0xFF545047)
+val TextBodySecondaryColor = Color(0xFFA3A3A3)
 val TextDialogColor = Color(0xFF333333)
 val SwitchUncheckedTrackColor = Color(0xFFE2E2E2)
 

@@ -15,17 +15,21 @@ import androidx.compose.ui.input.pointer.consumeAllChanges
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
 @Composable
 fun DetectorCanvas() {
     val configuration = LocalConfiguration.current
-    val heightImage = configuration.screenHeightDp * 0.56
-    val density = LocalDensity.current
+    val widthCanvas = configuration.screenWidthDp
+    val heightCanvas = configuration.screenHeightDp * 0.56
 
-    var offsetX by remember { mutableStateOf(0f) }
-    var offsetY by remember { mutableStateOf(0f) }
+    val density = LocalDensity.current
+    getEyeOffsetX(widthCanvas, density)
+
+    var offsetX by remember { mutableStateOf(getEyeOffsetX(widthCanvas, density)) }
+    var offsetY by remember { mutableStateOf(getEyeOffsetY(heightCanvas.toInt(), density)) }
     val paint = Paint().asFrameworkPaint().apply {
         textSize = density.run { 20.sp.toPx() }
         color = android.graphics.Color.WHITE
@@ -33,7 +37,7 @@ fun DetectorCanvas() {
 
     Canvas(modifier = Modifier
         .fillMaxWidth()
-        .height(heightImage.dp)
+        .height(heightCanvas.dp)
         .pointerInput(Unit) {
             detectDragGestures { change, dragAmount ->
                 change.consumeAllChanges()
@@ -42,10 +46,9 @@ fun DetectorCanvas() {
             }
         }
     ){
-        val canvasQuadrantSize = size / 2F
 
         drawCircle(
-            center = Offset(offsetX + (canvasQuadrantSize.width / 2f), offsetY),
+            center = Offset(offsetX, offsetY),
             color = Color.White,
             radius = density.run { 5.dp.toPx() }
         )
@@ -53,10 +56,21 @@ fun DetectorCanvas() {
         drawIntoCanvas {
             it.nativeCanvas.drawText(
                 "eye",
-                offsetX + (canvasQuadrantSize.width / 2f),
+                offsetX,
                 offsetY - density.run { 5.dp.toPx() },
                 paint
             )
         }
     }
 }
+
+private fun getEyeOffsetX(widthCanvas: Int, density: Density) = density.run {
+    widthCanvas * OFFSET_X_EYE.dp.toPx()
+}
+
+private fun getEyeOffsetY(heightCanvas: Int, density: Density) = density.run {
+    heightCanvas * OFFSET_Y_EYE.dp.toPx()
+}
+
+const val OFFSET_X_EYE = 0.42
+const val OFFSET_Y_EYE = 0.4
