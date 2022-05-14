@@ -86,9 +86,9 @@ fun ShareButtons() {
 fun ShareButton(icon: Painter, text: String, background: Color, modifier: Modifier = Modifier) {
     val context = LocalContext.current
     val configuration = LocalConfiguration.current
-    val widthButton = configuration.screenWidthDp * 0.45
-    val heightButton = configuration.screenHeightDp * 0.085
-    val sizeIcon = widthButton * 0.15
+    val widthButton = configuration.screenWidthDp * PERCENT_WIDTH_BUTTON
+    val heightButton = configuration.screenHeightDp * PERCENT_HEIGHT_BUTTON
+    val sizeIcon = widthButton * PERCENT_SIZE_ICON_BUTTON
 
     TextButtonsWithImage(
         modifier = modifier.size(
@@ -108,7 +108,7 @@ fun ShareButton(icon: Painter, text: String, background: Color, modifier: Modifi
 fun ShareButtonWithoutIcon(text: String, background: Color, modifier: Modifier = Modifier) {
     val context = LocalContext.current
     val configuration = LocalConfiguration.current
-    val heightButton = configuration.screenHeightDp * 0.085
+    val heightButton = configuration.screenHeightDp * PERCENT_HEIGHT_BUTTON
 
     TextButton(
         modifier = modifier.height(heightButton.dp),
@@ -122,3 +122,7 @@ fun ShareButtonWithoutIcon(text: String, background: Color, modifier: Modifier =
 
 private fun showToast(context: Context, text: String) =
     Toast.makeText(context, text, Toast.LENGTH_SHORT).show()
+
+const val PERCENT_SIZE_ICON_BUTTON = 0.15
+const val PERCENT_WIDTH_BUTTON = 0.45
+const val PERCENT_HEIGHT_BUTTON = 0.085
