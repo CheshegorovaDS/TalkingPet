@@ -23,7 +23,7 @@ fun TextButtonsWithImage(
     backgroundColor: Color,
     sizeIcon: Dp,
     onClick: () -> Unit
-) =  Button(
+) = Button(
     modifier = modifier,
     onClick = { onClick() },
     colors = ButtonDefaults.buttonColors(backgroundColor = backgroundColor),
@@ -40,6 +40,22 @@ fun TextButtonsWithImage(
         )
         ButtonsText(title = text)
     }
+}
+
+@Composable
+fun TextButton(
+    modifier: Modifier = Modifier,
+    text: String,
+    backgroundColor: Color,
+    onClick: () -> Unit
+) = Button(
+    modifier = modifier,
+    onClick = { onClick() },
+    colors = ButtonDefaults.buttonColors(backgroundColor = backgroundColor),
+    shape = RoundedCornerShape(PERCENT_ROUNDED_CORNER_BUTTON),
+    elevation = ButtonDefaults.elevation(defaultElevation = DEFAULT_ELEVATION.dp)
+) {
+    ButtonsText(title = text)
 }
 
 const val PERCENT_ROUNDED_CORNER_BUTTON = 25

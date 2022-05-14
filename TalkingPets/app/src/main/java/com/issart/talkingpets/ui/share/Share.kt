@@ -4,10 +4,6 @@ import android.content.Context
 import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Button
-import androidx.compose.material.ButtonDefaults
-import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -20,15 +16,13 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.imageResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.issart.talkingpets.R
+import com.issart.talkingpets.ui.common.buttons.TextButton
 import com.issart.talkingpets.ui.common.buttons.TextButtonsWithImage
 import com.issart.talkingpets.ui.theme.Blue
 import com.issart.talkingpets.ui.theme.Green
 import com.issart.talkingpets.ui.theme.Purple
-import com.issart.talkingpets.ui.theme.White
 
 @Composable
 fun Share() {
@@ -116,20 +110,14 @@ fun ShareButtonWithoutIcon(text: String, background: Color, modifier: Modifier =
     val configuration = LocalConfiguration.current
     val heightButton = configuration.screenHeightDp * 0.085
 
-    Button(
+    TextButton(
         modifier = modifier.height(heightButton.dp),
-        onClick = { showToast(context, text) },
-        colors = ButtonDefaults.buttonColors(backgroundColor = background),
-        shape = RoundedCornerShape(25),
-        elevation = ButtonDefaults.elevation(defaultElevation = 4.dp)
+        text = text,
+        backgroundColor = background
     ) {
-        Text(
-//            modifier = Modifier.padding(start = 8.dp),
-            text = text,
-            fontWeight = FontWeight(600),
-            color = White
-        )
+        showToast(context, text)
     }
+
 }
 
 private fun showToast(context: Context, text: String) =
