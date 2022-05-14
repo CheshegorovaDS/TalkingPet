@@ -13,7 +13,6 @@ import com.issart.talkingpets.navigation.TalkingPetsScreen
 import com.issart.talkingpets.navigation.TalkingPetsScreen.*
 import com.issart.talkingpets.ui.detector.Detector
 import com.issart.talkingpets.ui.editor.Editor
-import com.issart.talkingpets.ui.editor.EditorViewModel
 import com.issart.talkingpets.ui.gallery.Gallery
 import com.issart.talkingpets.ui.mainNavigation.MainNavigation
 import com.issart.talkingpets.ui.mainNavigation.NavigationViewModel

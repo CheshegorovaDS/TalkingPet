@@ -7,7 +7,6 @@ import com.issart.talkingpets.navigation.TalkingPetsScreen
 import com.issart.talkingpets.navigation.TalkingPetsScreen.*
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
-import javax.inject.Singleton
 
 @HiltViewModel
 class NavigationViewModel @Inject constructor() : ViewModel() {

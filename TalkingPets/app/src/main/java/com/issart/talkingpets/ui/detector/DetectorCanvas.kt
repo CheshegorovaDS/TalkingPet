@@ -13,7 +13,6 @@ import androidx.compose.ui.graphics.Paint
 import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
 import androidx.compose.ui.graphics.nativeCanvas
-import androidx.compose.ui.input.pointer.consumeAllChanges
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalDensity
@@ -42,7 +41,7 @@ fun DetectorCanvas(viewModel: DetectorViewModel = hiltViewModel()) {
         .height(heightCanvas.dp)
         .pointerInput(Unit) {
             detectDragGestures { change, dragAmount ->
-                change.consumeAllChanges()
+                change.consume()
                 viewModel.setLeftEye(
                     leftEye.value.x + dragAmount.x,
                     leftEye.value.y + dragAmount.y
