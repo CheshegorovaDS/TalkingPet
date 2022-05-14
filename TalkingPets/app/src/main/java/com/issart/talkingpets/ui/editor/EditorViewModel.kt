@@ -5,7 +5,6 @@ import android.graphics.Matrix
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.issart.talkingpets.ui.model.Point
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
@@ -18,9 +17,6 @@ class EditorViewModel @Inject constructor(): ViewModel() {
     private var mutableAngle = MutableLiveData(0f)
     val angle: LiveData<Float> = mutableAngle
 
-    private var mutableLeftEye = MutableLiveData(Point(0, 0))
-    val leftEye: LiveData<Point> = mutableLeftEye
-
     fun setEditorBitmap(newBitmap: Bitmap) {
         mutableBitmap.value = newBitmap
         clear()
@@ -28,10 +24,6 @@ class EditorViewModel @Inject constructor(): ViewModel() {
 
     fun setEditorAngle(newAngle: Float) {
         mutableAngle.value = newAngle
-    }
-
-    fun setLeftEye(x: Int, y: Int) {
-        mutableLeftEye.value = Point(x, y)
     }
 
     private fun clear() {

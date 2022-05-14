@@ -41,7 +41,7 @@ fun DetectorTitle() = BodyText(
 
 @Composable
 fun DetectorEarsSwitch() {
-    val checkedState = remember { mutableStateOf(true) }
+    val checkedState = remember { mutableStateOf(false) }
 
     Row(
         modifier = Modifier
