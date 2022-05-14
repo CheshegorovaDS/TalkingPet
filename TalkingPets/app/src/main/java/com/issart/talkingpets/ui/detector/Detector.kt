@@ -22,7 +22,7 @@ import com.issart.talkingpets.ui.theme.White
 @Composable
 fun Detector(viewModel: EditorViewModel = hiltViewModel()) {
     Column(modifier = Modifier.padding(bottom = 70.dp)) {
-        DetectorImage(viewModel.bitmap.value)
+        DetectorImage(viewModel.editedBitmap)
         DetectorTitle()
         DetectorEarsSwitch()
     }
