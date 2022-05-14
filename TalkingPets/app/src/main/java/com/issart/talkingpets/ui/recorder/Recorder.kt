@@ -1,152 +1,134 @@
 package com.issart.talkingpets.ui.recorder
 
-import android.content.Context
-import android.widget.Toast
+import android.graphics.Bitmap
+import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.ColorFilter
-import androidx.compose.ui.graphics.ImageBitmap
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.imageResource
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.issart.talkingpets.R
 import com.issart.talkingpets.ui.common.buttons.DEFAULT_ELEVATION
-import com.issart.talkingpets.ui.common.buttons.ImageButton
-import com.issart.talkingpets.ui.common.texts.BodyMediumText
-import com.issart.talkingpets.ui.common.texts.BodySecondaryText
+import com.issart.talkingpets.ui.common.images.MainImage
+import com.issart.talkingpets.ui.editor.EditorViewModel
 import com.issart.talkingpets.ui.theme.Blue
 import com.issart.talkingpets.ui.theme.White
 
 @Composable
-fun Recorder() {
-    Column(modifier = Modifier.padding(bottom = 70.dp)) {
-        RecorderImage()
-        RecordAudio()
-    }
-}
+fun Recorder(
+    viewModel: EditorViewModel = hiltViewModel(),
+    audioListViewModel: AudioListViewModel = hiltViewModel()
+) {
+    val audioListVisibility = audioListViewModel.isAudioListVisible.observeAsState(initial = false)
 
-@Composable
-fun RecorderImage() {
-    val configuration = LocalConfiguration.current
-    val heightImage = configuration.screenHeightDp * 0.56
-    Image(
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(heightImage.dp),
-        bitmap = ImageBitmap.imageResource(id = R.drawable.cat_1),
-        contentDescription = "animal photo",
-        contentScale = ContentScale.Crop
-    )
-}
-
-@Composable
-fun RecordAudio() {
-    Box(
-        modifier = Modifier.fillMaxSize()
-    ) {
-        RecorderRow()
-        RecordButton()
-        AudioListButton()
-    }
-}
-
-@Composable
-fun RecorderRow() {
-    Box(
-        modifier = Modifier.fillMaxSize(),
-        contentAlignment = Alignment.CenterStart
-    ) {
-        RecordTimer()
-    }
-}
-
-@Composable
-fun RecordTimer() {
-    Box(
-        modifier = Modifier
-            .fillMaxHeight()
-            .wrapContentWidth()
-            .padding(
-                start = 24.dp
-            ),
-        contentAlignment = Alignment.CenterStart
-    ) {
-        BodyMediumText(
-            title = "0:00",
-            fontSize = 30.sp
-        )
-    }
-}
-
-@Composable
-fun RecordButton() {
-    val context = LocalContext.current
-
-    Box(
-        modifier = Modifier.fillMaxSize(),
-        contentAlignment = Alignment.Center
-    ) {
-        Column(
-            modifier = Modifier.wrapContentSize(),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            ImageButton(
-                modifier = Modifier,
-                size = 80.dp,
-                onClick = { showToast(context, "start record") },
-                imageId = R.drawable.ic_record
-            )
-
-            BodySecondaryText(title = stringResource(id = R.string.hilt_recording))
+    Box(modifier = Modifier.padding(bottom = 70.dp)) {
+        Column {
+            RecorderImage(viewModel.editedBitmap)
+            AudioBox()
+        }
+        AudioListMenu(audioListVisibility.value) {
+            audioListViewModel.setAudioListVisibility(!audioListVisibility.value)
         }
     }
 }
 
 @Composable
-fun AudioListButton() {
-    val context = LocalContext.current
+fun RecorderImage(bitmap: Bitmap?) {
+    bitmap?.let { MainImage(bitmap = it) }
+}
+
+@Composable
+fun AudioBox() = Box(
+    modifier = Modifier.fillMaxSize()
+) {
+    RecordAudio()
+}
+
+@Composable
+fun AudioListMenu(isVisible: Boolean, onClickAudioListButton: () -> Unit) {
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .padding(top = 16.dp),
-        contentAlignment = Alignment.TopEnd,
+            .padding(
+                start = 16.dp,
+                bottom = 8.dp,
+                top = 16.dp
+            ),
+        contentAlignment = Alignment.CenterEnd
+    ) {
+        val configuration = LocalConfiguration.current
+        val width = if (isVisible) {
+            (configuration.screenWidthDp * 0.8).dp
+        } else {
+            0.dp
+        }
+        val iconAudioListButton = if (isVisible) {
+            R.drawable.ic_close
+        } else {
+            R.drawable.ic_recorder
+        }
+
+       Row {
+           AudioListButton(iconAudioListButton, onClickAudioListButton)
+           AudioList(width)
+       }
+    }
+}
+
+@Composable
+fun AudioList(width: Dp) = Column(
+    modifier = Modifier
+        .fillMaxHeight()
+        .width(width)
+        .animateContentSize()
+        .alpha(0.8f)
+        .background(
+            color = Blue,
+            shape = RoundedCornerShape(BUTTON_CORNER, 0, 0, BUTTON_CORNER)
+        )
+) {
+
+}
+
+@Composable
+fun AudioListButton(iconAudioListButton: Int, onClickAudioListButton: () -> Unit) {
+    val configuration = LocalConfiguration.current
+    val heightImage = configuration.screenWidthDp
+
+    Box(
+        modifier = Modifier
+            .wrapContentSize()
+            .padding(top = (heightImage + 16).dp),
+        contentAlignment = Alignment.CenterEnd,
     ) {
         Button(
-            modifier = Modifier.size(80.dp, 80.dp),
-            onClick = { showToast(context, "click audio list") },
+            modifier = Modifier.size(80.dp),
+            onClick = { onClickAudioListButton() },
             colors = ButtonDefaults.buttonColors(backgroundColor = Blue),
             shape = RoundedCornerShape(BUTTON_CORNER, 0,0, BUTTON_CORNER),
             elevation = ButtonDefaults.elevation(DEFAULT_ELEVATION.dp)
         ) {
-            Row(
-                modifier = Modifier.fillMaxSize(),
-                horizontalArrangement = Arrangement.End,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Image(
-                    painter = painterResource(id = R.drawable.ic_recorder),
-                    contentDescription = "audio list",
-                    colorFilter = ColorFilter.tint(
-                        color = White
-                    )
-                )
-            }
+           Image(
+               painter = painterResource(id = iconAudioListButton),
+               contentDescription = "audio list",
+               colorFilter = ColorFilter.tint(
+                   color = White
+               )
+           )
         }
     }
 }
 
-private fun showToast(context: Context, text: String) =
-    Toast.makeText(context, text, Toast.LENGTH_SHORT).show()
-
-const val BUTTON_CORNER = 20
+const val BUTTON_CORNER = 12
