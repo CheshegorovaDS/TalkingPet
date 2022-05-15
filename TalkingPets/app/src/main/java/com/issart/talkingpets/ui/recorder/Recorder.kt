@@ -6,6 +6,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
@@ -24,6 +25,8 @@ import com.issart.talkingpets.R
 import com.issart.talkingpets.ui.common.buttons.DEFAULT_ELEVATION
 import com.issart.talkingpets.ui.common.images.MainImage
 import com.issart.talkingpets.ui.editor.EditorViewModel
+import com.issart.talkingpets.ui.recorder.audioList.AudioItem
+import com.issart.talkingpets.ui.recorder.audioList.getAudioList
 import com.issart.talkingpets.ui.theme.Blue
 import com.issart.talkingpets.ui.theme.White
 
@@ -97,8 +100,8 @@ fun AudioList(width: Dp) = LazyColumn(
             shape = RoundedCornerShape(BUTTON_CORNER, 0, 0, BUTTON_CORNER)
         )
 ) {
-    items(10) {
-        AudioItem()
+    items(getAudioList()) { audio ->
+        AudioItem(audio)
     }
 }
 
