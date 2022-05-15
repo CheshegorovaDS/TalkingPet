@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
@@ -33,10 +34,11 @@ fun BodyMediumText(
 
 @Composable
 fun BodySecondaryText(
-    title: String
+    title: String,
+    color: Color = TextBodySecondaryColor
 ) = Text(
     text = title,
-    color = TextBodySecondaryColor,
+    color = color,
     fontSize = 20.sp,
     textAlign = TextAlign.Center,
     fontWeight = FontWeight(500),

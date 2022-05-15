@@ -5,6 +5,7 @@ import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
@@ -57,38 +58,35 @@ fun AudioBox() = Box(
 }
 
 @Composable
-fun AudioListMenu(isVisible: Boolean, onClickAudioListButton: () -> Unit) {
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(
-                start = 16.dp,
-                bottom = 8.dp,
-                top = 16.dp
-            ),
-        contentAlignment = Alignment.CenterEnd
-    ) {
-        val configuration = LocalConfiguration.current
-        val width = if (isVisible) {
-            (configuration.screenWidthDp * 0.8).dp
-        } else {
-            0.dp
-        }
-        val iconAudioListButton = if (isVisible) {
-            R.drawable.ic_close
-        } else {
-            R.drawable.ic_recorder
-        }
+fun AudioListMenu(isVisible: Boolean, onClickAudioListButton: () -> Unit) = Box(
+    modifier = Modifier
+        .fillMaxSize()
+        .padding(
+            start = 16.dp,
+            bottom = 8.dp,
+            top = 16.dp
+        ),
+    contentAlignment = Alignment.CenterEnd
+) {
+    val configuration = LocalConfiguration.current
+    val width = if (isVisible) { (configuration.screenWidthDp * 0.8).dp
+    } else {
+        0.dp
+    }
+    val iconAudioListButton = if (isVisible) {
+        R.drawable.ic_close
+    } else {
+        R.drawable.ic_recorder
+    }
 
-       Row {
-           AudioListButton(iconAudioListButton, onClickAudioListButton)
-           AudioList(width)
-       }
+    Row {
+        AudioListButton(iconAudioListButton, onClickAudioListButton)
+        AudioList(width)
     }
 }
 
 @Composable
-fun AudioList(width: Dp) = Column(
+fun AudioList(width: Dp) = LazyColumn(
     modifier = Modifier
         .fillMaxHeight()
         .width(width)
@@ -99,7 +97,9 @@ fun AudioList(width: Dp) = Column(
             shape = RoundedCornerShape(BUTTON_CORNER, 0, 0, BUTTON_CORNER)
         )
 ) {
-
+    items(10) {
+        AudioItem()
+    }
 }
 
 @Composable
