@@ -8,6 +8,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -25,8 +26,10 @@ fun AudioItem(
     val checkedAudioId = audioListViewModel.checkedAudio.observeAsState()
     val isPlayedAudioId = audioListViewModel.playedAudio.observeAsState()
     val isPlayed = audioListViewModel.isPlay.observeAsState()
+
     val isPauseIcon = isPlayedAudioId.value == audio.id && (isPlayed.value ?: false)
     val isChecked = checkedAudioId.value == audio.id
+    val context = LocalContext.current
 
     Box(
         modifier = Modifier
@@ -41,12 +44,7 @@ fun AudioItem(
             }
     ) {
        AudioItemColumn(isChecked, isPauseIcon, audio.title) {
-           val newIsPlay = if (isPlayedAudioId.value == audio.id) {
-               !(audioListViewModel.isPlay.value ?: false)
-           } else {
-               true
-           }
-           audioListViewModel.setIsPlay(newIsPlay)
+           audioListViewModel.clickPlayButton(audio.id, context)
            audioListViewModel.setPlayedAudio(audio.id)
        }
     }

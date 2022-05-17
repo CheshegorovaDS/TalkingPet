@@ -10,7 +10,8 @@ import java.io.IOException
 import javax.inject.Inject
 
 @HiltViewModel
-class AudioListViewModel @Inject constructor() : ViewModel() {
+class AudioListViewModel @Inject constructor(
+) : ViewModel() {
 
     private val mutableCheckedAudioId = MutableLiveData<Int>()
     val checkedAudio: LiveData<Int> = mutableCheckedAudioId
@@ -29,20 +30,34 @@ class AudioListViewModel @Inject constructor() : ViewModel() {
         mutablePlayedAudioId.value = audioId
     }
 
+    fun clickPlayButton(currentAudioId: Int, context: Context) {
+        if (currentAudioId != playedAudio.value) {
+            releasePlayer()
+            create(currentAudioId, context)
+        } else {
+            if (isPlay.value == true) {
+                pause()
+            } else {
+                play()
+            }
+        }
+    }
+
     fun setIsPlay(isPlay: Boolean) {
         mutableIsPlay.value = isPlay
     }
 
-    fun create(context: Context) {
+    fun create(currentAudioId: Int, context: Context) {
         if (mediaPlayer == null) {
-            mediaPlayer = checkedAudio.value?.let { MediaPlayer.create(context, it) }
-            mediaPlayer?.prepare()
+            mediaPlayer = MediaPlayer.create(context, currentAudioId)
+//            mediaPlayer?.prepare()
         }
         mutableIsPlay.value = false
+        play()
     }
 
 
-    fun play() {
+    private fun play() {
         try {
             mediaPlayer?.start()
             mutableIsPlay.value = true
@@ -51,12 +66,12 @@ class AudioListViewModel @Inject constructor() : ViewModel() {
         }
     }
 
-    fun pause() {
+    private fun pause() {
         mediaPlayer?.pause()
         mutableIsPlay.value = false
     }
 
-    fun releasePlayer() {
+    private fun releasePlayer() {
         mediaPlayer?.stop()
         mediaPlayer?.reset()
         mediaPlayer?.release()
