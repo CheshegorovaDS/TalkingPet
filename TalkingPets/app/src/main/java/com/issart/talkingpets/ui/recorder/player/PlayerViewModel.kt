@@ -24,6 +24,12 @@ class PlayerViewModel @Inject constructor() : ViewModel() {
         mutablePlayedAudioId.value = audioId
     }
 
+    fun clear() {
+        mutableIsPlay.value = false
+        setPlayedAudio(null)
+        releasePlayer()
+    }
+
     fun clickPlayButton(currentAudioId: Int, context: Context) {
         if (currentAudioId != playedAudio.value) {
             releasePlayer()
@@ -37,7 +43,7 @@ class PlayerViewModel @Inject constructor() : ViewModel() {
         }
     }
 
-    fun create(currentAudioId: Int, context: Context) {
+    private fun create(currentAudioId: Int, context: Context) {
         if (mediaPlayer == null) {
             mediaPlayer = MediaPlayer.create(context, currentAudioId)
         }

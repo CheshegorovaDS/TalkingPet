@@ -1,6 +1,5 @@
 package com.issart.talkingpets.ui.recorder.editAudio
 
-import android.content.Context
 import androidx.compose.foundation.layout.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.livedata.observeAsState
@@ -14,13 +13,19 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.issart.talkingpets.R
 import com.issart.talkingpets.ui.common.buttons.ImageButton
 import com.issart.talkingpets.ui.common.slider.SliderWithText
-import com.issart.talkingpets.ui.recorder.recorder.showToast
+import com.issart.talkingpets.ui.recorder.player.PlayerViewModel
 import com.issart.talkingpets.ui.theme.TextTitleColor
 
 @Composable
-fun EditAudio(editAudioViewModel: EditAudioViewModel = hiltViewModel()) {
+fun EditAudio(
+    editAudioViewModel: EditAudioViewModel = hiltViewModel(),
+    playerViewModel: PlayerViewModel = hiltViewModel()
+) {
+    val isPlayed = playerViewModel.isPlay.observeAsState()
+
     val speed = editAudioViewModel.speed.observeAsState(initial = 5f)
     val pitch = editAudioViewModel.pitch.observeAsState(initial = 7f)
+    val context = LocalContext.current
 
     Box(
         modifier = Modifier
@@ -31,7 +36,15 @@ fun EditAudio(editAudioViewModel: EditAudioViewModel = hiltViewModel()) {
             )
     ) {
         Column {
-            PlayerAndCancelButtons()
+            PlayerAndCancelButtons(
+                isPlayed.value ?: false,
+                onClickCancelButton = { playerViewModel.clear() },
+                onClickPlayerButton = {
+                    playerViewModel.playedAudio.value?.let {
+                        playerViewModel.clickPlayButton(it, context)
+                    }
+                }
+            )
             Speed(speed.value, editAudioViewModel::setSpeed)
             Pitch(pitch.value, editAudioViewModel::setPitch)
         }
@@ -39,45 +52,48 @@ fun EditAudio(editAudioViewModel: EditAudioViewModel = hiltViewModel()) {
 }
 
 @Composable
-fun PlayerAndCancelButtons() {
-    val context = LocalContext.current
-
-    Box(
-        modifier = Modifier
-            .fillMaxWidth()
-            .wrapContentHeight()
-            .padding(
-                top = 16.dp
-            )
-    ) {
-        DeleteCheckedAudioButton(context = context)
-        PlayerButton(context = context)
-    }
+fun PlayerAndCancelButtons(
+    isPlayed: Boolean,
+    onClickPlayerButton: () -> Unit,
+    onClickCancelButton: () -> Unit
+) = Box(
+    modifier = Modifier
+        .fillMaxWidth()
+        .wrapContentHeight()
+        .padding(top = 16.dp)
+) {
+    DeleteCheckedAudioButton(onClickCancelButton)
+    PlayerButton(isPlayed, onClickPlayerButton)
 }
 
+
 @Composable
-fun DeleteCheckedAudioButton(context: Context) = Box(
+fun DeleteCheckedAudioButton(onClick: () -> Unit) = Box(
     modifier = Modifier,
     contentAlignment = Alignment.CenterStart
 ) {
     ImageButton(
         modifier = Modifier,
         size = 64.dp,
-        onClick = { showToast(context, "record again") },
+        onClick = { onClick() },
         imageId = R.drawable.ic_record_again
     )
 }
 
 @Composable
-fun PlayerButton(context: Context) = Box(
+fun PlayerButton(isPlayed: Boolean, onClick: () -> Unit) = Box(
     modifier = Modifier.fillMaxWidth(),
     contentAlignment = Alignment.Center
 ) {
     ImageButton(
         modifier = Modifier,
         size = 70.dp,
-        onClick = { showToast(context, "play audio") },
-        imageId = R.drawable.ic_play,
+        onClick = { onClick() },
+        imageId = if (isPlayed) {
+            R.drawable.ic_pause
+        } else {
+            R.drawable.ic_play
+               },
         colorFilter = ColorFilter.tint(color = TextTitleColor)
     )
 }
