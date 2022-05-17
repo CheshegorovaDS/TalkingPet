@@ -19,4 +19,5 @@ val TextBodySecondaryColor = Color(0xFFA3A3A3)
 val TextBodySecondaryAudioColor = Color(0xFFFFF6EC)
 val TextDialogColor = Color(0xFF333333)
 val SwitchUncheckedTrackColor = Color(0xFFE2E2E2)
+val SliderTrackColor = Color(0xFFDDD6C7)
 

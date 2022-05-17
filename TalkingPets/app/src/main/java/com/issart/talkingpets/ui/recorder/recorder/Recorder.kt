@@ -1,4 +1,4 @@
-package com.issart.talkingpets.ui.recorder
+package com.issart.talkingpets.ui.recorder.recorder
 
 import android.graphics.Bitmap
 import androidx.compose.animation.animateContentSize
@@ -25,7 +25,9 @@ import com.issart.talkingpets.R
 import com.issart.talkingpets.ui.common.buttons.DEFAULT_ELEVATION
 import com.issart.talkingpets.ui.common.images.MainImage
 import com.issart.talkingpets.ui.editor.EditorViewModel
+import com.issart.talkingpets.ui.recorder.editAudio.EditAudio
 import com.issart.talkingpets.ui.recorder.audioList.AudioItem
+import com.issart.talkingpets.ui.recorder.audioList.AudioListViewModel
 import com.issart.talkingpets.ui.recorder.audioList.getAudioList
 import com.issart.talkingpets.ui.theme.Blue
 import com.issart.talkingpets.ui.theme.White
@@ -54,10 +56,17 @@ fun RecorderImage(bitmap: Bitmap?) {
 }
 
 @Composable
-fun AudioBox() = Box(
+fun AudioBox(
+    recorderViewModel: RecorderViewModel = hiltViewModel()
+) = Box(
     modifier = Modifier.fillMaxSize()
 ) {
-    RecordAudio()
+    val checkedAudioId = recorderViewModel.checkedAudio.observeAsState(initial = null)
+    if (checkedAudioId.value == null) {
+        RecordAudio()
+    } else {
+        EditAudio()
+    }
 }
 
 @Composable
@@ -67,7 +76,7 @@ fun AudioListMenu(isVisible: Boolean, onClickAudioListButton: () -> Unit) = Box(
         .padding(
             start = 16.dp,
             bottom = 8.dp,
-            top = 16.dp
+            top = 8.dp
         ),
     contentAlignment = Alignment.CenterEnd
 ) {

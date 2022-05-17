@@ -15,17 +15,20 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.issart.talkingpets.R
 import com.issart.talkingpets.ui.common.texts.BodySecondaryText
 import com.issart.talkingpets.ui.model.Audio
+import com.issart.talkingpets.ui.recorder.player.PlayerViewModel
+import com.issart.talkingpets.ui.recorder.recorder.RecorderViewModel
 import com.issart.talkingpets.ui.theme.TextBodySecondaryAudioColor
 import com.issart.talkingpets.ui.theme.White
 
 @Composable
 fun AudioItem(
     audio: Audio,
-    audioListViewModel: AudioListViewModel = hiltViewModel()
+    recorderViewModel: RecorderViewModel = hiltViewModel(),
+    playerViewModel: PlayerViewModel = hiltViewModel()
 ) {
-    val checkedAudioId = audioListViewModel.checkedAudio.observeAsState()
-    val isPlayedAudioId = audioListViewModel.playedAudio.observeAsState()
-    val isPlayed = audioListViewModel.isPlay.observeAsState()
+    val checkedAudioId = recorderViewModel.checkedAudio.observeAsState()
+    val isPlayedAudioId = playerViewModel.playedAudio.observeAsState()
+    val isPlayed = playerViewModel.isPlay.observeAsState()
 
     val isPauseIcon = isPlayedAudioId.value == audio.id && (isPlayed.value ?: false)
     val isChecked = checkedAudioId.value == audio.id
@@ -35,17 +38,11 @@ fun AudioItem(
         modifier = Modifier
             .wrapContentHeight()
             .fillMaxWidth()
-            .clickable {
-                if (isChecked) {
-                    audioListViewModel.setCheckedAudio(null)
-                } else {
-                    audioListViewModel.setCheckedAudio(audio.id)
-                }
-            }
+            .clickable { recorderViewModel.setCheckedAudio(audio.id, isChecked) }
     ) {
        AudioItemColumn(isChecked, isPauseIcon, audio.title) {
-           audioListViewModel.clickPlayButton(audio.id, context)
-           audioListViewModel.setPlayedAudio(audio.id)
+           playerViewModel.clickPlayButton(audio.id, context)
+           playerViewModel.setPlayedAudio(audio.id)
        }
     }
 }
