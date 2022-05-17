@@ -23,6 +23,9 @@ fun AudioItem(
     audioListViewModel: AudioListViewModel = hiltViewModel()
 ) {
     val checkedAudioId = audioListViewModel.checkedAudio.observeAsState()
+    val isPlayedAudioId = audioListViewModel.playedAudio.observeAsState()
+    val isPlayed = audioListViewModel.isPlay.observeAsState()
+    val isPauseIcon = isPlayedAudioId.value == audio.id && (isPlayed.value ?: false)
     val isChecked = checkedAudioId.value == audio.id
 
     Box(
@@ -37,12 +40,25 @@ fun AudioItem(
                 }
             }
     ) {
-       AudioItemColumn(isChecked, audio.title)
+       AudioItemColumn(isChecked, isPauseIcon, audio.title) {
+           val newIsPlay = if (isPlayedAudioId.value == audio.id) {
+               !(audioListViewModel.isPlay.value ?: false)
+           } else {
+               true
+           }
+           audioListViewModel.setIsPlay(newIsPlay)
+           audioListViewModel.setPlayedAudio(audio.id)
+       }
     }
 }
 
 @Composable
-fun AudioItemColumn(isChecked: Boolean, title: String) = Column(
+fun AudioItemColumn(
+    isChecked: Boolean,
+    isPlay: Boolean,
+    title: String,
+    onClickPlayerButton: () -> Unit
+) = Column(
     modifier = Modifier
         .padding(
             top = 8.dp,
@@ -51,7 +67,7 @@ fun AudioItemColumn(isChecked: Boolean, title: String) = Column(
         )
 ) {
     Row {
-        AudioPlayerButton()
+        AudioPlayerButton(isPlay) { onClickPlayerButton() }
         AudioTitle(title)
         AudioCheckButton(isChecked = isChecked)
     }
@@ -63,12 +79,20 @@ fun AudioItemColumn(isChecked: Boolean, title: String) = Column(
 }
 
 @Composable
-fun RowScope.AudioPlayerButton() = Box(
+fun RowScope.AudioPlayerButton(isPlay: Boolean, onClick: () -> Unit) = Box(
     modifier = Modifier
         .weight(1f)
 ) {
     Image(
-        painter = painterResource(id = R.drawable.ic_play),
+        modifier = Modifier
+            .clickable { onClick() },
+        painter = painterResource(
+            id = if (isPlay) {
+                R.drawable.ic_pause
+            } else {
+                R.drawable.ic_play
+            }
+        ),
         contentDescription = "play audio image"
     )
 }
