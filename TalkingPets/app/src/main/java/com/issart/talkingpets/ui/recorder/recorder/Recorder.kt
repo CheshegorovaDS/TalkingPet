@@ -29,13 +29,15 @@ import com.issart.talkingpets.ui.recorder.editAudio.EditAudio
 import com.issart.talkingpets.ui.recorder.audioList.AudioItem
 import com.issart.talkingpets.ui.recorder.audioList.AudioListViewModel
 import com.issart.talkingpets.ui.recorder.audioList.getAudioList
+import com.issart.talkingpets.ui.recorder.player.PlayerViewModel
 import com.issart.talkingpets.ui.theme.Blue
 import com.issart.talkingpets.ui.theme.White
 
 @Composable
 fun Recorder(
     viewModel: EditorViewModel = hiltViewModel(),
-    audioListViewModel: AudioListViewModel = hiltViewModel()
+    audioListViewModel: AudioListViewModel = hiltViewModel(),
+    playerViewModel: PlayerViewModel = hiltViewModel()
 ) {
     val audioListVisibility = audioListViewModel.isAudioListVisible.observeAsState(initial = false)
 
@@ -45,6 +47,9 @@ fun Recorder(
             AudioBox()
         }
         AudioListMenu(audioListVisibility.value) {
+            if (audioListVisibility.value) {
+                playerViewModel.clear()
+            }
             audioListViewModel.setAudioListVisibility(!audioListVisibility.value)
         }
     }
