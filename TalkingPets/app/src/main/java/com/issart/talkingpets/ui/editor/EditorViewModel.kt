@@ -14,6 +14,9 @@ class EditorViewModel @Inject constructor(): ViewModel() {
     private var mutableBitmap = MutableLiveData<Bitmap?>(null)
     val bitmap: LiveData<Bitmap?> = mutableBitmap
 
+    private var mutablePhotoUri = MutableLiveData<String?>(null)
+    val photoUri: LiveData<String?> = mutablePhotoUri
+
     private var mutableAngle = MutableLiveData(0f)
     val angle: LiveData<Float> = mutableAngle
 
@@ -24,6 +27,10 @@ class EditorViewModel @Inject constructor(): ViewModel() {
 
     fun setEditorAngle(newAngle: Float) {
         mutableAngle.value = newAngle
+    }
+
+    fun setPhotoUri(uri: String) {
+        mutablePhotoUri.value = uri
     }
 
     private fun clear() {

@@ -103,6 +103,7 @@ fun Gallery(
             AnimalGridLayout(updatePhoto)
         }
         else -> {
+            photoUri.value?.let { editorViewModel.setPhotoUri(it) }
             bitmap?.let { editorViewModel.setEditorBitmap(it) }
             updatePhoto(null)
             onChoosePhoto(TalkingPetsScreen.EDITOR)
@@ -260,7 +261,7 @@ private fun updateGalleryPhoto(
         stream.close()
         updatePhoto(filePath)
     } catch (e:IOException) {
-        showToast(context, e.message.toString())//?: "..."
+        showToast(context, e.message.toString())
     }
 }
 

@@ -1,16 +1,17 @@
 package com.issart.talkingpets.ui.editor
 
 import android.graphics.Bitmap
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
+import android.graphics.Matrix
 import androidx.compose.foundation.layout.*
+import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.draw.rotate
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import androidx.core.graphics.scale
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.issart.talkingpets.R
 import com.issart.talkingpets.ui.common.buttons.ImageButton
@@ -23,16 +24,30 @@ fun Editor(viewModel: EditorViewModel = hiltViewModel()) {
     val angle = viewModel.angle.observeAsState(initial = 0f)
 
     Column(modifier = Modifier.padding(bottom = 70.dp)) {
-        EditorImage(viewModel.bitmap.value, angle.value)
+        EditorImage(viewModel.bitmap.value, angle.value, viewModel.photoUri.value)
         EditorTitle()
         RotateButtons(angle.value, viewModel::setEditorAngle)
     }
 }
 
 @Composable
-fun EditorImage(bitmap: Bitmap?, degrees: Float = 0f) {
-    val modifier = Modifier.rotate(degrees)
-    bitmap?.let { MainImage(bitmap = it, modifier = modifier) }
+fun EditorImage(bitmap: Bitmap?, degrees: Float = 0f, photoUri: String?) {
+    if (bitmap == null) return
+
+    val configuration = LocalConfiguration.current
+    val sizeImage = configuration.screenWidthDp * configuration.densityDpi / 160f
+    val croppedBitmap = bitmap.
+
+    //scale - zip photo
+    //Bitmap.createScaled() - zip
+
+    val rotationMatrix = Matrix()
+    rotationMatrix.postRotate(degrees)
+    val rotatedBitmap = Bitmap.createBitmap(croppedBitmap, 0, 0, sizeImage.toInt(), sizeImage.toInt(), rotationMatrix, true)
+
+    val rescaledBitmap = getScaledBitmap(degrees, rotatedBitmap)
+
+    MainImage(bitmap = croppedBitmap)
 }
 
 @Composable
@@ -56,7 +71,7 @@ fun RotateButtons(currentAngle: Float, onClickRotateButton: (Float) -> Unit) = R
     ImageButton(
         modifier = Modifier.padding(end = 32.dp),
         size = sizeRotationButton.dp,
-        onClick = { onClickRotateButton(currentAngle - 90f) },
+        onClick = { onClickRotateButton(currentAngle - 15f) },
         imageId = R.drawable.ic_rotate_left
     )
 
@@ -70,7 +85,7 @@ fun RotateButtons(currentAngle: Float, onClickRotateButton: (Float) -> Unit) = R
     ImageButton(
         Modifier.padding(start = 32.dp),
         size = sizeRotationButton.dp,
-        onClick = { onClickRotateButton(currentAngle + 90f) },
+        onClick = { onClickRotateButton(currentAngle + 15f) },
         imageId = R.drawable.ic_rotate_right
     )
 

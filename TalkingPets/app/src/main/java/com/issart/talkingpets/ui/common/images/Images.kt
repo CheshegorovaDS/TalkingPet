@@ -24,8 +24,7 @@ fun MainImage(
         modifier = modifier
             .fillMaxWidth()
             .height(heightImage.dp),
-        contentScale = ContentScale.Crop,
-        contentDescription = contentDescription,
+        contentDescription = contentDescription
     )
 }
 
