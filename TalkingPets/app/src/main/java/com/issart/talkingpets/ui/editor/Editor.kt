@@ -36,7 +36,7 @@ fun EditorImage(bitmap: Bitmap?, degrees: Float = 0f, photoUri: String?) {
 
     val configuration = LocalConfiguration.current
     val sizeImage = configuration.screenWidthDp * configuration.densityDpi / 160f
-    val croppedBitmap = bitmap.
+    val croppedBitmap = bitmap.scale(sizeImage.toInt(), sizeImage.toInt())
 
     //scale - zip photo
     //Bitmap.createScaled() - zip
