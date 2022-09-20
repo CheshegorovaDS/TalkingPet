@@ -24,30 +24,31 @@ fun Editor(viewModel: EditorViewModel = hiltViewModel()) {
     val angle = viewModel.angle.observeAsState(initial = 0f)
 
     Column(modifier = Modifier.padding(bottom = 70.dp)) {
-        EditorImage(viewModel.bitmap.value, angle.value, viewModel.photoUri.value)
+        EditorImage(viewModel.bitmap.value, angle.value)
         EditorTitle()
         RotateButtons(angle.value, viewModel::setEditorAngle)
     }
 }
 
 @Composable
-fun EditorImage(bitmap: Bitmap?, degrees: Float = 0f, photoUri: String?) {
+fun EditorImage(bitmap: Bitmap?, degrees: Float = 0f) {
     if (bitmap == null) return
 
-    val configuration = LocalConfiguration.current
-    val sizeImage = configuration.screenWidthDp * configuration.densityDpi / 160f
-    val croppedBitmap = bitmap.scale(sizeImage.toInt(), sizeImage.toInt())
-
-    //scale - zip photo
-    //Bitmap.createScaled() - zip
+    val croppedBitmap  = if (bitmap.width < bitmap.height) {
+        val offset = (bitmap.height - bitmap.width)/2
+        Bitmap.createBitmap(bitmap, 0,  offset, bitmap.width, bitmap.width)
+    } else {
+        val offset = (bitmap.width - bitmap.height)/2
+        Bitmap.createBitmap(bitmap, offset, 0 , bitmap.height, bitmap.height)
+    }
 
     val rotationMatrix = Matrix()
     rotationMatrix.postRotate(degrees)
-    val rotatedBitmap = Bitmap.createBitmap(croppedBitmap, 0, 0, sizeImage.toInt(), sizeImage.toInt(), rotationMatrix, true)
+    val rotatedBitmap = Bitmap.createBitmap(croppedBitmap, 0, 0, croppedBitmap.width, croppedBitmap.height, rotationMatrix, true)
 
     val rescaledBitmap = getScaledBitmap(degrees, rotatedBitmap)
 
-    MainImage(bitmap = croppedBitmap)
+    MainImage(bitmap = rescaledBitmap)
 }
 
 @Composable
