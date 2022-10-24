@@ -43,7 +43,7 @@ fun Recorder(
 
     Box(modifier = Modifier.padding(bottom = 70.dp)) {
         Column {
-            RecorderImage(viewModel.editedBitmap)
+            RecorderImage(viewModel.editedBitmap.value)
             AudioBox()
         }
         AudioListMenu(audioListVisibility.value) {
