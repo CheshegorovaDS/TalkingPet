@@ -11,7 +11,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.issart.talkingpets.R
-import com.issart.talkingpets.ui.common.buttons.ImageButton
+import com.issart.talkingpets.ui.common.buttons.ActionImageButton
 import com.issart.talkingpets.ui.common.texts.BodyMediumText
 import com.issart.talkingpets.ui.common.texts.BodySecondaryText
 
@@ -65,11 +65,12 @@ fun RecordButton() {
             modifier = Modifier.wrapContentSize(),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            ImageButton(
+            ActionImageButton(
                 modifier = Modifier,
                 size = 80.dp,
-                onClick = { showToast(context, "start record") },
-                imageId = R.drawable.ic_record
+                imageId = R.drawable.ic_record,
+                onActionDownEvent = { showToast(context, "start record") },
+                onActionUpEvent = { showToast(context, "end record") }
             )
 
             BodySecondaryText(title = stringResource(id = R.string.hilt_recording))
