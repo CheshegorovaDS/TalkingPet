@@ -103,7 +103,6 @@ fun Gallery(
             AnimalGridLayout(updatePhoto)
         }
         else -> {
-            photoUri.value?.let { editorViewModel.setPhotoUri(it) }
             bitmap?.let { editorViewModel.setEditorBitmap(it) }
             updatePhoto(null)
             onChoosePhoto(TalkingPetsScreen.EDITOR)

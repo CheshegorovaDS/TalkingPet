@@ -34,21 +34,7 @@ fun Editor(viewModel: EditorViewModel = hiltViewModel()) {
 fun EditorImage(bitmap: Bitmap?, degrees: Float = 0f) {
     if (bitmap == null) return
 
-    val croppedBitmap  = if (bitmap.width < bitmap.height) {
-        val offset = (bitmap.height - bitmap.width)/2
-        Bitmap.createBitmap(bitmap, 0,  offset, bitmap.width, bitmap.width)
-    } else {
-        val offset = (bitmap.width - bitmap.height)/2
-        Bitmap.createBitmap(bitmap, offset, 0 , bitmap.height, bitmap.height)
-    }
-
-    val rotationMatrix = Matrix()
-    rotationMatrix.postRotate(degrees)
-    val rotatedBitmap = Bitmap.createBitmap(croppedBitmap, 0, 0, croppedBitmap.width, croppedBitmap.height, rotationMatrix, true)
-
-    val rescaledBitmap = getScaledBitmap(degrees, rotatedBitmap)
-
-    MainImage(bitmap = rescaledBitmap)
+    MainImage(bitmap = getRotatedAndCroppedBitmap(bitmap, degrees))
 }
 
 @Composable

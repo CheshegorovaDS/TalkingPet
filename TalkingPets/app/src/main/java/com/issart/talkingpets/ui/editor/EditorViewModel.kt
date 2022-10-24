@@ -14,9 +14,6 @@ class EditorViewModel @Inject constructor(): ViewModel() {
     private var mutableBitmap = MutableLiveData<Bitmap?>(null)
     val bitmap: LiveData<Bitmap?> = mutableBitmap
 
-    private var mutablePhotoUri = MutableLiveData<String?>(null)
-    val photoUri: LiveData<String?> = mutablePhotoUri
-
     private var mutableAngle = MutableLiveData(0f)
     val angle: LiveData<Float> = mutableAngle
 
@@ -29,28 +26,15 @@ class EditorViewModel @Inject constructor(): ViewModel() {
         mutableAngle.value = newAngle
     }
 
-    fun setPhotoUri(uri: String) {
-        mutablePhotoUri.value = uri
-    }
-
     private fun clear() {
         mutableAngle.value = 0f
     }
 
     val editedBitmap: Bitmap?
         get() {
-            val matrix = Matrix()
-            matrix.postRotate(angle.value ?: 0f)
-            return when (val source = mutableBitmap.value) {
-                null -> null
-                else -> Bitmap.createBitmap(
-                    source,
-                    0,
-                    0,
-                    source.width, source.height,
-                    matrix,
-                    true
-                )
+            return when {
+                bitmap.value != null -> getRotatedAndCroppedBitmap(bitmap.value!!, angle.value ?: 0f)
+                else -> null
             }
         }
 
