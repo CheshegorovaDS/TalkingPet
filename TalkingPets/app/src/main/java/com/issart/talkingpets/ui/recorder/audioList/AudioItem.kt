@@ -16,17 +16,16 @@ import com.issart.talkingpets.R
 import com.issart.talkingpets.ui.common.texts.BodySecondaryText
 import com.issart.talkingpets.ui.model.Audio
 import com.issart.talkingpets.ui.recorder.player.PlayerViewModel
-import com.issart.talkingpets.ui.recorder.recorder.RecorderViewModel
 import com.issart.talkingpets.ui.theme.TextBodySecondaryAudioColor
 import com.issart.talkingpets.ui.theme.White
 
 @Composable
 fun AudioItem(
     audio: Audio,
-    recorderViewModel: RecorderViewModel = hiltViewModel(),
+    audioListViewModel: AudioListViewModel = hiltViewModel(),
     playerViewModel: PlayerViewModel = hiltViewModel()
 ) {
-    val checkedAudioId = recorderViewModel.checkedAudio.observeAsState()
+    val checkedAudioId = audioListViewModel.checkedAudio.observeAsState()
     val isPlayedAudioId = playerViewModel.playedAudio.observeAsState()
     val isPlayed = playerViewModel.isPlay.observeAsState()
 
@@ -38,7 +37,7 @@ fun AudioItem(
         modifier = Modifier
             .wrapContentHeight()
             .fillMaxWidth()
-            .clickable { recorderViewModel.setCheckedAudio(audio.id, isChecked) }
+            .clickable { audioListViewModel.setCheckedAudio(audio.id, isChecked) }
     ) {
        AudioItemColumn(isChecked, isPauseIcon, audio.title) {
            playerViewModel.clickPlayButton(audio.id, context)

@@ -13,18 +13,18 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.issart.talkingpets.R
 import com.issart.talkingpets.ui.common.buttons.ImageButton
 import com.issart.talkingpets.ui.common.slider.SliderWithText
+import com.issart.talkingpets.ui.recorder.audioList.AudioListViewModel
 import com.issart.talkingpets.ui.recorder.player.PlayerViewModel
-import com.issart.talkingpets.ui.recorder.recorder.RecorderViewModel
 import com.issart.talkingpets.ui.theme.TextTitleColor
 
 @Composable
 fun EditAudio(
-    recorderViewModel: RecorderViewModel = hiltViewModel(),
+    audioListViewModel: AudioListViewModel = hiltViewModel(),
     editAudioViewModel: EditAudioViewModel = hiltViewModel(),
     playerViewModel: PlayerViewModel = hiltViewModel()
 ) {
     val isPlayed = playerViewModel.isPlay.observeAsState()
-    val checkedAudio = recorderViewModel.checkedAudio.observeAsState()
+    val checkedAudio = audioListViewModel.checkedAudio.observeAsState()
     playerViewModel.setPlayedAudio(checkedAudio.value)
 
     val speed = editAudioViewModel.speed.observeAsState(initial = 5f)
@@ -44,7 +44,7 @@ fun EditAudio(
                 isPlayed.value ?: false,
                 onClickCancelButton = { playerViewModel.clear() },
                 onClickPlayerButton = {
-                    recorderViewModel.checkedAudio.value?.let {
+                    audioListViewModel.checkedAudio.value?.let {
                         playerViewModel.clickPlayButton(it, context)
                     }
                 }

@@ -62,11 +62,11 @@ fun RecorderImage(bitmap: Bitmap?) {
 
 @Composable
 fun AudioBox(
-    recorderViewModel: RecorderViewModel = hiltViewModel()
+    audioListViewModel: AudioListViewModel = hiltViewModel()
 ) = Box(
     modifier = Modifier.fillMaxSize()
 ) {
-    val checkedAudioId = recorderViewModel.checkedAudio.observeAsState(initial = null)
+    val checkedAudioId = audioListViewModel.checkedAudio.observeAsState(initial = null)
     if (checkedAudioId.value == null) {
         RecordAudio()
     } else {
