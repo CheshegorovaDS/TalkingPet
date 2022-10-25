@@ -1,4 +1,4 @@
-package com.issart.talkingpets.ui.recorder.recorder
+package com.issart.talkingpets.ui.recorder.common
 
 import android.graphics.Bitmap
 import androidx.compose.animation.animateContentSize
@@ -30,6 +30,7 @@ import com.issart.talkingpets.ui.recorder.audioList.AudioItem
 import com.issart.talkingpets.ui.recorder.audioList.AudioListViewModel
 import com.issart.talkingpets.ui.recorder.audioList.getAudioList
 import com.issart.talkingpets.ui.recorder.player.PlayerViewModel
+import com.issart.talkingpets.ui.recorder.recorder.RecordAudio
 import com.issart.talkingpets.ui.theme.Blue
 import com.issart.talkingpets.ui.theme.White
 

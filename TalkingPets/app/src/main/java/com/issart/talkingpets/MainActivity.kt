@@ -16,7 +16,7 @@ import com.issart.talkingpets.ui.editor.Editor
 import com.issart.talkingpets.ui.gallery.Gallery
 import com.issart.talkingpets.ui.mainNavigation.MainNavigation
 import com.issart.talkingpets.ui.mainNavigation.NavigationViewModel
-import com.issart.talkingpets.ui.recorder.recorder.Recorder
+import com.issart.talkingpets.ui.recorder.common.Recorder
 import com.issart.talkingpets.ui.share.Share
 import com.issart.talkingpets.ui.theme.TalkingPetsTheme
 

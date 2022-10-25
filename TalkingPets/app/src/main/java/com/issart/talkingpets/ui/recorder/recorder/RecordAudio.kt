@@ -10,6 +10,8 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.google.accompanist.permissions.ExperimentalPermissionsApi
+import com.google.accompanist.permissions.rememberPermissionState
 import com.issart.talkingpets.R
 import com.issart.talkingpets.ui.common.buttons.ActionImageButton
 import com.issart.talkingpets.ui.common.texts.BodyMediumText
@@ -53,9 +55,14 @@ fun RecordTimer() {
     }
 }
 
+@OptIn(ExperimentalPermissionsApi::class)
 @Composable
 fun RecordButton() {
     val context = LocalContext.current
+
+    val recordAudioPermission = rememberPermissionState(
+        permission = android.Manifest.permission.RECORD_AUDIO
+    )
 
     Box(
         modifier = Modifier.fillMaxSize(),
@@ -69,7 +76,13 @@ fun RecordButton() {
                 modifier = Modifier,
                 size = 80.dp,
                 imageId = R.drawable.ic_record,
-                onActionDownEvent = { showToast(context, "start record") },
+                onActionDownEvent = {
+                    if (recordAudioPermission.hasPermission) {
+                        showToast(context, "start record")
+                    } else {
+                        recordAudioPermission.launchPermissionRequest()
+                    }
+                },
                 onActionUpEvent = { showToast(context, "end record") }
             )
 
