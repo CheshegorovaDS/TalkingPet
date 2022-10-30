@@ -1,9 +1,10 @@
 package com.issart.talkingpets.ui.recorder.recorder
 
-
 import android.annotation.SuppressLint
+import android.content.Context
 import android.media.AudioRecord
-import android.os.Environment
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import java.io.File
@@ -19,13 +20,20 @@ class RecorderViewModel @Inject constructor() : ViewModel() {
     private val recorderConfig = RecorderConfig()
     private var audioFilePath: String? = null
 
-    fun start() {
+    private var mutableAudioFile = MutableLiveData<String?>(null)
+    val audioFile: LiveData<String?> = mutableAudioFile
+
+    fun setAudioFile(audioPath: String?) {
+        mutableAudioFile.value = audioPath
+    }
+
+    fun start(context: Context) {
         if (recorder != null) stop()
 
         initAudioRecorder()
         recorder?.startRecording()
         isRecording = true
-        writeAudioDataToStorage()
+        writeAudioDataToStorage(context)
     }
 
     fun stop() {
@@ -34,10 +42,6 @@ class RecorderViewModel @Inject constructor() : ViewModel() {
             isRecording = false
             recorder?.stop()
             recorder?.release()
-            audioFilePath?.let {
-//                WaveHeaderWriter(it, recorderConfig).writeHeader()
-//                requestStorage.audioFile = it
-            }
         } catch (ex: IllegalStateException) {
 //            logger.logDebugLevel(ex.message.toString())
         } finally {
@@ -56,15 +60,15 @@ class RecorderViewModel @Inject constructor() : ViewModel() {
         )
     }
 
-    private fun writeAudioDataToStorage() {
+    private fun writeAudioDataToStorage(context: Context) {
         val file = try {
-            createAudioFile()
+            createAudioFile(context)
         } catch(ex: IOException) {
 //            logger.logExceptionLevel(ex, SAVE_AUDIO_EXCEPTION)
             null
         }
 
-        audioFilePath = file?.absolutePath
+        setAudioFile(file?.absolutePath)
 
         val data = ByteArray(recorderConfig.bufferSizeInBytes)
         val outputStream = file?.outputStream()
@@ -80,18 +84,17 @@ class RecorderViewModel @Inject constructor() : ViewModel() {
     }
 
     @Throws(IOException::class)
-    private fun createAudioFile(): File {
-        val filepath = Environment.getExternalStorageDirectory().toString() + "/Download/record.mp3"
-        val storageDir: File = File(filepath)//context.cacheDir
+    private fun createAudioFile(context: Context): File {
+        val storageDir: File = context.cacheDir
         return File.createTempFile(
-            "record",
-            ".wav",
+            "talking_pet_record",
+            ".mp3",
             storageDir
         )
     }
 
-    companion object {
-        const val SAVE_AUDIO_EXCEPTION = "SaveAudioException"
-    }
+//    companion object {
+//        const val SAVE_AUDIO_EXCEPTION = "SaveAudioException"
+//    }
 
 }

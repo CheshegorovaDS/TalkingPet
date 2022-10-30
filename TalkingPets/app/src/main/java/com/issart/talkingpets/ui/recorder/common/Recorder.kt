@@ -31,6 +31,7 @@ import com.issart.talkingpets.ui.recorder.audioList.AudioListViewModel
 import com.issart.talkingpets.ui.recorder.audioList.getAudioList
 import com.issart.talkingpets.ui.recorder.player.PlayerViewModel
 import com.issart.talkingpets.ui.recorder.recorder.RecordAudio
+import com.issart.talkingpets.ui.recorder.recorder.RecorderViewModel
 import com.issart.talkingpets.ui.theme.Blue
 import com.issart.talkingpets.ui.theme.White
 
@@ -63,15 +64,17 @@ fun RecorderImage(bitmap: Bitmap?) {
 
 @Composable
 fun AudioBox(
-    audioListViewModel: AudioListViewModel = hiltViewModel()
+    audioListViewModel: AudioListViewModel = hiltViewModel(),
+    recorderViewModel: RecorderViewModel = hiltViewModel()
 ) = Box(
     modifier = Modifier.fillMaxSize()
 ) {
     val checkedAudioId = audioListViewModel.checkedAudio.observeAsState(initial = null)
-    if (checkedAudioId.value == null) {
-        RecordAudio()
-    } else {
-        EditAudio()
+    val recorderFile = recorderViewModel.audioFile.observeAsState(initial = null)
+    when {
+        !recorderFile.value.isNullOrEmpty() -> EditAudio()
+        checkedAudioId.value != null -> EditAudio()
+        else -> RecordAudio()
     }
 }
 

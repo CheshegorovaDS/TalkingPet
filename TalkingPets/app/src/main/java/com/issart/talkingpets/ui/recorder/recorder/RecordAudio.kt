@@ -10,6 +10,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.rememberPermissionState
 import com.issart.talkingpets.R
@@ -57,7 +58,7 @@ fun RecordTimer() {
 
 @OptIn(ExperimentalPermissionsApi::class)
 @Composable
-fun RecordButton() {
+fun RecordButton(recorderViewModel: RecorderViewModel = hiltViewModel()) {
     val context = LocalContext.current
 
     val recordAudioPermission = rememberPermissionState(
@@ -78,12 +79,17 @@ fun RecordButton() {
                 imageId = R.drawable.ic_record,
                 onActionDownEvent = {
                     if (recordAudioPermission.hasPermission) {
+//                        recorderViewModel.start()
                         showToast(context, "start record")
                     } else {
                         recordAudioPermission.launchPermissionRequest()
                     }
                 },
-                onActionUpEvent = { showToast(context, "end record") }
+                onActionUpEvent = {
+//                    recorderViewModel.stop()
+                    recorderViewModel.setAudioFile("hjhjh")
+                    showToast(context, "end record")
+                }
             )
 
             BodySecondaryText(title = stringResource(id = R.string.hilt_recording))
