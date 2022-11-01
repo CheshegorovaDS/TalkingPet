@@ -27,6 +27,11 @@ class RecorderViewModel @Inject constructor() : ViewModel() {
         mutableAudioFile.value = audioPath
     }
 
+    fun clearRecorder() {
+        mutableAudioFile.value = null
+        //delete audio from storage
+    }
+
     fun start(context: Context) {
         if (recorder != null) stop()
 

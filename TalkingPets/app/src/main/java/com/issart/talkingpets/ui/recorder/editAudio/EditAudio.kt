@@ -15,12 +15,14 @@ import com.issart.talkingpets.ui.common.buttons.ImageButton
 import com.issart.talkingpets.ui.common.slider.SliderWithText
 import com.issart.talkingpets.ui.recorder.audioList.AudioListViewModel
 import com.issart.talkingpets.ui.recorder.player.PlayerViewModel
+import com.issart.talkingpets.ui.recorder.recorder.RecorderViewModel
 import com.issart.talkingpets.ui.theme.TextTitleColor
 
 @Composable
 fun EditAudio(
     audioListViewModel: AudioListViewModel = hiltViewModel(),
     editAudioViewModel: EditAudioViewModel = hiltViewModel(),
+    recorderViewModel: RecorderViewModel = hiltViewModel(),
     playerViewModel: PlayerViewModel = hiltViewModel()
 ) {
     val isPlayed = playerViewModel.isPlay.observeAsState()
@@ -42,7 +44,11 @@ fun EditAudio(
         Column {
             PlayerAndCancelButtons(
                 isPlayed.value ?: false,
-                onClickCancelButton = { playerViewModel.clear() },
+                onClickCancelButton = {
+                    audioListViewModel.clearCheckedAudio()
+                    recorderViewModel.clearRecorder()
+                    playerViewModel.clear()
+                },
                 onClickPlayerButton = {
                     audioListViewModel.checkedAudio.value?.let {
                         playerViewModel.clickPlayButton(it, context)

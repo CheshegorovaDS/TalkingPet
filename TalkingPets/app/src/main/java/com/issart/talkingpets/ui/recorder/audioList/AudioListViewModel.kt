@@ -27,4 +27,8 @@ class AudioListViewModel @Inject constructor() : ViewModel() {
         }
     }
 
+    fun clearCheckedAudio() {
+        mutableCheckedAudioId.value = null
+    }
+
 }
