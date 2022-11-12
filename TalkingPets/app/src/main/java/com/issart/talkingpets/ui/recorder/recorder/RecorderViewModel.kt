@@ -3,6 +3,7 @@ package com.issart.talkingpets.ui.recorder.recorder
 import android.annotation.SuppressLint
 import android.content.Context
 import android.media.AudioRecord
+import android.os.CountDownTimer
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -18,13 +19,27 @@ class RecorderViewModel @Inject constructor() : ViewModel() {
 
     private var isRecording: Boolean = false
     private val recorderConfig = RecorderConfig()
+
+    private var timer: CountDownTimer? = null
+
     private var audioFilePath: String? = null
 
     private var mutableAudioFile = MutableLiveData<String?>(null)
     val audioFile: LiveData<String?> = mutableAudioFile
 
-    fun setAudioFile(audioPath: String?) {
+    private var mutableAudioDuration = MutableLiveData(DEFAULT_TIMER_VALUE)
+    val audioDuration: LiveData<String> = mutableAudioDuration
+
+    private fun setAudioFile(audioPath: String?) {
         mutableAudioFile.value = audioPath
+    }
+
+    private fun setAudioDuration(duration: Int) {
+        mutableAudioDuration.value = String.format(
+            DURATION_STRING_FORMAT,
+            duration / SECONDS_IN_MINUTE,
+            duration % SECONDS_IN_MINUTE
+        )
     }
 
     fun clearRecorder() {
@@ -36,17 +51,23 @@ class RecorderViewModel @Inject constructor() : ViewModel() {
         if (recorder != null) stop()
 
         initAudioRecorder()
-        recorder?.startRecording()
+//        recorder?.startRecording()
+        if (timer == null) {
+            timer = createTimer().apply { start() }
+        }
         isRecording = true
-        writeAudioDataToStorage(context)
+//        writeAudioDataToStorage(context)
     }
 
     fun stop() {
+        finishTimer()
+
         if (!isRecording) return
         try {
             isRecording = false
-            recorder?.stop()
-            recorder?.release()
+//            recorder?.stop()
+//            recorder?.release()
+            setAudioFile("hjhjh")//delete debug
         } catch (ex: IllegalStateException) {
 //            logger.logDebugLevel(ex.message.toString())
         } finally {
@@ -98,8 +119,37 @@ class RecorderViewModel @Inject constructor() : ViewModel() {
         )
     }
 
-//    companion object {
+    private fun createTimer() = object : CountDownTimer(TIMEOUT_MILLISECONDS, COUNTDOWN_INTERVAL) {
+
+        override fun onTick(millisUntilFinished: Long) {
+            val seconds = (TIMEOUT_MILLISECONDS - millisUntilFinished) / MILLISECONDS_IN_SECONDS
+            setAudioDuration(seconds.toInt())
+        }
+
+        override fun onFinish() {
+            setAudioDuration(0)
+            timer = null
+            stop()
+        }
+
+    }
+
+    private fun finishTimer() {
+        timer?.cancel()
+        timer = null
+        setAudioDuration(0)
+    }
+
+    companion object {
+        const val TIMEOUT_SECONDS = 10
+        const val MILLISECONDS_IN_SECONDS = 1_000
+        const val SECONDS_IN_MINUTE = 60
+        const val COUNTDOWN_INTERVAL = 1_000L
+        const val TIMEOUT_MILLISECONDS = 10_000L
+        const val DURATION_STRING_FORMAT = "%02d:%02d"
+        const val DEFAULT_TIMER_VALUE = "00:00"
+    }
+
 //        const val SAVE_AUDIO_EXCEPTION = "SaveAudioException"
-//    }
 
 }

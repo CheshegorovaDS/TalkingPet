@@ -4,6 +4,7 @@ import android.content.Context
 import android.widget.Toast
 import androidx.compose.foundation.layout.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -19,27 +20,28 @@ import com.issart.talkingpets.ui.common.texts.BodyMediumText
 import com.issart.talkingpets.ui.common.texts.BodySecondaryText
 
 @Composable
-fun RecordAudio() {
+fun RecordAudio(recorderViewModel: RecorderViewModel = hiltViewModel()) {
+    val timer = recorderViewModel.audioDuration.observeAsState()
     Box(
         modifier = Modifier.fillMaxSize()
     ) {
-        RecorderRow()
+        RecorderRow(timer.value)
         RecordButton()
     }
 }
 
 @Composable
-fun RecorderRow() {
+fun RecorderRow(timer: String?) {
     Box(
         modifier = Modifier.fillMaxSize(),
         contentAlignment = Alignment.CenterStart
     ) {
-        RecordTimer()
+        RecordTimer(timer)
     }
 }
 
 @Composable
-fun RecordTimer() {
+fun RecordTimer(timer: String?) {
     Box(
         modifier = Modifier
             .fillMaxHeight()
@@ -50,7 +52,7 @@ fun RecordTimer() {
         contentAlignment = Alignment.CenterStart
     ) {
         BodyMediumText(
-            title = "0:00",
+            title = timer ?: RecorderViewModel.DEFAULT_TIMER_VALUE,
             fontSize = 30.sp
         )
     }
@@ -79,15 +81,14 @@ fun RecordButton(recorderViewModel: RecorderViewModel = hiltViewModel()) {
                 imageId = R.drawable.ic_record,
                 onActionDownEvent = {
                     if (recordAudioPermission.hasPermission) {
-//                        recorderViewModel.start()
+                        recorderViewModel.start(context)
                         showToast(context, "start record")
                     } else {
                         recordAudioPermission.launchPermissionRequest()
                     }
                 },
                 onActionUpEvent = {
-//                    recorderViewModel.stop()
-                    recorderViewModel.setAudioFile("hjhjh")
+                    recorderViewModel.stop()
                     showToast(context, "end record")
                 }
             )
