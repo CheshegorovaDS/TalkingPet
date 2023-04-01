@@ -4,15 +4,15 @@ import com.issart.talkingpets.animation.mat.getSubmat
 import org.opencv.core.Mat
 
 
-internal fun getTopEyeRectangle(src: Mat, x: Double, y: Double, radiusEye: Int, radiusFace: Int): Mat {
-    return getSubmat(
-        src,
-        (y - radiusFace),
-        (y - radiusEye),
-        (x - radiusEye),
-        (x + radiusEye)
-    )
-}
+//internal fun getTopEyeRectangle(src: Mat, x: Double, y: Double, radiusEye: Int, radiusFace: Int): Mat {
+//    return getSubmat(
+//        src,
+//        (y - radiusFace),
+//        (y - radiusEye),
+//        (x - radiusEye),
+//        (x + radiusEye)
+//    )
+//}
 
 internal fun getEyeRectangle(src: Mat, x: Double, y: Double, radius: Int): Mat {
     return getSubmat(

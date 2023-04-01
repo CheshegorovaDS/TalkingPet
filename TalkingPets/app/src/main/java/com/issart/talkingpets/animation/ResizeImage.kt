@@ -6,6 +6,7 @@ import com.issart.talkingpets.animation.eyeRect.getResizedEyeRectangle
 import com.issart.talkingpets.animation.eyeRect.getResizedTopEyeRectangle
 import com.issart.talkingpets.animation.mask.getMask
 import com.issart.talkingpets.animation.mat.copyMatFromTo
+import com.issart.talkingpets.animation.mat.copySubmatToMat
 import com.issart.talkingpets.animation.model.BlinkingEyeHeights
 import com.issart.talkingpets.animation.model.Eye
 import com.issart.talkingpets.animation.model.Face
@@ -36,14 +37,17 @@ fun getResizeEyeImage(
     val src = Mat()
     Utils.bitmapToMat(photo, src)
 
-    val newTopEyeRect = getResizedTopEyeRectangle(
-        src,
-        eye.x,
-        eye.y,
-        eye.radius,
-        newEyeHeight,
-        face.minorAxis
+    val director = EyeRectangleDirector(
+        mat = src,
+        eye = eye,
+        face = face,
+        newEyeHeight = newEyeHeight
     )
+
+    val topEyeRectangleBuilder = TopRectangleEyeBuilder()
+    director.createTopEyeRectangle(topEyeRectangleBuilder)
+
+    val newTopEyeRect = topEyeRectangleBuilder.getResizedRectangle()
 
     val newEyeRect = getResizedEyeRectangle(
         src,
@@ -59,7 +63,7 @@ fun getResizeEyeImage(
         eye.y,
         eye.radius,
         newEyeHeight,
-        face.minorAxis
+        face.radius
     )
 
     val newPhoto = getImageWithNewRectangles(
@@ -70,7 +74,7 @@ fun getResizeEyeImage(
         eye.x,
         eye.y,
         eye.radius,
-        face.minorAxis
+        face.radius
     )
 
     val bitmap = Bitmap.createBitmap(newPhoto.width(), newPhoto.height(), Bitmap.Config.ARGB_8888)
@@ -125,37 +129,37 @@ private fun saveEyeRectangles(
     var top = firstCol
     var bottom = top + topImage.rows()
 
-    for (i in top..bottom) {
-        for (j in left..right) {
-            val arr = topImage.get(i - top, j - left)
-            if (arr != null) {
-                dst.put(i, j, arr[0], arr[1], arr[2])
-            }
-        }
-    }
+    copySubmatToMat(
+        submat = topImage,
+        dst = dst,
+        top = top,
+        bottom = bottom,
+        left = left,
+        right = right
+    )
 
     top = bottom
     bottom = top + centerImage.rows()
 
-    for (i in top..bottom) {
-        for (j in left..right + 1) {
-            val arr = centerImage.get(i - top, j - left)
-            if (arr != null) {
-                dst.put(i, j, arr[0], arr[1], arr[2])
-            }
-        }
-    }
+    copySubmatToMat(
+        submat = centerImage,
+        dst = dst,
+        top = top,
+        bottom = bottom,
+        left = left,
+        right = right + 1 // check without +1
+    )
 
     top = bottom
     bottom = top + bottomImage.rows()
 
-    for (i in top..bottom) {
-        for (j in left..right) {
-            val arr = bottomImage.get(i - top, j - left)
-            if (arr != null) {
-                dst.put(i, j, arr[0], arr[1], arr[2])
-            }
-        }
-    }
+    copySubmatToMat(
+        submat = bottomImage,
+        dst = dst,
+        top = top,
+        bottom = bottom,
+        left = left,
+        right = right
+    )
 
 }
