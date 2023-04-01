@@ -1,10 +1,10 @@
-package com.issart.talkingpets.animation
+package com.issart.talkingpets.animation.eyeRect
 
 import com.issart.talkingpets.animation.mat.getResizeMat
 import com.issart.talkingpets.animation.mat.getSubmat
 import org.opencv.core.Mat
 
-class TopRectangleEyeBuilder : RectBuilder {
+class TopEyeRectangleBuilder : EyeRectanglesBuilder {
 
     private var rectangle: Mat? = null
     private var newHeight: Double? = null
@@ -32,8 +32,9 @@ class TopRectangleEyeBuilder : RectBuilder {
     }
 
     companion object {
-        const val RECTANGLE_IS_NULL = "Top rectangle is null."
-        const val NEW_HEIGHT_IS_NULL = "New height of top rectangle is null."
+        private const val NAME = "TopEyeRectangleBuilder:"
+        const val RECTANGLE_IS_NULL = "$NAME Top rectangle is null."
+        const val NEW_HEIGHT_IS_NULL = "$NAME New height of top rectangle is null."
     }
 
 }

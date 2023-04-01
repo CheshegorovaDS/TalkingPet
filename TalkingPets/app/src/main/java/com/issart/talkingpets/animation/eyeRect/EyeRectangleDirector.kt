@@ -1,4 +1,4 @@
-package com.issart.talkingpets.animation
+package com.issart.talkingpets.animation.eyeRect
 
 import com.issart.talkingpets.animation.model.Eye
 import com.issart.talkingpets.animation.model.Face
@@ -10,7 +10,8 @@ class EyeRectangleDirector(
     private val face: Face,
     private val newEyeHeight: Double
     ) {
-     fun createTopEyeRectangle(builder: RectBuilder) {
+
+     fun createTopEyeRectangle(builder: EyeRectanglesBuilder) {
          builder.getRectangleFromMat(
              mat = mat,
              top = (eye.y - face.radius),
@@ -23,9 +24,22 @@ class EyeRectangleDirector(
              newEyeRectHeight = newEyeHeight,
              heightAllRectangles = getRectanglesHeight()
          )
-
-
      }
+
+    fun createEyeRectangle(builder: EyeRectanglesBuilder) {
+        builder.getRectangleFromMat(
+            mat = mat,
+            top = (eye.y - eye.radius),
+            bottom = (eye.y + eye.radius),
+            left = (eye.x - eye.radius),
+            right = (eye.x + eye.radius)
+        )
+
+        builder.getNewHeight(
+            newEyeRectHeight = newEyeHeight,
+            heightAllRectangles = getRectanglesHeight()
+        )
+    }
 
     private fun getRectanglesHeight() = face.radius * 2
 }

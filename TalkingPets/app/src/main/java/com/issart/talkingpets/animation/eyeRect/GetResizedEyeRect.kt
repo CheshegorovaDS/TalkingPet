@@ -18,17 +18,17 @@ import org.opencv.core.Mat
 //    return getResizeMat(topEyeRect, newRectHeight)
 //}
 
-internal fun getResizedEyeRectangle(
-    photo: Mat,
-    x: Double,
-    y: Double,
-    radiusEye: Double,
-    newEyeHeight: Double
-) : Mat {
-    val eyeRect = getEyeRectangle(photo, x, y, radiusEye.toInt())
-
-    return getResizeMat(eyeRect, newEyeHeight)
-}
+//internal fun getResizedEyeRectangle(
+//    photo: Mat,
+//    x: Double,
+//    y: Double,
+//    radiusEye: Double,
+//    newEyeHeight: Double
+//) : Mat {
+//    val eyeRect = getEyeRectangle(photo, x, y, radiusEye.toInt())
+//
+//    return getResizeMat(eyeRect, newEyeHeight)
+//}
 
 internal fun getResizedBottomEyeRectangle(
     photo: Mat,

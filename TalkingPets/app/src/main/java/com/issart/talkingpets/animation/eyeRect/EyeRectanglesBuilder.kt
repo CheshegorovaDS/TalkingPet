@@ -1,8 +1,8 @@
-package com.issart.talkingpets.animation
+package com.issart.talkingpets.animation.eyeRect
 
 import org.opencv.core.Mat
 
-interface RectBuilder {
+interface EyeRectanglesBuilder {
 
     fun getRectangleFromMat(
         mat: Mat,

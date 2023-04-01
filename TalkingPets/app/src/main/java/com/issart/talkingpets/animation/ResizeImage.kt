@@ -1,9 +1,8 @@
 package com.issart.talkingpets.animation
 
 import android.graphics.Bitmap
+import com.issart.talkingpets.animation.eyeRect.*
 import com.issart.talkingpets.animation.eyeRect.getResizedBottomEyeRectangle
-import com.issart.talkingpets.animation.eyeRect.getResizedEyeRectangle
-import com.issart.talkingpets.animation.eyeRect.getResizedTopEyeRectangle
 import com.issart.talkingpets.animation.mask.getMask
 import com.issart.talkingpets.animation.mat.copyMatFromTo
 import com.issart.talkingpets.animation.mat.copySubmatToMat
@@ -44,18 +43,14 @@ fun getResizeEyeImage(
         newEyeHeight = newEyeHeight
     )
 
-    val topEyeRectangleBuilder = TopRectangleEyeBuilder()
+    val topEyeRectangleBuilder = TopEyeRectangleBuilder()
     director.createTopEyeRectangle(topEyeRectangleBuilder)
-
     val newTopEyeRect = topEyeRectangleBuilder.getResizedRectangle()
 
-    val newEyeRect = getResizedEyeRectangle(
-        src,
-        eye.x,
-        eye.y,
-        eye.radius,
-        newEyeHeight
-    )
+
+    val eyeRectangleBuilder = EyeRectangleBuilder()
+    director.createEyeRectangle(eyeRectangleBuilder)
+    val newEyeRect = eyeRectangleBuilder.getResizedRectangle()
 
     val newBottomRect = getResizedBottomEyeRectangle(
         src,
