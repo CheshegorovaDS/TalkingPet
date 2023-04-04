@@ -4,7 +4,7 @@ import com.issart.talkingpets.animation.mat.getResizeMat
 import com.issart.talkingpets.animation.mat.getSubmat
 import org.opencv.core.Mat
 
-class EyeRectangleBuilder : EyeRectanglesBuilder {
+internal class EyeRectangleBuilder : EyeRectanglesBuilder {
 
     private var rectangle: Mat? = null
     private var newHeight: Double? = null

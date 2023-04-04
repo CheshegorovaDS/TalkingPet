@@ -2,7 +2,7 @@ package com.issart.talkingpets.animation.eyeRect
 
 import org.opencv.core.Mat
 
-interface EyeRectanglesBuilder {
+internal interface EyeRectanglesBuilder {
 
     fun getRectangleFromMat(
         mat: Mat,
