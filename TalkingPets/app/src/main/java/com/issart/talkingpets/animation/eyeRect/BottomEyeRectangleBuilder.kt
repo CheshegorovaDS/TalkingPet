@@ -4,7 +4,7 @@ import com.issart.talkingpets.animation.mat.getResizeMat
 import com.issart.talkingpets.animation.mat.getSubmat
 import org.opencv.core.Mat
 
-internal class TopEyeRectangleBuilder : EyeRectanglesBuilder {
+internal class BottomEyeRectangleBuilder : EyeRectanglesBuilder {
 
     private var rectangle: Mat? = null
     private var newHeight: Double? = null
@@ -20,9 +20,9 @@ internal class TopEyeRectangleBuilder : EyeRectanglesBuilder {
     }
 
     override fun getNewHeight(newEyeRectHeight: Double, heightAllRectangles: Double) {
-        newHeight = ((heightAllRectangles - newEyeRectHeight) / 2)
-            .toInt()
-            .toDouble()//to Int and bottom get from toInt
+        val eyeRectHeight = newEyeRectHeight.toInt()
+        val topEyeRect = ((heightAllRectangles - newEyeRectHeight) / 2).toInt()
+        newHeight = heightAllRectangles - eyeRectHeight - topEyeRect
     }
 
     override fun getResizedRectangle(): Mat = when {
@@ -32,9 +32,9 @@ internal class TopEyeRectangleBuilder : EyeRectanglesBuilder {
     }
 
     companion object {
-        private const val NAME = "TopEyeRectangleBuilder:"
-        const val RECTANGLE_IS_NULL = "$NAME Top rectangle is null."
-        const val NEW_HEIGHT_IS_NULL = "$NAME New height of top rectangle is null."
+        private const val NAME = "BottomEyeRectangleBuilder:"
+        const val RECTANGLE_IS_NULL = "$NAME Bottom rectangle is null."
+        const val NEW_HEIGHT_IS_NULL = "$NAME New height of bottom rectangle is null."
     }
 
 }

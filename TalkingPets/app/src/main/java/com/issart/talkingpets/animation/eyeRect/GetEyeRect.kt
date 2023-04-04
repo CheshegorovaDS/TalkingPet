@@ -24,12 +24,12 @@ import org.opencv.core.Mat
 //    )
 //}
 
-internal fun getBottomEyeRectangle(src: Mat, x: Double, y: Double, radiusEye: Int, radiusFace: Int): Mat {
-    return getSubmat(
-        src,
-        (y + radiusEye),
-        (y + radiusFace),
-        (x - radiusEye),
-        (x + radiusEye)
-    )
-}
+//internal fun getBottomEyeRectangle(src: Mat, x: Double, y: Double, radiusEye: Int, radiusFace: Int): Mat {
+//    return getSubmat(
+//        src,
+//        (y + radiusEye),
+//        (y + radiusFace),
+//        (x - radiusEye),
+//        (x + radiusEye)
+//    )
+//}

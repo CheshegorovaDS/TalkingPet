@@ -30,19 +30,19 @@ import org.opencv.core.Mat
 //    return getResizeMat(eyeRect, newEyeHeight)
 //}
 
-internal fun getResizedBottomEyeRectangle(
-    photo: Mat,
-    x: Double,
-    y: Double,
-    radiusEye: Double,
-    newEyeHeight: Double,
-    radiusFace: Double//maby need height other rectangles: newTopEye, newEye
-): Mat {
-    val bottomEyeRect = getBottomEyeRectangle(photo, x, y, radiusEye.toInt(), radiusFace.toInt())
-
-    val increaseHeightTop = ((2 * radiusFace) - newEyeHeight) / 2 // maybe need convert to Int
-
-    val newRectHeight = (2 * radiusFace) - newEyeHeight - increaseHeightTop // maybe wrong, check
-
-    return getResizeMat(bottomEyeRect, newRectHeight)
-}
+//internal fun getResizedBottomEyeRectangle(
+//    photo: Mat,
+//    x: Double,
+//    y: Double,
+//    radiusEye: Double,
+//    newEyeHeight: Double,
+//    radiusFace: Double//maby need height other rectangles: newTopEye, newEye
+//): Mat {
+//    val bottomEyeRect = getBottomEyeRectangle(photo, x, y, radiusEye.toInt(), radiusFace.toInt())
+//
+//    val increaseHeightTop = ((2 * radiusFace) - newEyeHeight) / 2 // maybe need convert to Int
+//
+//    val newRectHeight = (2 * radiusFace) - newEyeHeight - increaseHeightTop // maybe wrong, check
+//
+//    return getResizeMat(bottomEyeRect, newRectHeight)
+//}

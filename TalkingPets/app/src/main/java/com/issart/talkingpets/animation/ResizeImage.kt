@@ -52,19 +52,14 @@ fun getResizeEyeImage(
     director.createEyeRectangle(eyeRectangleBuilder)
     val newEyeRect = eyeRectangleBuilder.getResizedRectangle()
 
-    val newBottomRect = getResizedBottomEyeRectangle(
-        src,
-        eye.x,
-        eye.y,
-        eye.radius,
-        newEyeHeight,
-        face.radius
-    )
+    val bottomEyeRectangleBuilder = BottomEyeRectangleBuilder()
+    director.createBottomEyeRectangle(bottomEyeRectangleBuilder)
+    val newBottomEyeRect = bottomEyeRectangleBuilder.getResizedRectangle()
 
     val newPhoto = getImageWithNewRectangles(
         newTopEyeRect,
         newEyeRect,
-        newBottomRect,
+        newBottomEyeRect,
         src,
         eye.x,
         eye.y,

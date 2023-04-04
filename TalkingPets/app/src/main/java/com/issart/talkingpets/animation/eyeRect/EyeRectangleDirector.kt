@@ -4,7 +4,7 @@ import com.issart.talkingpets.animation.model.Eye
 import com.issart.talkingpets.animation.model.Face
 import org.opencv.core.Mat
 
-class EyeRectangleDirector(
+internal class EyeRectangleDirector(
     private val mat: Mat,
     private val eye: Eye,
     private val face: Face,
@@ -41,5 +41,21 @@ class EyeRectangleDirector(
         )
     }
 
+    fun createBottomEyeRectangle(builder: EyeRectanglesBuilder) {
+        builder.getRectangleFromMat(
+            mat = mat,
+            top = (eye.y + eye.radius),
+            bottom = (eye.y + face.radius),
+            left = (eye.x - eye.radius),
+            right = (eye.x + eye.radius)
+        )
+
+        builder.getNewHeight(
+            newEyeRectHeight = newEyeHeight,
+            heightAllRectangles = getRectanglesHeight()
+        )
+    }
+
     private fun getRectanglesHeight() = face.radius * 2
+
 }
