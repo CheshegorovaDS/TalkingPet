@@ -8,10 +8,12 @@ import javax.inject.Inject
 
 @HiltViewModel
 class GalleryViewModel @Inject constructor(): ViewModel() {
+
     private var photoUri = MutableLiveData<String?>(null)
     val uri: LiveData<String?> = photoUri
 
     fun setPhotoUri(uri: String?) {
         photoUri.value = uri
     }
+
 }

@@ -82,6 +82,9 @@ dependencies {
     //StatusBar
     implementation "com.google.accompanist:accompanist-systemuicontroller:0.24.7-alpha"
 
+    //OpenCV
+    implementation project(':opencv')
+
     // Testing
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'

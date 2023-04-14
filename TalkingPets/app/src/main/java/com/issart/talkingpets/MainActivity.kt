@@ -19,7 +19,9 @@ import com.issart.talkingpets.ui.mainNavigation.NavigationViewModel
 import com.issart.talkingpets.ui.recorder.recorder.Recorder
 import com.issart.talkingpets.ui.share.Share
 import com.issart.talkingpets.ui.theme.TalkingPetsTheme
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
