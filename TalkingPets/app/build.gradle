@@ -2,16 +2,16 @@ plugins {
     id 'com.android.application'
     id 'kotlin-android'
     id 'kotlin-kapt'
-    id 'dagger.hilt.android.plugin'
+    id 'com.google.dagger.hilt.android'
 }
 
 android {
-    compileSdk 31
+    compileSdk 33
 
     defaultConfig {
         applicationId "com.issart.talkingpets"
         minSdk 24
-        targetSdk 31
+        targetSdk 33
         versionCode 1
         versionName "1.0"
 
@@ -33,7 +33,6 @@ android {
     }
     kotlinOptions {
         jvmTarget = '1.8'
-        useIR = true
     }
     buildFeatures {
         compose true
@@ -63,9 +62,8 @@ dependencies {
     implementation 'com.github.CanHub:Android-Image-Cropper:4.0.0'
 
     //Hilt
-    implementation "com.google.dagger:hilt-android:2.43.1"
-    kapt "com.google.dagger:hilt-android-compiler:2.43.1"
-    implementation "com.google.dagger:hilt-android:2.43.1"
+    implementation 'com.google.dagger:hilt-android:2.45'
+    kapt 'com.google.dagger:hilt-compiler:2.45'
     implementation 'androidx.hilt:hilt-navigation-compose:1.0.0'
 
     //Live Data

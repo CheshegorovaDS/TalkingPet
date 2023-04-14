@@ -1,12 +1,11 @@
 package com.issart.talkingpets.ui.common.gridLayout
 
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.GridCells
-import androidx.compose.foundation.lazy.LazyVerticalGrid
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.material.Card
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.runtime.Composable
@@ -18,7 +17,7 @@ import androidx.compose.ui.unit.dp
 import com.issart.talkingpets.ui.utils.onClickImageCallback
 
 @Composable
-@OptIn(ExperimentalMaterialApi::class, ExperimentalFoundationApi::class)
+@OptIn(ExperimentalMaterialApi::class)
 fun ImageGridLayout(
     modifier: Modifier = Modifier,
     data: List<Int>,
@@ -28,7 +27,7 @@ fun ImageGridLayout(
 ) {
     LazyVerticalGrid(
         modifier = modifier,
-        cells = GridCells.Fixed(COUNT_IMAGES_AT_ROW),
+        columns = GridCells.Fixed(COUNT_IMAGES_AT_ROW),
         contentPadding = contentPadding
     ) {
         items(data) { animalPhotoId ->
