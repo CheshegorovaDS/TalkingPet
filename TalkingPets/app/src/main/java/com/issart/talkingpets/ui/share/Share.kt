@@ -1,49 +1,47 @@
 package com.issart.talkingpets.ui.share
 
 import android.content.Context
+import android.graphics.Bitmap
 import android.widget.Toast
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.painter.Painter
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.imageResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.issart.talkingpets.R
 import com.issart.talkingpets.ui.common.buttons.TextButton
 import com.issart.talkingpets.ui.common.buttons.TextButtonsWithImage
+import com.issart.talkingpets.ui.common.images.MainImage
+import com.issart.talkingpets.ui.editor.EditorViewModel
 import com.issart.talkingpets.ui.theme.Blue
 import com.issart.talkingpets.ui.theme.Green
 import com.issart.talkingpets.ui.theme.Purple
 
 @Composable
-fun Share() {
+fun Share(
+    viewModel: ShareViewModel = hiltViewModel(),
+    editorViewModel: EditorViewModel = hiltViewModel()
+) {
+    val video = viewModel.video.observeAsState()
+
     Column(modifier = Modifier.padding(bottom = 70.dp)) {
-        TalkingPetVideo()
+        TalkingPetVideo(editorViewModel.editedBitmap.value)
         ShareButtons()
     }
 }
 
 @Composable
-fun TalkingPetVideo() {
-    val configuration = LocalConfiguration.current
-    val heightImage = configuration.screenHeightDp * 0.56
-    Image(
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(heightImage.dp),
-        bitmap = ImageBitmap.imageResource(id = R.drawable.cat_1),
-        contentDescription = "animal photo",
-        contentScale = ContentScale.Crop
-    )
+fun TalkingPetVideo(bitmap: Bitmap?) {
+    bitmap?.let { MainImage(bitmap = it) }
+    //play button
 }
 
 @Composable
