@@ -81,7 +81,7 @@ fun ButtonsPreview() {
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             TextButton(
-                text = stringResource(id = R.string.crop_photo_hilt),
+                text = stringResource(id = R.string.crop_photo),
                 backgroundColor = Blue
             ) {
 
