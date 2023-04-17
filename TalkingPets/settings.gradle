@@ -8,3 +8,4 @@ dependencyResolutionManagement {
 }
 rootProject.name = "TalkingPets"
 include ':app'
+include ':opencv'
