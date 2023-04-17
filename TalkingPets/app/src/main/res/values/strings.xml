@@ -11,7 +11,7 @@
     <string name="got_it">Got it</string>
     
     //Edit photo
-    <string name="crop_photo_hilt">Crop photo</string>
+    <string name="crop_photo">Crop photo</string>
     <string name="change_photo_hilt">Crop and rotate the picture</string>
     
     //Analyze photo

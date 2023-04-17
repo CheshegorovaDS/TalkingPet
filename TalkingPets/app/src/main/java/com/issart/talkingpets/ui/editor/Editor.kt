@@ -2,7 +2,9 @@ package com.issart.talkingpets.ui.editor
 
 import android.graphics.Bitmap
 import android.net.Uri
+import androidx.activity.compose.ManagedActivityResultLauncher
 import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.ActivityResultLauncher
 import androidx.compose.foundation.layout.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.livedata.observeAsState
@@ -14,6 +16,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.canhub.cropper.CropImageContract
+import com.canhub.cropper.CropImageContractOptions
 import com.canhub.cropper.CropImageView
 import com.canhub.cropper.options
 import com.issart.talkingpets.R
@@ -42,22 +45,29 @@ fun Editor(viewModel: EditorViewModel = hiltViewModel()) {
         EditorImage(editedBitmap.value)
         EditorTitle()
         RotateButtons(angle.value, viewModel::setEditorAngle)
-        TextButton(
-            text = stringResource(id = R.string.crop_photo_hilt),
-            backgroundColor = Blue
-        ) {
-            val uri: Uri? = viewModel.getUriForImageCrop()
-            uri?.let {
-                cropImage.launch(
-                    options(
-                        uri = it
-                    ) {
-                        setAspectRatio(1, 1)
-                        setGuidelines(CropImageView.Guidelines.ON)
-                        setOutputCompressFormat(Bitmap.CompressFormat.JPEG)
-                    }
-                )
-            }
+        CropButton(uri = viewModel.getUriForImageCrop(), activityResultLauncher = cropImage)
+    }
+}
+
+@Composable
+fun CropButton(
+    uri: Uri?,
+    activityResultLauncher: ManagedActivityResultLauncher<CropImageContractOptions, CropImageView.CropResult>
+) {
+    TextButton(
+        text = stringResource(id = R.string.crop_photo),
+        backgroundColor = Blue
+    ) {
+        uri?.let {
+            activityResultLauncher.launch(
+                options(
+                    uri = it
+                ) {
+                    setAspectRatio(1, 1)
+                    setGuidelines(CropImageView.Guidelines.ON)
+                    setOutputCompressFormat(Bitmap.CompressFormat.JPEG)
+                }
+            )
         }
     }
 }
