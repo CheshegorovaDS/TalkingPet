@@ -1,14 +1,18 @@
 package com.issart.talkingpets.ui.editor
 
 import android.graphics.Bitmap
+import android.net.Uri
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.issart.talkingpets.services.files.FileService
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
 @HiltViewModel
-class EditorViewModel @Inject constructor(): ViewModel() {
+class EditorViewModel @Inject constructor(
+    private val fileService: FileService
+): ViewModel() {
 
     private var mutableBitmap = MutableLiveData<Bitmap?>(null)
     val bitmap: LiveData<Bitmap?> = mutableBitmap
@@ -33,8 +37,25 @@ class EditorViewModel @Inject constructor(): ViewModel() {
         }
     }
 
+    fun getUriForImageCrop(): Uri? {
+        val bitmap: Bitmap? = mutableBitmap.value
+        return when {
+            bitmap != null -> fileService.getUrlForBitmap(bitmap)
+            else -> null
+        }
+    }
+
+    fun onCropResult(bitmapUri: Uri?) {
+        bitmapUri?.let { notNullUri ->
+            val croppedImage = fileService.loadImageFromFile(notNullUri)
+            mutableBitmap.value = croppedImage
+
+            val currentAngle: Float? = mutableAngle.value
+            currentAngle?.let {  notNullAngle ->  setEditorAngle(notNullAngle) }
+        }
+    }
+
     private fun clear() {
         mutableAngle.value = 0f
     }
-
 }

@@ -1,8 +1,12 @@
 package com.issart.talkingpets.ui.editor
 
 import android.graphics.Bitmap
+import android.net.Uri
+import androidx.activity.compose.ManagedActivityResultLauncher
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.ActivityResultLauncher
 import androidx.compose.foundation.layout.*
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -11,28 +15,66 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.canhub.cropper.CropImageContract
+import com.canhub.cropper.CropImageContractOptions
+import com.canhub.cropper.CropImageView
+import com.canhub.cropper.options
 import com.issart.talkingpets.R
 import com.issart.talkingpets.ui.common.buttons.ImageButton
+import com.issart.talkingpets.ui.common.buttons.TextButton
 import com.issart.talkingpets.ui.common.images.MainImage
 import com.issart.talkingpets.ui.common.texts.BodyText
+import com.issart.talkingpets.ui.theme.Blue
 import com.issart.talkingpets.ui.theme.TalkingPetsTheme
 
 @Composable
 fun Editor(viewModel: EditorViewModel = hiltViewModel()) {
     val angle = viewModel.angle.observeAsState(initial = 0f)
     val editedBitmap = viewModel.editedBitmap.observeAsState()
+    val cropImage = rememberLauncherForActivityResult(CropImageContract()) { result ->
+        if (result.isSuccessful) {
+            viewModel.onCropResult(result.uriContent)
+        }
+    }
 
-    Column(modifier = Modifier.padding(bottom = 70.dp)) {
+    Column(
+        modifier = Modifier
+            .padding(bottom = 70.dp),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
         EditorImage(editedBitmap.value)
         EditorTitle()
         RotateButtons(angle.value, viewModel::setEditorAngle)
+        CropButton(uri = viewModel.getUriForImageCrop(), activityResultLauncher = cropImage)
+    }
+}
+
+@Composable
+fun CropButton(
+    uri: Uri?,
+    activityResultLauncher: ManagedActivityResultLauncher<CropImageContractOptions, CropImageView.CropResult>
+) {
+    TextButton(
+        text = stringResource(id = R.string.crop_photo),
+        backgroundColor = Blue
+    ) {
+        uri?.let {
+            activityResultLauncher.launch(
+                options(
+                    uri = it
+                ) {
+                    setAspectRatio(1, 1)
+                    setGuidelines(CropImageView.Guidelines.ON)
+                    setOutputCompressFormat(Bitmap.CompressFormat.JPEG)
+                }
+            )
+        }
     }
 }
 
 @Composable
 fun EditorImage(bitmap: Bitmap?) {
     if (bitmap == null) return
-
     MainImage(bitmap = bitmap)
 }
 
