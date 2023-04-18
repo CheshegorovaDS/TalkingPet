@@ -2,6 +2,7 @@ package com.issart.talkingpets.ui.detector
 
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.gestures.detectDragGestures
+import androidx.compose.foundation.gestures.detectDragGesturesAfterLongPress
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.runtime.*
@@ -40,7 +41,7 @@ fun DetectorCanvas(viewModel: DetectorViewModel = hiltViewModel()) {
         .fillMaxWidth()
         .height(heightCanvas.dp)
         .pointerInput(Unit) {
-            detectDragGestures { change, dragAmount ->
+            detectDragGesturesAfterLongPress { change, dragAmount ->
                 change.consume()
                 viewModel.setLeftEye(
                     leftEye.value.x + dragAmount.x,
