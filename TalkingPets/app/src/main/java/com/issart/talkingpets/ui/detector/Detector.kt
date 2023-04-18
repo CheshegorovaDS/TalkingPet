@@ -32,7 +32,6 @@ fun Detector(viewModel: EditorViewModel = hiltViewModel()) {
 fun DetectorImage(bitmap: Bitmap?) = Box {
     bitmap?.let { MainImage(bitmap = it) }
     DetectorBox()
-//    DetectorCanvas()
 }
 
 @Composable
