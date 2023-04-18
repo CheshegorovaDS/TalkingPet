@@ -1,8 +1,6 @@
 package com.issart.talkingpets.ui.share
 
-import android.content.Context
 import android.graphics.Bitmap
-import android.widget.Toast
 import androidx.compose.foundation.layout.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.livedata.observeAsState
@@ -20,6 +18,7 @@ import com.issart.talkingpets.R
 import com.issart.talkingpets.ui.common.buttons.TextButton
 import com.issart.talkingpets.ui.common.buttons.TextButtonsWithImage
 import com.issart.talkingpets.ui.common.images.MainImage
+import com.issart.talkingpets.ui.common.toast.showToast
 import com.issart.talkingpets.ui.editor.EditorViewModel
 import com.issart.talkingpets.ui.theme.Blue
 import com.issart.talkingpets.ui.theme.Green
@@ -117,9 +116,6 @@ fun ShareButtonWithoutIcon(text: String, background: Color, modifier: Modifier =
     }
 
 }
-
-private fun showToast(context: Context, text: String) =
-    Toast.makeText(context, text, Toast.LENGTH_SHORT).show()
 
 const val PERCENT_SIZE_ICON_BUTTON = 0.15
 const val PERCENT_WIDTH_BUTTON = 0.45

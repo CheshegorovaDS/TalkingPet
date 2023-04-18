@@ -1,7 +1,5 @@
 package com.issart.talkingpets.ui.recorder.recorder
 
-import android.content.Context
-import android.widget.Toast
 import androidx.compose.foundation.layout.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -14,6 +12,7 @@ import com.issart.talkingpets.R
 import com.issart.talkingpets.ui.common.buttons.ImageButton
 import com.issart.talkingpets.ui.common.texts.BodyMediumText
 import com.issart.talkingpets.ui.common.texts.BodySecondaryText
+import com.issart.talkingpets.ui.common.toast.showToast
 
 @Composable
 fun RecordAudio() {
@@ -76,6 +75,3 @@ fun RecordButton() {
         }
     }
 }
-
-fun showToast(context: Context, text: String) =
-    Toast.makeText(context, text, Toast.LENGTH_SHORT).show()

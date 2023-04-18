@@ -8,7 +8,6 @@ import android.graphics.ImageDecoder
 import android.net.Uri
 import android.os.Build
 import android.provider.MediaStore
-import android.widget.Toast
 import androidx.activity.compose.ManagedActivityResultLauncher
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -39,6 +38,7 @@ import com.issart.talkingpets.ui.common.gridLayout.HORIZONTAL_PADDING_GRID_LAYOU
 import com.issart.talkingpets.ui.common.gridLayout.ImageGridLayout
 import com.issart.talkingpets.ui.common.gridLayout.VERTICAL_PADDING_GRID_LAYOUT
 import com.issart.talkingpets.ui.common.texts.TitleText
+import com.issart.talkingpets.ui.common.toast.showToast
 import com.issart.talkingpets.ui.editor.EditorViewModel
 import com.issart.talkingpets.ui.utils.StringCallback
 import java.io.File
@@ -92,7 +92,7 @@ fun Gallery(
             updatePhoto(photoUri.value)
         } else {
             updatePhoto(null)
-            Toast.makeText(context, "Camera image didn't save.", Toast.LENGTH_SHORT).show()
+            showToast(context, "Camera image didn't save.")
         }
     }
 
@@ -268,11 +268,7 @@ private fun getPhotoUri(context: Context): Uri? {
     val photoFile: File? = try {
         createImageFile(context)
     } catch (ex: IOException) {
-        Toast.makeText(
-            context,
-            "SAVE_IMAGE_EXCEPTION_MESSAGE",
-            Toast.LENGTH_SHORT
-        ).show()
+        showToast(context, "SAVE_IMAGE_EXCEPTION_MESSAGE")
         null
     }
 
@@ -298,9 +294,6 @@ private fun createImageFile(context: Context): File {
         storageDir
     )
 }
-
-private fun showToast(context: Context, text: String) =
-    Toast.makeText(context, text, Toast.LENGTH_SHORT).show()
 
 private fun setPhotoFromList(context: Context, animalImageId: Int, updatePhoto: StringCallback) {
     val uri = getPhotoUri(context)
