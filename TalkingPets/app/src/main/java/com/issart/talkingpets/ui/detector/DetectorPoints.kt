@@ -16,7 +16,8 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.LiveData
 import com.issart.talkingpets.R
-import com.issart.talkingpets.ui.detector.detectorPoints.LeftYeyParams
+import com.issart.talkingpets.ui.detector.detectorPoints.EyeParams
+import com.issart.talkingpets.ui.detector.detectorPoints.LeftEeyParams
 import com.issart.talkingpets.ui.model.Eye
 
 @Composable
@@ -31,10 +32,9 @@ fun DetectorBox(viewModel: DetectorViewModel = hiltViewModel()) {
     ) {
         DetectorEyeBox(
             eye = viewModel.leftEye,
+            params = LeftEeyParams,
             setZoom = viewModel::setLeftEyeZoom,
             setOffset = viewModel::setLeftEyePosition,
-            defaultOffsetX = LeftYeyParams.offsetX,
-            defaultOffsetY = LeftYeyParams.offsetY,
             boxSize = boxSize
         )
     }
@@ -44,18 +44,17 @@ fun DetectorBox(viewModel: DetectorViewModel = hiltViewModel()) {
 @Composable
 fun DetectorEyeBox(
     eye: LiveData<Eye>,
+    params: EyeParams,
     setZoom: (Float) -> Unit,
     setOffset: (Float, Float) -> Unit,
-    defaultOffsetX: Double,
-    defaultOffsetY: Double,
     boxSize: Int
 ) {
     val density = LocalDensity.current
 
     val eyeState = eye.observeAsState(
         initial = Eye(
-            getEyeOffsetX(boxSize, density, defaultOffsetX).toFloat(),
-            getEyeOffsetY(boxSize, density, defaultOffsetY).toFloat(),
+            getEyeOffsetX(boxSize, density, params.offsetX).toFloat(),
+            getEyeOffsetY(boxSize, density, params.offsetY).toFloat(),
             1f
         )
     )
@@ -105,6 +104,3 @@ private fun getEyeOffsetY(
 ) = density.run {
     heightCanvas * offsetY
 }
-
-//const val SIZE_CANVAS_TEXT = 20
-//const val RADIUS_EYE = 5
