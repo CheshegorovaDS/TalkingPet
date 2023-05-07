@@ -14,44 +14,61 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.LiveData
 import com.issart.talkingpets.R
+import com.issart.talkingpets.ui.detector.detectorPoints.LeftYeyParams
 import com.issart.talkingpets.ui.model.Eye
 
 @Composable
 fun DetectorBox(viewModel: DetectorViewModel = hiltViewModel()) {
     val configuration = LocalConfiguration.current
     val boxSize = configuration.screenWidthDp
-    val density = LocalDensity.current
-
-    viewModel.setLeftEyePosition(
-        getEyeOffsetX(boxSize, density).toFloat(),
-        getEyeOffsetY(boxSize, density).toFloat()
-    )
-
-    val leftEye = viewModel.leftEye.observeAsState(
-        initial = Eye(
-            getEyeOffsetX(boxSize, density).toFloat(),
-            getEyeOffsetY(boxSize, density).toFloat(),
-            1f
-        )
-    )
 
     Box(
         modifier = Modifier
             .fillMaxWidth()
             .height(boxSize.dp)
     ) {
-        EyeImageTransformableState2(
-            eye = leftEye,
+        DetectorEyeBox(
+            eye = viewModel.leftEye,
             setZoom = viewModel::setLeftEyeZoom,
-            setOffset = viewModel::setLeftEyePosition
+            setOffset = viewModel::setLeftEyePosition,
+            defaultOffsetX = LeftYeyParams.offsetX,
+            defaultOffsetY = LeftYeyParams.offsetY,
+            boxSize = boxSize
         )
     }
 
 }
 
 @Composable
-fun EyeImageTransformableState2(
+fun DetectorEyeBox(
+    eye: LiveData<Eye>,
+    setZoom: (Float) -> Unit,
+    setOffset: (Float, Float) -> Unit,
+    defaultOffsetX: Double,
+    defaultOffsetY: Double,
+    boxSize: Int
+) {
+    val density = LocalDensity.current
+
+    val eyeState = eye.observeAsState(
+        initial = Eye(
+            getEyeOffsetX(boxSize, density, defaultOffsetX).toFloat(),
+            getEyeOffsetY(boxSize, density, defaultOffsetY).toFloat(),
+            1f
+        )
+    )
+
+    EyeImageTransformableState(
+        eye = eyeState,
+        setZoom = setZoom,
+        setOffset = setOffset
+    )
+}
+
+@Composable
+fun EyeImageTransformableState(
     eye: State<Eye>,
     setZoom: (Float) -> Unit,
     setOffset: (Float, Float) -> Unit
@@ -73,17 +90,21 @@ fun EyeImageTransformableState2(
     )
 }
 
-private fun getEyeOffsetX(widthCanvas: Int, density: Density) = density.run {
-    widthCanvas * OFFSET_X_EYE
+private fun getEyeOffsetX(
+    widthCanvas: Int,
+    density: Density,
+    offsetX: Double
+) = density.run {
+    widthCanvas * offsetX
 }
 
-private fun getEyeOffsetY(heightCanvas: Int, density: Density) = density.run {
-    heightCanvas * OFFSET_Y_EYE
+private fun getEyeOffsetY(
+    heightCanvas: Int,
+    density: Density,
+    offsetY: Double
+) = density.run {
+    heightCanvas * offsetY
 }
 
-const val OFFSET_X_EYE = 0.42
-const val OFFSET_Y_EYE = 0.4
-
-const val EYE_HINT = "eye"
-const val SIZE_CANVAS_TEXT = 20
-const val RADIUS_EYE = 5
+//const val SIZE_CANVAS_TEXT = 20
+//const val RADIUS_EYE = 5
