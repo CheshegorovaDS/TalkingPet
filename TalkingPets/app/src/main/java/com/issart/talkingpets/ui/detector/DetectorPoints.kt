@@ -1,21 +1,16 @@
 package com.issart.talkingpets.ui.detector
 
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.gestures.rememberTransformableState
-import androidx.compose.foundation.gestures.transformable
 import androidx.compose.foundation.layout.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.scale
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.LiveData
-import com.issart.talkingpets.R
+import com.issart.talkingpets.ui.common.dragPoints.TransformablePoint
 import com.issart.talkingpets.ui.detector.detectorPoints.EyeParams
 import com.issart.talkingpets.ui.detector.detectorPoints.LeftEeyParams
 import com.issart.talkingpets.ui.model.Eye
@@ -38,6 +33,11 @@ fun DetectorBox(viewModel: DetectorViewModel = hiltViewModel()) {
             boxSize = boxSize
         )
     }
+
+}
+
+@Composable
+fun DetectorFaceBox() {
 
 }
 
@@ -72,20 +72,13 @@ fun EyeImageTransformableState(
     setZoom: (Float) -> Unit,
     setOffset: (Float, Float) -> Unit
 ) {
-    val transformableState = rememberTransformableState { zoomChange, offsetChange, _ ->
-        setZoom(eye.value.zoom * zoomChange)
-        setOffset(
-            eye.value.x + offsetChange.x,
-            eye.value.y + offsetChange.y
-        )
-    }
-    Image(
-        painter = painterResource(id = R.drawable.ic_record),
-        contentDescription = "left eye",
-        modifier = Modifier
-            .scale(eye.value.zoom)
-            .offset(eye.value.x.dp, eye.value.y.dp)
-            .transformable(transformableState)
+    TransformablePoint(
+        zoom = eye.value.zoom,
+        offsetX = eye.value.x,
+        offsetY = eye.value.y,
+        setZoom = setZoom,
+        setOffset = setOffset,
+        description = "left eye"
     )
 }
 
