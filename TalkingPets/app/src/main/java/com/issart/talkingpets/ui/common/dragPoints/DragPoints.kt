@@ -44,8 +44,41 @@ fun TransformablePoint(
     ) {
         Image(
             painter = painterResource(id = imageId),
-            contentDescription = DEFAULT_CONTENT_DESCRIPTION,
+            contentDescription = description,
             modifier = Modifier.scale(zoom)
+        )
+    }
+
+}
+
+@Composable
+fun DraggablePoint(
+    offsetX: Float,
+    offsetY: Float,
+    setOffset: (Float, Float) -> Unit,
+    imageId: Int = DEFAULT_IMAGE_POINT_ID,
+    description: String = DEFAULT_CONTENT_DESCRIPTION
+) {
+    val transformableState = rememberTransformableState { _, offsetChange, _ ->
+        setOffset(
+            offsetX + offsetChange.x,
+            offsetY + offsetChange.y
+        )
+    }
+
+    Box(
+        modifier = Modifier
+            .size(SCALE_BOX_SIZE.dp)
+            .graphicsLayer(
+                translationX = offsetX,
+                translationY = offsetY,
+            )
+            .transformable(transformableState),
+        contentAlignment = Alignment.Center
+    ) {
+        Image(
+            painter = painterResource(id = imageId),
+            contentDescription = description
         )
     }
 
@@ -53,4 +86,4 @@ fun TransformablePoint(
 
 const val SCALE_BOX_SIZE = 100
 const val DEFAULT_CONTENT_DESCRIPTION = "Transformable point"
-const val DEFAULT_IMAGE_POINT_ID = R.drawable.ic_record
+const val DEFAULT_IMAGE_POINT_ID = R.drawable.ic_point

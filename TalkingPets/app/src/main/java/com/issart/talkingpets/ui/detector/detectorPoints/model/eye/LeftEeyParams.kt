@@ -1,4 +1,4 @@
-package com.issart.talkingpets.ui.detector.detectorPoints
+package com.issart.talkingpets.ui.detector.detectorPoints.model.eye
 
 object LeftEeyParams : EyeParams {
     override val offsetX: Double = 0.42

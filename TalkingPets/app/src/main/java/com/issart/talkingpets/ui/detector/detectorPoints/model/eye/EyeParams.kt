@@ -1,4 +1,4 @@
-package com.issart.talkingpets.ui.detector.detectorPoints
+package com.issart.talkingpets.ui.detector.detectorPoints.model.eye
 
 interface EyeParams {
     val offsetX: Double

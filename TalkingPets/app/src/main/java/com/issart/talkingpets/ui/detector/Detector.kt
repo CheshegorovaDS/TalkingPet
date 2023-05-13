@@ -14,6 +14,7 @@ import com.issart.talkingpets.R
 import com.issart.talkingpets.ui.common.images.MainImage
 import com.issart.talkingpets.ui.common.texts.BodyMediumText
 import com.issart.talkingpets.ui.common.texts.BodyText
+import com.issart.talkingpets.ui.detector.detectorPoints.DetectorBox
 import com.issart.talkingpets.ui.editor.EditorViewModel
 import com.issart.talkingpets.ui.theme.Blue
 import com.issart.talkingpets.ui.theme.SwitchUncheckedTrackColor

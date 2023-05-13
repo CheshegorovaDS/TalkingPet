@@ -3,6 +3,8 @@ package com.issart.talkingpets.ui.detector
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.issart.talkingpets.ui.detector.detectorPoints.model.face.FaceParams
+import com.issart.talkingpets.ui.detector.detectorPoints.model.face.FacePoints
 import com.issart.talkingpets.ui.model.Eye
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
@@ -18,6 +20,15 @@ class DetectorViewModel @Inject constructor() : ViewModel() {
 
     private var mutableHasEars = MutableLiveData(false)
     val hasEars: LiveData<Boolean> = mutableHasEars
+
+    private var mutableFace = MutableLiveData(FaceParams)
+    val face: LiveData<FaceParams> = mutableFace
+
+    private var mutableTopFacePoint = MutableLiveData<FacePoints>()
+    val topFacePoint: LiveData<FacePoints> = mutableTopFacePoint
+
+    private var mutableLeftFacePoint = MutableLiveData<FacePoints>()
+    val leftFacePoint: LiveData<FacePoints> = mutableLeftFacePoint
 
     fun setLeftEyePosition(x: Float, y: Float) {
         mutableLeftEye.value = Eye(
@@ -37,6 +48,20 @@ class DetectorViewModel @Inject constructor() : ViewModel() {
 
     fun setRightEye(x: Float, y: Float) {
         mutableRightEye.value = mutableRightEye.value?.copy(
+            x = x,
+            y = y
+        )
+    }
+
+    fun setTopFacePosition(x: Float, y: Float) {
+        mutableTopFacePoint.value = FacePoints(
+            x = x,
+            y = y
+        )
+    }
+
+    fun setLeftFacePosition(x: Float, y: Float) {
+        mutableLeftFacePoint.value = FacePoints(
             x = x,
             y = y
         )
