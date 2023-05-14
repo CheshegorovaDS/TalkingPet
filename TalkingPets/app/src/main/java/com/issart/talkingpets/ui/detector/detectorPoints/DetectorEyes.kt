@@ -3,7 +3,6 @@ package com.issart.talkingpets.ui.detector.detectorPoints
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.State
 import androidx.compose.runtime.livedata.observeAsState
-import androidx.compose.ui.platform.LocalDensity
 import androidx.lifecycle.LiveData
 import com.issart.talkingpets.ui.common.dragPoints.TransformablePoint
 import com.issart.talkingpets.ui.detector.detectorPoints.model.eye.EyeParams
@@ -17,12 +16,10 @@ fun DetectorEyeBox(
     setOffset: (Float, Float) -> Unit,
     boxSize: Int
 ) {
-    val density = LocalDensity.current
-
     val eyeState = eye.observeAsState(
         initial = Eye(
-            getEyeOffsetX(boxSize, density, params.offsetX).toFloat(),
-            getEyeOffsetY(boxSize, density, params.offsetY).toFloat(),
+            getEyeOffsetX(boxSize, params.offsetX).toFloat(),
+            getEyeOffsetY(boxSize, params.offsetY).toFloat(),
             1f
         )
     )

@@ -2,7 +2,6 @@ package com.issart.talkingpets.ui.detector.detectorPoints
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.livedata.observeAsState
-import androidx.compose.ui.platform.LocalDensity
 import androidx.lifecycle.LiveData
 import com.issart.talkingpets.ui.common.dragPoints.DraggablePoint
 import com.issart.talkingpets.ui.detector.detectorPoints.model.face.FacePoints
@@ -14,12 +13,10 @@ fun DetectorFaceBox(
     setOffset: (Float, Float) -> Unit,
     boxSize: Int
 ) {
-    val density = LocalDensity.current
-
     val pointState = facePoints.observeAsState(
         initial = FacePoints(
-            x = getEyeOffsetX(boxSize, density, defaultFacePoints.x.toDouble()).toFloat(),
-            y = getEyeOffsetY(boxSize, density, defaultFacePoints.y.toDouble()).toFloat()
+            x = getEyeOffsetX(boxSize, defaultFacePoints.x.toDouble()).toFloat(),
+            y = getEyeOffsetY(boxSize, defaultFacePoints.y.toDouble()).toFloat()
         )
     )
 

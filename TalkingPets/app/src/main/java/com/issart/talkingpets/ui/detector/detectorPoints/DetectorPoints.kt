@@ -1,14 +1,19 @@
 package com.issart.talkingpets.ui.detector.detectorPoints
 
+import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.vector.PathNode
 import androidx.compose.ui.platform.LocalConfiguration
-import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.issart.talkingpets.ui.common.dragPoints.POINT_SIZE
 import com.issart.talkingpets.ui.detector.DetectorViewModel
 import com.issart.talkingpets.ui.detector.detectorPoints.model.face.FaceParams
+import com.issart.talkingpets.ui.detector.detectorPoints.model.face.FacePoints
+import com.issart.talkingpets.ui.theme.Green
 
 @Composable
 fun DetectorBox(viewModel: DetectorViewModel = hiltViewModel()) {
@@ -20,6 +25,7 @@ fun DetectorBox(viewModel: DetectorViewModel = hiltViewModel()) {
             .fillMaxWidth()
             .height(boxSize.dp)
     ) {
+        FaceCanvas(boxSize = boxSize)
         DetectorFaceBox(
             facePoints = viewModel.topFacePoint,
             defaultFacePoints = FaceParams.topPoint,
@@ -37,18 +43,35 @@ fun DetectorBox(viewModel: DetectorViewModel = hiltViewModel()) {
 
 }
 
+@Composable
+fun FaceCanvas(viewModel: DetectorViewModel = hiltViewModel(), boxSize: Int) {
+    val start = FacePoints(
+        x = getEyeOffsetX(boxSize, FaceParams.topPoint.x.toDouble()).toFloat(),
+        y = getEyeOffsetY(boxSize, FaceParams.topPoint.y.toDouble()).toFloat()
+    )
+    val end = FacePoints(
+        x = getEyeOffsetX(boxSize, FaceParams.leftPoint.x.toDouble()).toFloat(),
+        y = getEyeOffsetY(boxSize, FaceParams.leftPoint.y.toDouble()).toFloat()
+    )
+
+    Canvas(modifier = Modifier.fillMaxSize() ) {
+
+        drawLine(
+            color = Green,
+            start = Offset(start.x + POINT_SIZE, start.y + POINT_SIZE),
+            end = Offset(end.x + POINT_SIZE, end.y + POINT_SIZE),
+            strokeWidth = 10f
+        )
+
+    }
+}
+
 fun getEyeOffsetX(
     widthCanvas: Int,
-    density: Density,
     offsetX: Double
-) = density.run {
-    widthCanvas * offsetX
-}
+) = widthCanvas * offsetX
 
 fun getEyeOffsetY(
     heightCanvas: Int,
-    density: Density,
     offsetY: Double
-) = density.run {
-    heightCanvas * offsetY
-}
+) = heightCanvas * offsetY
