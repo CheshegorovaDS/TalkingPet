@@ -66,24 +66,21 @@ fun DraggablePoint(
         )
     }
 
-    Box(
+    Image(
         modifier = Modifier
-            .size(SCALE_BOX_SIZE.dp)
+            .size(POINT_SIZE.dp)
             .graphicsLayer(
                 translationX = offsetX,
                 translationY = offsetY,
             )
             .transformable(transformableState),
-        contentAlignment = Alignment.Center
-    ) {
-        Image(
-            painter = painterResource(id = imageId),
-            contentDescription = description
-        )
-    }
+        painter = painterResource(id = imageId),
+        contentDescription = description
+    )
 
 }
 
 const val SCALE_BOX_SIZE = 100
+const val POINT_SIZE = 11
 const val DEFAULT_CONTENT_DESCRIPTION = "Transformable point"
 const val DEFAULT_IMAGE_POINT_ID = R.drawable.ic_point
