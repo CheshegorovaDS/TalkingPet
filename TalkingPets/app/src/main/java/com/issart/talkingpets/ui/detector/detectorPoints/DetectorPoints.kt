@@ -5,7 +5,10 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.graphics.vector.PathNode
+import androidx.compose.ui.geometry.Rect
+import androidx.compose.ui.geometry.Size
+import androidx.compose.ui.graphics.Path
+import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -55,14 +58,20 @@ fun FaceCanvas(viewModel: DetectorViewModel = hiltViewModel(), boxSize: Int) {
     )
 
     Canvas(modifier = Modifier.fillMaxSize() ) {
-
-        drawLine(
-            color = Green,
-            start = Offset(start.x + POINT_SIZE, start.y + POINT_SIZE),
-            end = Offset(end.x + POINT_SIZE, end.y + POINT_SIZE),
-            strokeWidth = 10f
+        val path = Path()
+        path.addArc(
+            oval = Rect(
+                 offset = Offset(end.x + POINT_SIZE, start.y + POINT_SIZE),
+                size = Size(2 * (start.x - end.x), 2 * (end.y - start.y))
+            ),
+            startAngleDegrees = -90f,
+            sweepAngleDegrees = -90f
         )
-
+        drawPath(
+            path = path,
+            color = Green,
+            style = Stroke(3f)
+        )
     }
 }
 
