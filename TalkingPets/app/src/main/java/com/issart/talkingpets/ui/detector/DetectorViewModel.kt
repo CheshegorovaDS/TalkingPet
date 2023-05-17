@@ -21,14 +21,17 @@ class DetectorViewModel @Inject constructor() : ViewModel() {
     private var mutableHasEars = MutableLiveData(false)
     val hasEars: LiveData<Boolean> = mutableHasEars
 
-    private var mutableFace = MutableLiveData(FaceParams)
-    val face: LiveData<FaceParams> = mutableFace
-
     private var mutableTopFacePoint = MutableLiveData<FacePoints>()
     val topFacePoint: LiveData<FacePoints> = mutableTopFacePoint
 
+    private var mutableBottomFacePoint = MutableLiveData<FacePoints>()
+    val bottomFacePoint: LiveData<FacePoints> = mutableBottomFacePoint
+
     private var mutableLeftFacePoint = MutableLiveData<FacePoints>()
     val leftFacePoint: LiveData<FacePoints> = mutableLeftFacePoint
+
+    private var mutableRightFacePoint = MutableLiveData<FacePoints>()
+    val rightFacePoint: LiveData<FacePoints> = mutableRightFacePoint
 
     fun setLeftEyePosition(x: Float, y: Float) {
         mutableLeftEye.value = Eye(
@@ -60,8 +63,22 @@ class DetectorViewModel @Inject constructor() : ViewModel() {
         )
     }
 
+    fun setBottomFacePosition(x: Float, y: Float) {
+        mutableBottomFacePoint.value = FacePoints(
+            x = x,
+            y = y
+        )
+    }
+
     fun setLeftFacePosition(x: Float, y: Float) {
         mutableLeftFacePoint.value = FacePoints(
+            x = x,
+            y = y
+        )
+    }
+
+    fun setRightFacePosition(x: Float, y: Float) {
+        mutableRightFacePoint.value = FacePoints(
             x = x,
             y = y
         )

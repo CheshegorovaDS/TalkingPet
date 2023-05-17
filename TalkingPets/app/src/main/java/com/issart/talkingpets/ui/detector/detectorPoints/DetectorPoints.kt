@@ -1,22 +1,18 @@
 package com.issart.talkingpets.ui.detector.detectorPoints
 
-import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.*
 import androidx.compose.runtime.*
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.geometry.Rect
-import androidx.compose.ui.geometry.Size
-import androidx.compose.ui.graphics.Path
-import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.issart.talkingpets.ui.common.dragPoints.POINT_SIZE
+import com.issart.talkingpets.ui.common.figures.Arc
 import com.issart.talkingpets.ui.detector.DetectorViewModel
 import com.issart.talkingpets.ui.detector.detectorPoints.model.face.FaceParams
 import com.issart.talkingpets.ui.detector.detectorPoints.model.face.FacePoints
-import com.issart.talkingpets.ui.theme.Green
 
 @Composable
 fun DetectorBox(viewModel: DetectorViewModel = hiltViewModel()) {
@@ -37,10 +33,24 @@ fun DetectorBox(viewModel: DetectorViewModel = hiltViewModel()) {
         )
 
         DetectorFaceBox(
+            facePoints = viewModel.bottomFacePoint,
+            defaultFacePoints = FaceParams.bottomPoint,
+            boxSize = boxSize,
+            setOffset = viewModel::setBottomFacePosition
+        )
+
+        DetectorFaceBox(
             facePoints = viewModel.leftFacePoint,
             defaultFacePoints = FaceParams.leftPoint,
             boxSize = boxSize,
             setOffset = viewModel::setLeftFacePosition
+        )
+
+        DetectorFaceBox(
+            facePoints = viewModel.rightFacePoint,
+            defaultFacePoints = FaceParams.rightPoint,
+            boxSize = boxSize,
+            setOffset = viewModel::setRightFacePosition
         )
     }
 
@@ -48,31 +58,68 @@ fun DetectorBox(viewModel: DetectorViewModel = hiltViewModel()) {
 
 @Composable
 fun FaceCanvas(viewModel: DetectorViewModel = hiltViewModel(), boxSize: Int) {
-    val start = FacePoints(
-        x = getEyeOffsetX(boxSize, FaceParams.topPoint.x.toDouble()).toFloat(),
-        y = getEyeOffsetY(boxSize, FaceParams.topPoint.y.toDouble()).toFloat()
-    )
-    val end = FacePoints(
-        x = getEyeOffsetX(boxSize, FaceParams.leftPoint.x.toDouble()).toFloat(),
-        y = getEyeOffsetY(boxSize, FaceParams.leftPoint.y.toDouble()).toFloat()
+//    val top = viewModel.topFacePoint.observeAsState(
+//        initial = FacePoints(
+//            x = getEyeOffsetX(boxSize, FaceParams.topPoint.x.toDouble()).toFloat(),
+//            y = getEyeOffsetY(boxSize, FaceParams.topPoint.y.toDouble()).toFloat()
+//        )
+//    )
+
+    val bottom = viewModel.bottomFacePoint.observeAsState(
+        initial = FacePoints(
+            x = getEyeOffsetX(boxSize, FaceParams.bottomPoint.x.toDouble()).toFloat(),
+            y = getEyeOffsetY(boxSize, FaceParams.bottomPoint.y.toDouble()).toFloat()
+        )
     )
 
-    Canvas(modifier = Modifier.fillMaxSize() ) {
-        val path = Path()
-        path.addArc(
-            oval = Rect(
-                 offset = Offset(end.x + POINT_SIZE, start.y + POINT_SIZE),
-                size = Size(2 * (start.x - end.x), 2 * (end.y - start.y))
-            ),
-            startAngleDegrees = -90f,
-            sweepAngleDegrees = -90f
+//    val right = viewModel.rightFacePoint.observeAsState(
+//        initial = FacePoints(
+//            x = getEyeOffsetX(boxSize, FaceParams.rightPoint.x.toDouble()).toFloat(),
+//            y = getEyeOffsetY(boxSize, FaceParams.rightPoint.y.toDouble()).toFloat()
+//        )
+//    )
+    val left = viewModel.leftFacePoint.observeAsState(
+        initial = FacePoints(
+            x = getEyeOffsetX(boxSize, FaceParams.leftPoint.x.toDouble()).toFloat(),
+            y = getEyeOffsetY(boxSize, FaceParams.leftPoint.y.toDouble()).toFloat()
         )
-        drawPath(
-            path = path,
-            color = Green,
-            style = Stroke(3f)
-        )
-    }
+    )
+
+//    Arc(
+//        from = top.value,
+//        to = left.value,
+//        offset = Offset(left.value.x + POINT_SIZE, top.value.y + POINT_SIZE),
+//        startAngle = -90f,
+//        sweepAngle = -90f
+//    )
+
+//    Arc(
+//        from = top.value,
+//        to = right.value,
+//        offset = Offset(2* top.value.x - right.value.x + POINT_SIZE, top.value.y + POINT_SIZE),
+//        startAngle = -90f,
+//        sweepAngle = 90f
+//    )
+
+//    Arc(
+//        from = bottom.value,
+//        to = right.value,
+//        offset = Offset(
+//            2 * bottom.value.x - right.value.x + POINT_SIZE,
+//            2 * right.value.y - bottom.value.y + POINT_SIZE
+//        ),
+//        startAngle = 90f,
+//        sweepAngle = -90f
+//    )
+
+    Arc(
+        from = bottom.value,
+        to = left.value,
+        offset = Offset(left.value.x + POINT_SIZE, 2 * left.value.y - bottom.value.y + POINT_SIZE),
+        startAngle = 90f,
+        sweepAngle = 90f
+    )
+
 }
 
 fun getEyeOffsetX(
