@@ -4,11 +4,9 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.issart.talkingpets.ui.common.dragPoints.POINT_SIZE
 import com.issart.talkingpets.ui.common.figures.Arc
 import com.issart.talkingpets.ui.detector.DetectorViewModel
 import com.issart.talkingpets.ui.detector.detectorPoints.model.face.FaceParams
@@ -86,32 +84,10 @@ fun FaceCanvas(viewModel: DetectorViewModel = hiltViewModel(), boxSize: Int) {
         )
     )
 
-    Arc(
-        from = top.value,
-        to = left.value,
-        offset = Offset(left.value.x + POINT_SIZE, top.value.y + POINT_SIZE)
-    )
-
-    Arc(
-        from = top.value,
-        to = right.value,
-        offset = Offset(2* top.value.x - right.value.x + POINT_SIZE, top.value.y + POINT_SIZE)
-    )
-
-    Arc(
-        from = bottom.value,
-        to = right.value,
-        offset = Offset(
-            2 * bottom.value.x - right.value.x + POINT_SIZE,
-            2 * right.value.y - bottom.value.y + POINT_SIZE
-        )
-    )
-
-    Arc(
-        from = bottom.value,
-        to = left.value,
-        offset = Offset(left.value.x + POINT_SIZE, 2 * left.value.y - bottom.value.y + POINT_SIZE)
-    )
+    Arc(from = top.value, to = left.value)
+    Arc(from = top.value, to = right.value)
+    Arc(from = bottom.value, to = right.value)
+    Arc(from = bottom.value, to = left.value)
 
 }
 

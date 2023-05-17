@@ -19,14 +19,13 @@ fun Arc(
     from: FacePoints,
     to: FacePoints,
     color: Color = Green,
-    pointOffset: Int = POINT_SIZE,
-    offset: Offset
+    pointOffset: Int = POINT_SIZE
 ) {
     Canvas(modifier = Modifier.fillMaxSize()) {
         val path = Path()
         path.addArc(
             oval = Rect(
-                offset = offset,//getOffset(from, to, pointOffset),
+                offset = getOffset(from, to, pointOffset),
                 size = Size(getRectSize(from.x, to.x), getRectSize(from.y, to.y))
             ),
             startAngleDegrees = getStartAngle(from.y, to.y),
@@ -37,21 +36,8 @@ fun Arc(
             color = color,
             style = Stroke(ARC_STROKE_WIDTH)
         )
-//        drawRect(
-//            topLeft = offset,
-//            size = Size(getRectSize(from.x, to.x), getRectSize(from.y, to.y)),
-//            color = color
-//        )
     }
 }
-//top - left start = -90, left = -90
-//offset to.x, from.y
-//top - right start = -90, left = 90
-//offset to.x - from.x, from.y
-//bottom - right start = 90, sweep = -90
-//offset to.x - from.x, from.y - to.y
-//bottom - left start =90, sweep = 90
-//offset to.x, from.y - to.y
 
 private fun getStartAngle(fromY: Float, toY: Float) = if (fromY < toY) {
     -90f
@@ -65,19 +51,19 @@ private fun getSweepAngle(from: FacePoints, to: FacePoints) = when {
     else -> -90f
 }
 
-//private fun getOffset(from: FacePoints, to: FacePoints, pointOffset: Int): Offset {
-//    val offsetX = if (from.x > to.x) {
-//        to.x
-//    } else {
-//        to.x - from.x
-//    }
-//    val offsetY = if (from.y > to.y) {
-//        from.y - to.y
-//    } else {
-//        from.y
-//    }
-//    return Offset(offsetX + pointOffset, offsetY + pointOffset)
-//}
+private fun getOffset(from: FacePoints, to: FacePoints, pointOffset: Int): Offset {
+    val offsetX = if (from.x > to.x) {
+        to.x
+    } else {
+        2 * from.x - to.x
+    }
+    val offsetY = if (from.y > to.y) {
+        2 * to.y - from.y
+    } else {
+        from.y
+    }
+    return Offset(offsetX + pointOffset, offsetY + pointOffset)
+}
 
 private fun getRectSize(fromCoordinate: Float, toCoordinate: Float) = if (fromCoordinate > toCoordinate) {
     2 * (fromCoordinate - toCoordinate)
