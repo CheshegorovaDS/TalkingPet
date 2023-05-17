@@ -20,9 +20,7 @@ fun Arc(
     to: FacePoints,
     color: Color = Green,
     pointOffset: Int = POINT_SIZE,
-    offset: Offset,
-    startAngle: Float,
-    sweepAngle: Float
+    offset: Offset
 ) {
     Canvas(modifier = Modifier.fillMaxSize()) {
         val path = Path()
@@ -31,8 +29,8 @@ fun Arc(
                 offset = offset,//getOffset(from, to, pointOffset),
                 size = Size(getRectSize(from.x, to.x), getRectSize(from.y, to.y))
             ),
-            startAngleDegrees = startAngle,//getStartAngle(from.y, to.y),
-            sweepAngleDegrees = sweepAngle//getSweepAngle(from, to)
+            startAngleDegrees = getStartAngle(from.y, to.y),
+            sweepAngleDegrees = getSweepAngle(from, to)
         )
         drawPath(
             path = path,
@@ -55,18 +53,18 @@ fun Arc(
 //bottom - left start =90, sweep = 90
 //offset to.x, from.y - to.y
 
-//private fun getStartAngle(fromY: Float, toY: Float) = if (fromY < toY) {
-//    -90f
-//} else {
-//    90f
-//}
-//
-//private fun getSweepAngle(from: FacePoints, to: FacePoints) = when {
-//    from.x > to.x && from.y > to.y -> 90f
-//    from.x < to.x && from.y < to.y -> 90f
-//    else -> -90f
-//}
-//
+private fun getStartAngle(fromY: Float, toY: Float) = if (fromY < toY) {
+    -90f
+} else {
+    90f
+}
+
+private fun getSweepAngle(from: FacePoints, to: FacePoints) = when {
+    from.x > to.x && from.y > to.y -> 90f
+    from.x < to.x && from.y < to.y -> 90f
+    else -> -90f
+}
+
 //private fun getOffset(from: FacePoints, to: FacePoints, pointOffset: Int): Offset {
 //    val offsetX = if (from.x > to.x) {
 //        to.x

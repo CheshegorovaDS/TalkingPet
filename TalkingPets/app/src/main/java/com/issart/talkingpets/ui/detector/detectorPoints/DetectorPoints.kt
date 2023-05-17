@@ -58,12 +58,12 @@ fun DetectorBox(viewModel: DetectorViewModel = hiltViewModel()) {
 
 @Composable
 fun FaceCanvas(viewModel: DetectorViewModel = hiltViewModel(), boxSize: Int) {
-//    val top = viewModel.topFacePoint.observeAsState(
-//        initial = FacePoints(
-//            x = getEyeOffsetX(boxSize, FaceParams.topPoint.x.toDouble()).toFloat(),
-//            y = getEyeOffsetY(boxSize, FaceParams.topPoint.y.toDouble()).toFloat()
-//        )
-//    )
+    val top = viewModel.topFacePoint.observeAsState(
+        initial = FacePoints(
+            x = getEyeOffsetX(boxSize, FaceParams.topPoint.x.toDouble()).toFloat(),
+            y = getEyeOffsetY(boxSize, FaceParams.topPoint.y.toDouble()).toFloat()
+        )
+    )
 
     val bottom = viewModel.bottomFacePoint.observeAsState(
         initial = FacePoints(
@@ -72,12 +72,13 @@ fun FaceCanvas(viewModel: DetectorViewModel = hiltViewModel(), boxSize: Int) {
         )
     )
 
-//    val right = viewModel.rightFacePoint.observeAsState(
-//        initial = FacePoints(
-//            x = getEyeOffsetX(boxSize, FaceParams.rightPoint.x.toDouble()).toFloat(),
-//            y = getEyeOffsetY(boxSize, FaceParams.rightPoint.y.toDouble()).toFloat()
-//        )
-//    )
+    val right = viewModel.rightFacePoint.observeAsState(
+        initial = FacePoints(
+            x = getEyeOffsetX(boxSize, FaceParams.rightPoint.x.toDouble()).toFloat(),
+            y = getEyeOffsetY(boxSize, FaceParams.rightPoint.y.toDouble()).toFloat()
+        )
+    )
+
     val left = viewModel.leftFacePoint.observeAsState(
         initial = FacePoints(
             x = getEyeOffsetX(boxSize, FaceParams.leftPoint.x.toDouble()).toFloat(),
@@ -85,39 +86,31 @@ fun FaceCanvas(viewModel: DetectorViewModel = hiltViewModel(), boxSize: Int) {
         )
     )
 
-//    Arc(
-//        from = top.value,
-//        to = left.value,
-//        offset = Offset(left.value.x + POINT_SIZE, top.value.y + POINT_SIZE),
-//        startAngle = -90f,
-//        sweepAngle = -90f
-//    )
+    Arc(
+        from = top.value,
+        to = left.value,
+        offset = Offset(left.value.x + POINT_SIZE, top.value.y + POINT_SIZE)
+    )
 
-//    Arc(
-//        from = top.value,
-//        to = right.value,
-//        offset = Offset(2* top.value.x - right.value.x + POINT_SIZE, top.value.y + POINT_SIZE),
-//        startAngle = -90f,
-//        sweepAngle = 90f
-//    )
+    Arc(
+        from = top.value,
+        to = right.value,
+        offset = Offset(2* top.value.x - right.value.x + POINT_SIZE, top.value.y + POINT_SIZE)
+    )
 
-//    Arc(
-//        from = bottom.value,
-//        to = right.value,
-//        offset = Offset(
-//            2 * bottom.value.x - right.value.x + POINT_SIZE,
-//            2 * right.value.y - bottom.value.y + POINT_SIZE
-//        ),
-//        startAngle = 90f,
-//        sweepAngle = -90f
-//    )
+    Arc(
+        from = bottom.value,
+        to = right.value,
+        offset = Offset(
+            2 * bottom.value.x - right.value.x + POINT_SIZE,
+            2 * right.value.y - bottom.value.y + POINT_SIZE
+        )
+    )
 
     Arc(
         from = bottom.value,
         to = left.value,
-        offset = Offset(left.value.x + POINT_SIZE, 2 * left.value.y - bottom.value.y + POINT_SIZE),
-        startAngle = 90f,
-        sweepAngle = 90f
+        offset = Offset(left.value.x + POINT_SIZE, 2 * left.value.y - bottom.value.y + POINT_SIZE)
     )
 
 }
