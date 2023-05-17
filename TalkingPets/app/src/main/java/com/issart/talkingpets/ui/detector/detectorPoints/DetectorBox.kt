@@ -13,7 +13,7 @@ import com.issart.talkingpets.ui.detector.detectorPoints.model.face.FaceParams
 import com.issart.talkingpets.ui.detector.detectorPoints.model.face.FacePoints
 
 @Composable
-fun DetectorBox(viewModel: DetectorViewModel = hiltViewModel()) {
+fun DetectorBox() {
     val configuration = LocalConfiguration.current
     val boxSize = configuration.screenWidthDp
 
@@ -22,36 +22,49 @@ fun DetectorBox(viewModel: DetectorViewModel = hiltViewModel()) {
             .fillMaxWidth()
             .height(boxSize.dp)
     ) {
-        FaceCanvas(boxSize = boxSize)
-        FacePoint(
-            facePoints = viewModel.topFacePoint,
-            defaultFacePoints = FaceParams.topPoint,
-            setOffset = viewModel::setTopFacePosition
-        )
-
-        FacePoint(
-            facePoints = viewModel.bottomFacePoint,
-            defaultFacePoints = FaceParams.bottomPoint,
-            setOffset = viewModel::setBottomFacePosition
-        )
-
-        FacePoint(
-            facePoints = viewModel.leftFacePoint,
-            defaultFacePoints = FaceParams.leftPoint,
-            setOffset = viewModel::setLeftFacePosition
-        )
-
-        FacePoint(
-            facePoints = viewModel.rightFacePoint,
-            defaultFacePoints = FaceParams.rightPoint,
-            setOffset = viewModel::setRightFacePosition
-        )
+        DetectorEyes()
+        DetectorFace()
     }
+}
+
+@Composable
+fun DetectorEyes() {
 
 }
 
 @Composable
-fun FaceCanvas(viewModel: DetectorViewModel = hiltViewModel(), boxSize: Int) {
+fun DetectorFace(viewModel: DetectorViewModel = hiltViewModel()) {
+    FaceCanvas()
+    FacePoint(
+        facePoints = viewModel.topFacePoint,
+        defaultFacePoints = FaceParams.topPoint,
+        setOffset = viewModel::setTopFacePosition
+    )
+
+    FacePoint(
+        facePoints = viewModel.bottomFacePoint,
+        defaultFacePoints = FaceParams.bottomPoint,
+        setOffset = viewModel::setBottomFacePosition
+    )
+
+    FacePoint(
+        facePoints = viewModel.leftFacePoint,
+        defaultFacePoints = FaceParams.leftPoint,
+        setOffset = viewModel::setLeftFacePosition
+    )
+
+    FacePoint(
+        facePoints = viewModel.rightFacePoint,
+        defaultFacePoints = FaceParams.rightPoint,
+        setOffset = viewModel::setRightFacePosition
+    )
+}
+
+@Composable
+fun FaceCanvas(viewModel: DetectorViewModel = hiltViewModel()) {
+    val configuration = LocalConfiguration.current
+    val boxSize = configuration.screenWidthDp
+
     val top = viewModel.topFacePoint.observeAsState(
         initial = FacePoints(
             x = getEyeOffsetX(boxSize, FaceParams.topPoint.x.toDouble()).toFloat(),
