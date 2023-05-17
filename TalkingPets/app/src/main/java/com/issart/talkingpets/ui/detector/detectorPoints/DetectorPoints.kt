@@ -23,31 +23,27 @@ fun DetectorBox(viewModel: DetectorViewModel = hiltViewModel()) {
             .height(boxSize.dp)
     ) {
         FaceCanvas(boxSize = boxSize)
-        DetectorFaceBox(
+        FacePoint(
             facePoints = viewModel.topFacePoint,
             defaultFacePoints = FaceParams.topPoint,
-            boxSize = boxSize,
             setOffset = viewModel::setTopFacePosition
         )
 
-        DetectorFaceBox(
+        FacePoint(
             facePoints = viewModel.bottomFacePoint,
             defaultFacePoints = FaceParams.bottomPoint,
-            boxSize = boxSize,
             setOffset = viewModel::setBottomFacePosition
         )
 
-        DetectorFaceBox(
+        FacePoint(
             facePoints = viewModel.leftFacePoint,
             defaultFacePoints = FaceParams.leftPoint,
-            boxSize = boxSize,
             setOffset = viewModel::setLeftFacePosition
         )
 
-        DetectorFaceBox(
+        FacePoint(
             facePoints = viewModel.rightFacePoint,
             defaultFacePoints = FaceParams.rightPoint,
-            boxSize = boxSize,
             setOffset = viewModel::setRightFacePosition
         )
     }
