@@ -5,6 +5,3 @@ object LeftEeyParams : EyeParams {
     override val offsetY: Double = 0.4
     override val text: String = "left eye"
 }
-
-//const val SIZE_CANVAS_TEXT = 20
-//const val RADIUS_EYE = 5
