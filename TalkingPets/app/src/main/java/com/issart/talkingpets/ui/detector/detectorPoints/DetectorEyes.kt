@@ -3,10 +3,25 @@ package com.issart.talkingpets.ui.detector.detectorPoints
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.State
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.ui.platform.LocalConfiguration
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.LiveData
 import com.issart.talkingpets.ui.common.dragPoints.TransformablePoint
+import com.issart.talkingpets.ui.detector.DetectorViewModel
 import com.issart.talkingpets.ui.detector.detectorPoints.model.eye.EyeParams
+import com.issart.talkingpets.ui.detector.detectorPoints.model.eye.LeftEeyParams
 import com.issart.talkingpets.ui.model.Eye
+
+@Composable
+fun DetectorEyes(viewModel: DetectorViewModel = hiltViewModel()) {
+    DetectorEyeBox(
+        eye = viewModel.leftEye,
+        params = LeftEeyParams,
+        setZoom = viewModel::setLeftEyeZoom,
+        setOffset = viewModel:: setLeftEyePosition,
+        boxSize = LocalConfiguration.current.screenWidthDp
+    )
+}
 
 @Composable
 fun DetectorEyeBox(
