@@ -1,9 +1,14 @@
 package com.issart.talkingpets.ui.share
 
 import android.graphics.Bitmap
+import androidx.compose.animation.core.animateFloat
+import androidx.compose.animation.core.infiniteRepeatable
+import androidx.compose.animation.core.rememberInfiniteTransition
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -47,7 +52,7 @@ fun Share(
         ProgressBarBox()
     } else {
         Column(modifier = Modifier.padding(bottom = 70.dp)) {
-            TalkingPetVideo(editorViewModel.editedBitmap.value)
+            TalkingPetVideo(video.value)
             ShareButtons()
         }
     }
@@ -55,7 +60,26 @@ fun Share(
 
 @Composable
 fun ProgressBarBox() {
-    CircularProgressIndicator()
+    val infiniteTransition = rememberInfiniteTransition()
+    val progressAnimationValue by infiniteTransition.animateFloat(
+        initialValue = 0.0f,
+        targetValue = 1f,
+        animationSpec = infiniteRepeatable(animation = tween(900))
+    )
+
+    Box(
+        modifier = Modifier
+        .fillMaxSize()
+        .padding(bottom = 70.dp),
+        contentAlignment = Alignment.Center
+    ) {
+        CircularProgressIndicator(
+            progress = progressAnimationValue,
+            color = Blue,
+            strokeWidth = 10.dp,
+            modifier = Modifier.size(120.dp)
+        )
+    }
 }
 
 @Composable
