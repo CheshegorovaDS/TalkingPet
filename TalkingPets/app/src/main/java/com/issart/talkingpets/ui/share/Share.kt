@@ -2,6 +2,7 @@ package com.issart.talkingpets.ui.share
 
 import android.graphics.Bitmap
 import androidx.compose.foundation.layout.*
+import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
@@ -19,6 +20,7 @@ import com.issart.talkingpets.ui.common.buttons.TextButton
 import com.issart.talkingpets.ui.common.buttons.TextButtonsWithImage
 import com.issart.talkingpets.ui.common.images.MainImage
 import com.issart.talkingpets.ui.common.toast.showToast
+import com.issart.talkingpets.ui.detector.DetectorViewModel
 import com.issart.talkingpets.ui.editor.EditorViewModel
 import com.issart.talkingpets.ui.theme.Blue
 import com.issart.talkingpets.ui.theme.Green
@@ -27,14 +29,33 @@ import com.issart.talkingpets.ui.theme.Purple
 @Composable
 fun Share(
     viewModel: ShareViewModel = hiltViewModel(),
-    editorViewModel: EditorViewModel = hiltViewModel()
+    editorViewModel: EditorViewModel = hiltViewModel(),
+    detectorViewModel: DetectorViewModel = hiltViewModel()
 ) {
-    val video = viewModel.video.observeAsState()
+    viewModel.createVideo(
+        editorViewModel.editedBitmap,
+        LocalContext.current,
+        detectorViewModel.leftEye.value,
+        detectorViewModel.topFacePoint.value,
+        detectorViewModel.bottomFacePoint.value,
+        detectorViewModel.leftFacePoint.value,
+        detectorViewModel.rightFacePoint.value
+    )//fixed
+    val video = viewModel.cadr.observeAsState()
 
-    Column(modifier = Modifier.padding(bottom = 70.dp)) {
-        TalkingPetVideo(editorViewModel.editedBitmap.value)
-        ShareButtons()
+    if (video.value == null) {
+        ProgressBarBox()
+    } else {
+        Column(modifier = Modifier.padding(bottom = 70.dp)) {
+            TalkingPetVideo(editorViewModel.editedBitmap.value)
+            ShareButtons()
+        }
     }
+}
+
+@Composable
+fun ProgressBarBox() {
+    CircularProgressIndicator()
 }
 
 @Composable
