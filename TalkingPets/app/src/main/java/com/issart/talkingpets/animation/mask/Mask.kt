@@ -7,7 +7,7 @@ internal fun getMask(dst: Mat, top: Int, bottom: Int, left: Int, right: Int): Ma
 
     for (i in top until bottom) {
         for (j in left until right) {
-            mask.put(i, j, DEFAULT_VALUE, DEFAULT_VALUE, DEFAULT_VALUE)
+            mask.put(i, j, DEFAULT_VALUE, DEFAULT_VALUE, DEFAULT_VALUE, DEFAULT_VALUE)
         }
     }
 

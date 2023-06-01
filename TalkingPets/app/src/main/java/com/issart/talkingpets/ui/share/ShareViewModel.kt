@@ -57,7 +57,7 @@ class ShareViewModel @Inject constructor(
                 bottomFace!!,
                 leftFace!!,
                 rightFace!!
-            ).last()
+            ).first()
         }
     }
 

@@ -15,8 +15,8 @@ internal fun copySubmatToMat(
     for (i in top..bottom) {
         for (j in left..right) {
             val arr = submat.get(i - top, j - left)
-            if (arr != null) {
-                dst.put(i, j, arr[0], arr[1], arr[2])
+            if (arr?.size == dst.channels()) {
+                dst.put(i, j, arr[0], arr[1], arr[2], arr[3])
             }
         }
     }
