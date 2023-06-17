@@ -1,6 +1,5 @@
 package com.issart.talkingpets.ui.share
 
-import android.graphics.Bitmap
 import androidx.compose.animation.core.animateFloat
 import androidx.compose.animation.core.infiniteRepeatable
 import androidx.compose.animation.core.rememberInfiniteTransition
@@ -45,21 +44,21 @@ fun Share(
         detectorViewModel.bottomFacePoint.value,
         detectorViewModel.leftFacePoint.value,
         detectorViewModel.rightFacePoint.value
-    )//fixed
-    val video = viewModel.cadr.observeAsState()
+    )
 
-    if (video.value == null) {
-        ProgressBarBox()
-    } else {
-        Column(modifier = Modifier.padding(bottom = 70.dp)) {
-            TalkingPetVideo(video.value)
-            ShareButtons()
-        }
+    ProgressBarBox()
+    Column(modifier = Modifier.padding(bottom = 70.dp)) {
+        TalkingPetVideo()
+        ShareButtons()
     }
 }
 
 @Composable
-fun ProgressBarBox() {
+fun ProgressBarBox(viewModel: ShareViewModel = hiltViewModel()) {
+    val video = viewModel.cadr.observeAsState()
+
+    if (video.value != null) return
+
     val infiniteTransition = rememberInfiniteTransition()
     val progressAnimationValue by infiniteTransition.animateFloat(
         initialValue = 0.0f,
@@ -83,8 +82,11 @@ fun ProgressBarBox() {
 }
 
 @Composable
-fun TalkingPetVideo(bitmap: Bitmap?) {
-    bitmap?.let { MainImage(bitmap = it) }
+fun TalkingPetVideo(viewModel: ShareViewModel = hiltViewModel()) {
+    val video = viewModel.cadr.observeAsState()
+    val bitmap = video.value ?: return
+
+    MainImage(bitmap = bitmap)
     //play button
 }
 
