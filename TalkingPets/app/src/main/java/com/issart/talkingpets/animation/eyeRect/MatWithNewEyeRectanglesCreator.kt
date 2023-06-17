@@ -17,14 +17,14 @@ internal class MatWithNewEyeRectanglesCreator(
     private var top = firstRow
     private var bottom = top + submats[0].rows()
     private var left = firstCol
-    private var right = firstCol + submats[0].cols()
+    private var right = lastCol
 
     fun copySubmats(): Mat {
         for ((index, submat) in submats.withIndex()) {
             copySubmat(submat)
 
             if (submats.size > index.inc()) {
-                top = bottom
+                top = bottom + 1
                 bottom = top + submats[index + 1].rows()
             }
         }

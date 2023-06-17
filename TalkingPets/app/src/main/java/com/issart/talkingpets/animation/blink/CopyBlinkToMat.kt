@@ -14,7 +14,7 @@ internal fun getImageWithNewRectangles(
     radiusEye: Double,
     radiusFace: Double
 ): Mat {
-    val creator = MatWithNewEyeRectanglesCreator (
+    val creator = MatWithNewEyeRectanglesCreator(
         src,
         listOf(topEyeRect, eyeRect, bottomEyeRect),
         (y - radiusFace).toInt(),

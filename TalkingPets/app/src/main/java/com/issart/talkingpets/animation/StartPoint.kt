@@ -19,10 +19,10 @@ fun start(bitmap: Bitmap): List<Bitmap> {//delete
     return photos
 }
 
-const val CENTER_EYE_X = 630.0
-const val CENTER_EYE_Y = 510.0
-const val RADIUS_EYE = 35.0
+const val CENTER_EYE_X = 1890.0
+const val CENTER_EYE_Y = 1530.0
+const val RADIUS_EYE = 105.0
 const val MAJOR_AXIS_FACE = 10.0
-const val MINOR_AXIS_FACE = 66.0
-const val CENTER_FACE_X = 10.0
-const val CENTER_FACE_Y = 10.0
+const val MINOR_AXIS_FACE = 198.0
+const val CENTER_FACE_X = 30.0
+const val CENTER_FACE_Y = 30.0
