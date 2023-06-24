@@ -4,8 +4,8 @@ class BlinkingEyeHeights(
     private val radius: Double
 ) {
      val heights = listOf(
-         radius / 2,
-         radius / 4,
+//         radius / 2,
+//         radius / 4,
          1.0
      )
 }

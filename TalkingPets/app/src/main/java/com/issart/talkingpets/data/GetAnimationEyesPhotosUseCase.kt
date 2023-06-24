@@ -1,9 +1,6 @@
 package com.issart.talkingpets.data
 
 import android.graphics.Bitmap
-import com.issart.talkingpets.animation.CENTER_FACE_X
-import com.issart.talkingpets.animation.CENTER_FACE_Y
-import com.issart.talkingpets.animation.MINOR_AXIS_FACE
 import com.issart.talkingpets.animation.blink.getBlinkEyesImages
 import com.issart.talkingpets.animation.model.Face
 import com.issart.talkingpets.ui.common.dragPoints.POINT_SIZE
@@ -62,4 +59,6 @@ class GetAnimationEyesPhotosUseCase @Inject constructor(
      //radius of face should be smaller than source
 }
 
-const val POINT_IMAGE_SIZE_PX = 33
+const val MINOR_AXIS_FACE = 198.0
+const val CENTER_FACE_X = 30.0
+const val CENTER_FACE_Y = 30.0
