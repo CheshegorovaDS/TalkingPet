@@ -43,8 +43,8 @@ class ShareViewModel @Inject constructor(
         val error = when {
             bitmap.value == null -> "bitmap is null"
             leftEye == null -> "eye is null"
-//            topFace == null -> "top face is null"
-//            bottomFace == null -> "bottom face is null"
+            topFace == null -> "top face is null"
+            bottomFace == null -> "bottom face is null"
             else -> null
         }
         if (error != null) {
@@ -56,10 +56,10 @@ class ShareViewModel @Inject constructor(
             mutableCadr.value = getAnimationEyesPhotosUseCase.getPhotos(
                 bitmap.value!!,
                 leftEye!!,
-//                topFace!!,
-//                bottomFace!!,
-//                leftFace!!,
-//                rightFace!!,
+                topFace!!,
+                bottomFace!!,
+                leftFace!!,
+                rightFace!!,
                 density,
                 px
             ).first()

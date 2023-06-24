@@ -17,6 +17,5 @@ internal fun getBlinkEyesImages(
     for (height in heights) {
         photos.add(getResizeEyeImage(eye, face, photo, height))
     }
-//    photos.add(paintControlPoints(photo, eye))
     return photos
 }

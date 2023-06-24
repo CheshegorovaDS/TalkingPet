@@ -16,10 +16,10 @@ class GetAnimationEyesPhotosUseCase @Inject constructor(
      suspend fun getPhotos(
           bitmap: Bitmap,
           leftEye: Eye,
-//          topFace: FacePoints,
-//          bottomFace: FacePoints,
-//          leftFace: FacePoints,
-//          rightFace: FacePoints,
+          topFace: FacePoints,
+          bottomFace: FacePoints,
+          leftFace: FacePoints,
+          rightFace: FacePoints,
           density: Float,
           px: Float
      ): List<Bitmap> {
