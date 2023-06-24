@@ -15,6 +15,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -36,6 +37,9 @@ fun Share(
     editorViewModel: EditorViewModel = hiltViewModel(),
     detectorViewModel: DetectorViewModel = hiltViewModel()
 ) {
+    val w = LocalConfiguration.current.screenWidthDp
+    val wDp = w.dp
+    val px = with(LocalDensity.current) { wDp.toPx() }
     viewModel.createVideo(
         editorViewModel.editedBitmap,
         LocalContext.current,
@@ -43,7 +47,9 @@ fun Share(
         detectorViewModel.topFacePoint.value,
         detectorViewModel.bottomFacePoint.value,
         detectorViewModel.leftFacePoint.value,
-        detectorViewModel.rightFacePoint.value
+        detectorViewModel.rightFacePoint.value,
+        LocalDensity.current.density,
+        px
     )
 
     ProgressBarBox()

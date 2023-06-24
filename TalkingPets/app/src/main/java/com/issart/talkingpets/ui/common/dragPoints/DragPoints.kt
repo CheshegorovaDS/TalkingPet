@@ -1,6 +1,7 @@
 package com.issart.talkingpets.ui.common.dragPoints
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.rememberTransformableState
 import androidx.compose.foundation.gestures.transformable
 import androidx.compose.foundation.layout.Box
@@ -9,6 +10,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
@@ -81,6 +83,6 @@ fun DraggablePoint(
 }
 
 const val SCALE_BOX_SIZE = 100
-const val POINT_SIZE = 11
+const val POINT_SIZE = 12
 const val DEFAULT_CONTENT_DESCRIPTION = "Transformable point"
 const val DEFAULT_IMAGE_POINT_ID = R.drawable.ic_point

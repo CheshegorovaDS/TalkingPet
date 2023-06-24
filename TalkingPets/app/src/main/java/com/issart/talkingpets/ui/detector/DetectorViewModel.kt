@@ -3,7 +3,6 @@ package com.issart.talkingpets.ui.detector
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.issart.talkingpets.ui.detector.detectorPoints.model.face.FaceParams
 import com.issart.talkingpets.ui.detector.detectorPoints.model.face.FacePoints
 import com.issart.talkingpets.ui.model.Eye
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -49,10 +48,19 @@ class DetectorViewModel @Inject constructor() : ViewModel() {
         )
     }
 
-    fun setRightEye(x: Float, y: Float) {
+    fun setRightEyePosition(x: Float, y: Float) {
         mutableRightEye.value = mutableRightEye.value?.copy(
             x = x,
-            y = y
+            y = y,
+            zoom = rightEye.value?.zoom ?: 1f
+        )
+    }
+
+    fun setRightEyeZoom(zoom: Float) {
+        mutableRightEye.value = Eye(
+            x = rightEye.value?.x ?: 0f,//default position for left eye
+            y = rightEye.value?.y ?: 0f,
+            zoom = zoom
         )
     }
 

@@ -16,7 +16,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ShareViewModel @Inject constructor(
-    private val getAnimationEyesPhotosUseCase: GetAnimationEyesPhotosUseCase,
+    private val getAnimationEyesPhotosUseCase: GetAnimationEyesPhotosUseCase
 ) : ViewModel() {
 
     private var mutableVideo = MutableLiveData("")
@@ -35,13 +35,16 @@ class ShareViewModel @Inject constructor(
         topFace: FacePoints?,
         bottomFace: FacePoints?,
         leftFace: FacePoints?,
-        rightFace: FacePoints?
+        rightFace: FacePoints?,
+        density: Float,
+        px: Float
     ) {
+        showToast(context, "create video")
         val error = when {
             bitmap.value == null -> "bitmap is null"
             leftEye == null -> "eye is null"
-            topFace == null -> "top face is null"
-            bottomFace == null -> "bottom face is null"
+//            topFace == null -> "top face is null"
+//            bottomFace == null -> "bottom face is null"
             else -> null
         }
         if (error != null) {
@@ -53,10 +56,12 @@ class ShareViewModel @Inject constructor(
             mutableCadr.value = getAnimationEyesPhotosUseCase.getPhotos(
                 bitmap.value!!,
                 leftEye!!,
-                topFace!!,
-                bottomFace!!,
-                leftFace!!,
-                rightFace!!
+//                topFace!!,
+//                bottomFace!!,
+//                leftFace!!,
+//                rightFace!!,
+                density,
+                px
             ).first()
         }
     }

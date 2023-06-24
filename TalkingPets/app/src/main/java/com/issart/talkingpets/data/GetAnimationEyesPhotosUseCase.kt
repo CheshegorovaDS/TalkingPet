@@ -1,9 +1,13 @@
 package com.issart.talkingpets.data
 
 import android.graphics.Bitmap
+import com.issart.talkingpets.animation.CENTER_FACE_X
+import com.issart.talkingpets.animation.CENTER_FACE_Y
+import com.issart.talkingpets.animation.MINOR_AXIS_FACE
 import com.issart.talkingpets.animation.blink.getBlinkEyesImages
 import com.issart.talkingpets.animation.model.Face
-import com.issart.talkingpets.animation.start
+import com.issart.talkingpets.ui.common.dragPoints.POINT_SIZE
+import com.issart.talkingpets.ui.common.dragPoints.SCALE_BOX_SIZE
 import com.issart.talkingpets.ui.detector.detectorPoints.model.face.FacePoints
 import com.issart.talkingpets.ui.model.Eye
 import javax.inject.Inject
@@ -15,30 +19,34 @@ class GetAnimationEyesPhotosUseCase @Inject constructor(
      suspend fun getPhotos(
           bitmap: Bitmap,
           leftEye: Eye,
-          topFace: FacePoints,
-          bottomFace: FacePoints,
-          leftFace: FacePoints,
-          rightFace: FacePoints
+//          topFace: FacePoints,
+//          bottomFace: FacePoints,
+//          leftFace: FacePoints,
+//          rightFace: FacePoints,
+          density: Float,
+          px: Float
      ): List<Bitmap> {
-          return start(bitmap)
-//          val eye = leftEye.toAnimationEye()
+          val offsetBox = ((SCALE_BOX_SIZE /*- (POINT_SIZE * leftEye.zoom)*/) * density / 2)
+          val eye = leftEye.toAnimationEye((bitmap.width / px), offsetBox)
+
+          val face = Face(CENTER_FACE_X, CENTER_FACE_Y, MINOR_AXIS_FACE)
 //          val face = toFace(
 //               topFace,
 //               bottomFace,
 //               leftFace,
 //               rightFace
 //          )
-//          return getBlinkEyesImages(
-//               eye = eye,
-//               face = face,
-//               photo = bitmap
-//          )
+          return getBlinkEyesImages(
+               eye = eye,
+               face = face,
+               photo = bitmap
+          )
      }
 
-     private fun Eye.toAnimationEye() = AnimationEye(
-          x = x.toDouble(),
-          y = y.toDouble(),
-          radius = (5 * zoom).toDouble()
+     private fun Eye.toAnimationEye(difference: Float, offsetBox: Float): AnimationEye = AnimationEye(
+          x = (x * difference).toDouble() + offsetBox,
+          y = (y * difference).toDouble() + offsetBox,
+          radius = (POINT_SIZE * zoom * difference).toDouble()
      )
 
      private fun toFace(
@@ -53,3 +61,5 @@ class GetAnimationEyesPhotosUseCase @Inject constructor(
      )
      //radius of face should be smaller than source
 }
+
+const val POINT_IMAGE_SIZE_PX = 33

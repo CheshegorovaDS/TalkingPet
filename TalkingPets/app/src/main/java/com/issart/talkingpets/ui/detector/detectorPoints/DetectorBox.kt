@@ -17,6 +17,6 @@ fun DetectorBox() {
             .height(boxSize.dp)
     ) {
         DetectorEyes()
-        DetectorFace()
+//        DetectorFace()
     }
 }

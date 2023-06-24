@@ -24,8 +24,9 @@ class EditorViewModel @Inject constructor(
     val editedBitmap: LiveData<Bitmap?> = mutableEditedBitmap
 
     fun setEditorBitmap(newBitmap: Bitmap) {
-        mutableBitmap.value = newBitmap
-        mutableEditedBitmap.value = newBitmap
+        val b = Bitmap.createScaledBitmap(newBitmap, 1080, 1080, false)
+        mutableBitmap.value = b
+        mutableEditedBitmap.value = b
         clear()
     }
 
