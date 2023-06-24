@@ -24,9 +24,9 @@ class EditorViewModel @Inject constructor(
     val editedBitmap: LiveData<Bitmap?> = mutableEditedBitmap
 
     fun setEditorBitmap(newBitmap: Bitmap) {
-        val b = Bitmap.createScaledBitmap(newBitmap, 1080, 1080, false)
-        mutableBitmap.value = b
-        mutableEditedBitmap.value = b
+        val resizedBitmap = Bitmap.createScaledBitmap(newBitmap, VIDEO_SIZE, VIDEO_SIZE, false)
+        mutableBitmap.value = resizedBitmap
+        mutableEditedBitmap.value = resizedBitmap
         clear()
     }
 
@@ -58,5 +58,9 @@ class EditorViewModel @Inject constructor(
 
     private fun clear() {
         mutableAngle.value = 0f
+    }
+
+    companion object {
+        const val VIDEO_SIZE = 1080
     }
 }
