@@ -11,7 +11,7 @@ internal fun getBlinkEyesImages(
     photo: Bitmap
 ): List<Bitmap> {
     val photos = mutableListOf<Bitmap>()
-//    photos.add(photo)
+    photos.add(photo)
 
     val heights = BlinkingEyeHeights(eye.radius).heights
     for (height in heights) {
