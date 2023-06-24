@@ -13,7 +13,7 @@ import com.issart.talkingpets.animation.model.Eye as AnimationEye
 class GetAnimationEyesPhotosUseCase @Inject constructor(
 ) {
 
-     suspend fun getPhotos(
+     fun getPhotos(
           bitmap: Bitmap,
           leftEye: Eye,
           topFace: FacePoints,
@@ -26,13 +26,12 @@ class GetAnimationEyesPhotosUseCase @Inject constructor(
           val offsetBox = SCALE_BOX_SIZE * density / 2
           val eye = leftEye.toAnimationEye((bitmap.width / screenWidthPx), offsetBox)
 
-          val face = Face(CENTER_FACE_X, CENTER_FACE_Y, MINOR_AXIS_FACE)
-//          val face = toFace(
-//               topFace,
-//               bottomFace,
-//               leftFace,
-//               rightFace
-//          )
+          val face = toFace(
+               topFace,
+               bottomFace,
+               leftFace,
+               rightFace
+          )
           return getBlinkEyesImages(
                eye = eye,
                face = face,
@@ -53,12 +52,7 @@ class GetAnimationEyesPhotosUseCase @Inject constructor(
           rightPoint: FacePoints
      ) = Face(
           x = (leftPoint.x + ((rightPoint.x - leftPoint.x) / 2)).toDouble(),
-          y = (topPoint.y + ((bottomPoint.y - bottomPoint.y) / 2)).toDouble(),
-          radius = ((bottomPoint.y - bottomPoint.y) / 2).toDouble()
+          y = (topPoint.y + ((bottomPoint.y - topPoint.y) / 2)).toDouble(),
+          radius = ((bottomPoint.y - topPoint.y) / 6).toDouble()
      )
-     //radius of face should be smaller than source
 }
-
-const val MINOR_AXIS_FACE = 198.0
-const val CENTER_FACE_X = 30.0
-const val CENTER_FACE_Y = 30.0
