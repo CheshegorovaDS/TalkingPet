@@ -21,10 +21,10 @@ class GetAnimationEyesPhotosUseCase @Inject constructor(
           leftFace: FacePoints,
           rightFace: FacePoints,
           density: Float,
-          px: Float
+          screenWidthPx: Float
      ): List<Bitmap> {
-          val offsetBox = ((SCALE_BOX_SIZE /*- (POINT_SIZE * leftEye.zoom)*/) * density / 2)
-          val eye = leftEye.toAnimationEye((bitmap.width / px), offsetBox)
+          val offsetBox = SCALE_BOX_SIZE * density / 2
+          val eye = leftEye.toAnimationEye((bitmap.width / screenWidthPx), offsetBox)
 
           val face = Face(CENTER_FACE_X, CENTER_FACE_Y, MINOR_AXIS_FACE)
 //          val face = toFace(

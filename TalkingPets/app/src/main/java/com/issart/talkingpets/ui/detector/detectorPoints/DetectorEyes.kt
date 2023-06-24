@@ -6,7 +6,6 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.LiveData
-import com.issart.talkingpets.ui.common.dragPoints.DraggablePoint
 import com.issart.talkingpets.ui.common.dragPoints.TransformablePoint
 import com.issart.talkingpets.ui.detector.DetectorViewModel
 import com.issart.talkingpets.ui.detector.detectorPoints.model.eye.EyeParams
@@ -19,7 +18,8 @@ fun DetectorEyes(viewModel: DetectorViewModel = hiltViewModel()) {
         eye = viewModel.leftEye,
         params = LeftEyeParams,
         setZoom = viewModel::setLeftEyeZoom,
-        setOffset = viewModel::setLeftEyePosition
+        setOffset = viewModel::setLeftEyePosition,
+        boxSize = LocalConfiguration.current.screenWidthDp
     )
 //    DetectorEyeBox(
 //        eye = viewModel.rightEye,
@@ -35,12 +35,13 @@ fun DetectorEyeBox(
     eye: LiveData<Eye>,
     params: EyeParams,
     setZoom: (Float) -> Unit,
-    setOffset: (Float, Float) -> Unit
+    setOffset: (Float, Float) -> Unit,
+    boxSize: Int
 ) {
     val eyeState = eye.observeAsState(
         initial = Eye(
-            0f,//getEyeOffsetX(boxSize, params.offsetX).toFloat(),
-            0f,//getEyeOffsetY(boxSize, params.offsetY).toFloat(),
+            getEyeOffsetX(boxSize, params.offsetX).toFloat(),
+            getEyeOffsetY(boxSize, params.offsetY).toFloat(),
             1f
         )
     )
