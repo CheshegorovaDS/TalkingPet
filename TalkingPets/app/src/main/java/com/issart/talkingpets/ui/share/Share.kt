@@ -37,8 +37,9 @@ fun Share(
     editorViewModel: EditorViewModel = hiltViewModel(),
     detectorViewModel: DetectorViewModel = hiltViewModel()
 ) {
-    val wDp = LocalConfiguration.current.screenWidthDp.dp
-    val px = with(LocalDensity.current) { wDp.toPx() }
+    val px = with(LocalDensity.current) {
+        LocalConfiguration.current.screenWidthDp.dp.toPx()
+    }
     viewModel.createVideo(
         editorViewModel.editedBitmap,
         LocalContext.current,
