@@ -37,8 +37,7 @@ fun Share(
     editorViewModel: EditorViewModel = hiltViewModel(),
     detectorViewModel: DetectorViewModel = hiltViewModel()
 ) {
-    val w = LocalConfiguration.current.screenWidthDp
-    val wDp = w.dp
+    val wDp = LocalConfiguration.current.screenWidthDp.dp
     val px = with(LocalDensity.current) { wDp.toPx() }
     viewModel.createVideo(
         editorViewModel.editedBitmap,
@@ -52,8 +51,8 @@ fun Share(
         px
     )
 
-    ProgressBarBox()
     Column(modifier = Modifier.padding(bottom = 70.dp)) {
+        ProgressBarBox()
         TalkingPetVideo()
         ShareButtons()
     }
