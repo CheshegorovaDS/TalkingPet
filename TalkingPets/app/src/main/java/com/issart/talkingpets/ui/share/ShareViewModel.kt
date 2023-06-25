@@ -19,11 +19,11 @@ class ShareViewModel @Inject constructor(
     private val getAnimationEyesPhotosUseCase: GetAnimationEyesPhotosUseCase
 ) : ViewModel() {
 
-    private var mutableVideo = MutableLiveData("")
+    private var mutableVideo = MutableLiveData("singing_pet.mp4")
     val video: LiveData<String> = mutableVideo
 
     private var mutablePhoto = MutableLiveData("")
-    val photo: LiveData<String> = mutableVideo
+    val photo: LiveData<String> = mutablePhoto
 
     private var mutableCadr = MutableLiveData<Bitmap?>(null)
     val cadr: LiveData<Bitmap?> = mutableCadr
@@ -53,7 +53,7 @@ class ShareViewModel @Inject constructor(
         }
 
         viewModelScope.launch {
-            mutableCadr.value = getAnimationEyesPhotosUseCase.getPhotos(
+            val images = getAnimationEyesPhotosUseCase.getPhotos(
                 bitmap.value!!,
                 leftEye!!,
                 topFace!!,
@@ -62,7 +62,8 @@ class ShareViewModel @Inject constructor(
                 rightFace!!,
                 density,
                 px
-            ).first()
+            )
+            mutableCadr.value = images.first()
         }
     }
 

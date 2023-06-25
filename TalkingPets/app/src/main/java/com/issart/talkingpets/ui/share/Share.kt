@@ -23,13 +23,14 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.issart.talkingpets.R
 import com.issart.talkingpets.ui.common.buttons.TextButton
 import com.issart.talkingpets.ui.common.buttons.TextButtonsWithImage
-import com.issart.talkingpets.ui.common.images.MainImage
 import com.issart.talkingpets.ui.common.toast.showToast
 import com.issart.talkingpets.ui.detector.DetectorViewModel
 import com.issart.talkingpets.ui.editor.EditorViewModel
+import com.issart.talkingpets.ui.share.video.VideoViewModel
 import com.issart.talkingpets.ui.theme.Blue
 import com.issart.talkingpets.ui.theme.Green
 import com.issart.talkingpets.ui.theme.Purple
+import com.issart.talkingpets.ui.common.videoView.VideoView
 
 @Composable
 fun Share(
@@ -53,10 +54,19 @@ fun Share(
     )
 
     Column(modifier = Modifier.padding(bottom = 70.dp)) {
-        ProgressBarBox()
+//        ProgressBarBox()
         TalkingPetVideo()
         ShareButtons()
     }
+}
+
+@Composable
+fun TalkingPetVideo(
+    videoViewModel: VideoViewModel = hiltViewModel()
+) {
+    videoViewModel.addVideo(LocalContext.current)
+
+    VideoView(player = videoViewModel.player)
 }
 
 @Composable
@@ -74,8 +84,8 @@ fun ProgressBarBox(viewModel: ShareViewModel = hiltViewModel()) {
 
     Box(
         modifier = Modifier
-        .fillMaxSize()
-        .padding(bottom = 70.dp),
+            .fillMaxSize()
+            .padding(bottom = 70.dp),
         contentAlignment = Alignment.Center
     ) {
         CircularProgressIndicator(
@@ -85,15 +95,6 @@ fun ProgressBarBox(viewModel: ShareViewModel = hiltViewModel()) {
             modifier = Modifier.size(120.dp)
         )
     }
-}
-
-@Composable
-fun TalkingPetVideo(viewModel: ShareViewModel = hiltViewModel()) {
-    val video = viewModel.cadr.observeAsState()
-    val bitmap = video.value ?: return
-
-    MainImage(bitmap = bitmap)
-    //play button
 }
 
 @Composable

@@ -83,6 +83,12 @@ dependencies {
     //OpenCV
     implementation project(':opencv')
 
+    //Create video
+    implementation 'com.github.israel-fl:bitmap2video:2.0.0'
+
+    implementation 'androidx.media3:media3-exoplayer:1.1.0-rc01'
+    implementation 'androidx.media3:media3-ui:1.1.0-rc01'
+
     // Testing
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
