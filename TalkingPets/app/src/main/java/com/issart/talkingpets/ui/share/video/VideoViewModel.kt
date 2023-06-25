@@ -16,8 +16,8 @@ class VideoViewModel @Inject constructor(
     val player: Player
 ) : ViewModel() {
 
-    private var mutableVideo = MutableLiveData<Uri>()
-    val video: LiveData<Uri> = mutableVideo
+    private var mutableVideo = MutableLiveData<Uri?>()
+    val video: LiveData<Uri?> = mutableVideo
 
     init {
         player.prepare()
@@ -29,6 +29,7 @@ class VideoViewModel @Inject constructor(
     }
 
     override fun onCleared() {
+        mutableVideo.value = null
         player.release()
         super.onCleared()
     }
