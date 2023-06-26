@@ -62,9 +62,13 @@ fun Share(
 
 @Composable
 fun TalkingPetVideo(
-    videoViewModel: VideoViewModel = hiltViewModel()
+    videoViewModel: VideoViewModel = hiltViewModel(),
+    viewModel: ShareViewModel = hiltViewModel()
 ) {
-    videoViewModel.addVideo(LocalContext.current)
+    val videoState = viewModel.video.observeAsState()
+    val videoFile = videoState.value ?: return
+
+    videoViewModel.addVideo(LocalContext.current, videoFile)
 
     VideoView(player = videoViewModel.player)
 }

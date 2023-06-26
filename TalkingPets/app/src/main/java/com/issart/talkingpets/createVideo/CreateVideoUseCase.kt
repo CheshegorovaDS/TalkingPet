@@ -2,37 +2,23 @@ package com.issart.talkingpets.createVideo
 
 import android.content.Context
 import android.graphics.Bitmap
-import android.util.Log
-//import com.homesoft.encoder.Muxer
-//import com.homesoft.encoder.MuxerConfig
-//import com.homesoft.encoder.MuxingError
-//import com.homesoft.encoder.MuxingSuccess
+import org.jcodec.api.android.AndroidSequenceEncoder
+import java.io.File
+import javax.inject.Inject
 
-class CreateVideoUseCase {
+class CreateVideoUseCase @Inject constructor() {
 
-//    private var muxer: Muxer? = null
+    operator fun invoke(context: Context, images: List<Bitmap>): File {
+        val file = FileUtils.getVideoFile(context, "talking_pet.mp4")
+        val encoder = AndroidSequenceEncoder.create25Fps(file)
 
-    suspend fun createVideo(context: Context, images: List<Bitmap>) {
-//        val file = FileUtils.getVideoFile(context, "video.mp4")
-//
-//        val muxerConfig = MuxerConfig(
-//            file = file,
-//            videoWidth = 600,
-//            videoHeight = 600,
-//            framesPerImage = 1
-//        )
-//        muxer = Muxer(context, muxerConfig)
-//
-//        when (val result = muxer?.muxAsync(images)) {
-//            is MuxingSuccess -> {
-//                Log.i(TAG, "Video muxed - file path: ${result.file.absolutePath}")
-////                onMuxerCompleted()
-//            }
-//            is MuxingError -> {
-//                Log.e(TAG, "There was an error muxing the video")
-////                bt_make.isEnabled = true
-//            }
-//        }
+        for (bitmap in images) {
+            encoder.encodeImage(bitmap)
+        }
+
+        encoder.finish()
+
+        return file
     }
 
     companion object {

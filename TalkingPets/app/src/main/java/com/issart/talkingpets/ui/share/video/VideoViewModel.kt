@@ -2,6 +2,7 @@ package com.issart.talkingpets.ui.share.video
 
 import android.content.Context
 import android.net.Uri
+import androidx.core.net.toUri
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -9,6 +10,7 @@ import androidx.media3.common.MediaItem
 import androidx.media3.common.Player
 import com.issart.talkingpets.R
 import dagger.hilt.android.lifecycle.HiltViewModel
+import java.io.File
 import javax.inject.Inject
 
 @HiltViewModel
@@ -23,8 +25,9 @@ class VideoViewModel @Inject constructor(
         player.prepare()
     }
 
-    fun addVideo(context: Context) {
-        mutableVideo.value = Uri.parse( "android.resource://" + context.packageName + "/" + R.raw.singing_pet)
+    fun addVideo(context: Context, videoFile: File) {
+//        mutableVideo.value = Uri.parse( "android.resource://" + context.packageName + "/" + R.raw.singing_pet)
+        mutableVideo.value = videoFile.toUri()
         player.addMediaItem(MediaItem.fromUri(mutableVideo.value!!))
     }
 
